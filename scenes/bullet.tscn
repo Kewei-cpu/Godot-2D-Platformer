@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://n7yk27svvafh"]
+
+[ext_resource type="Texture2D" uid="uid://b7dfulijj28pw" path="res://sprites/bullets/29b.png" id="1_mkf8s"]
+[ext_resource type="Script" uid="uid://xa71ugpny5ee" path="res://scripts/bullet.gd" id="1_y25gk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y25gk"]
+radius = 3.0
+
+[node name="Bullet" type="RigidBody2D"]
+z_index = 10
+collision_mask = 3
+gravity_scale = 0.0
+script = ExtResource("1_y25gk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 10
+scale = Vector2(2, 2)
+texture = ExtResource("1_mkf8s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 7
+scale = Vector2(2, 2)
+shape = SubResource("CircleShape2D_y25gk")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
