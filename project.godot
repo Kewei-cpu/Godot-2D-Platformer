@@ -11,9 +11,14 @@ config_version=5
 [application]
 
 config/name="2D Platformer"
-run/main_scene="uid://cc0ytnsq165td"
+run/main_scene="uid://chtp84dsb6e60"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Transition="*res://scenes/transition.tscn"
+GameHandler="*res://scenes/game_handler.tscn"
 
 [display]
 

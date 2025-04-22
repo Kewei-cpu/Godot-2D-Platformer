@@ -1,12 +1,11 @@
-[gd_scene load_steps=11 format=4 uid="uid://cc0ytnsq165td"]
+[gd_scene load_steps=9 format=4 uid="uid://cc0ytnsq165td"]
 
 [ext_resource type="Script" uid="uid://blrflx2y4i3o6" path="res://scripts/game.gd" id="1_p57ef"]
 [ext_resource type="Texture2D" uid="uid://b63mladrvcorv" path="res://sprites/world_tileset.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://deyowusmtphnn" path="res://scenes/platform.tscn" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://dowjb6qywlatd" path="res://scripts/terrain.gd" id="3_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://psa4ouhlr0ab" path="res://scenes/kill_zone.tscn" id="4_lbhrr"]
-[ext_resource type="FontFile" uid="uid://bqjqtb4v1fm28" path="res://fonts/PixelOperator8-Bold.ttf" id="5_iywne"]
-[ext_resource type="FontFile" uid="uid://bqoyclilvktou" path="res://fonts/PixelOperator8.ttf" id="6_p57ef"]
+[ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="6_p57ef"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -174,10 +173,6 @@ texture = ExtResource("2_yqjtg")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_lnu2h")
 
-[sub_resource type="LabelSettings" id="LabelSettings_p57ef"]
-font = ExtResource("5_iywne")
-font_size = 80
-
 [node name="Game" type="Node2D"]
 script = ExtResource("1_p57ef")
 
@@ -196,64 +191,6 @@ tile_set = SubResource("TileSet_lbhrr")
 [node name="KillZone" parent="." instance=ExtResource("4_lbhrr")]
 position = Vector2(0, 256)
 
-[node name="UI" type="CanvasLayer" parent="."]
-
-[node name="Multiplayer" type="Control" parent="UI"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Multiplayer"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -390.0
-offset_top = -120.0
-offset_right = 390.0
-offset_bottom = 160.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1, 1.03026)
-alignment = 1
-
-[node name="Title" type="Label" parent="UI/Multiplayer/VBoxContainer"]
-layout_mode = 2
-text = "Hide & Seek"
-label_settings = SubResource("LabelSettings_p57ef")
-horizontal_alignment = 1
-
-[node name="Host" type="Button" parent="UI/Multiplayer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_fonts/font = ExtResource("6_p57ef")
-theme_override_font_sizes/font_size = 40
-text = "Host"
-
-[node name="Join" type="Button" parent="UI/Multiplayer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_fonts/font = ExtResource("6_p57ef")
-theme_override_font_sizes/font_size = 40
-text = "Join"
-
-[node name="IP" type="LineEdit" parent="UI/Multiplayer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_fonts/font = ExtResource("6_p57ef")
-theme_override_font_sizes/font_size = 36
-placeholder_text = "IP Address"
-alignment = 1
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://cnkylbamt2u8d")
-spawn_path = NodePath("..")
-
 [node name="Platform" parent="." instance=ExtResource("3_lnu2h")]
 position = Vector2(-1024, -304)
 
@@ -263,5 +200,60 @@ position = Vector2(-1024, -496)
 [node name="Platform3" parent="." instance=ExtResource("3_lnu2h")]
 position = Vector2(-1024, -688)
 
-[connection signal="pressed" from="UI/Multiplayer/VBoxContainer/Host" to="." method="_on_host_pressed"]
-[connection signal="pressed" from="UI/Multiplayer/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+unique_name_in_owner = true
+_spawnable_scenes = PackedStringArray("uid://cnkylbamt2u8d")
+spawn_path = NodePath("..")
+
+[node name="WaitingScreen" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="ColorRect" type="ColorRect" parent="WaitingScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0980392, 0.313726, 0.752941, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WaitingScreen"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -456.0
+offset_top = -200.0
+offset_right = 456.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 15
+
+[node name="PlayerCount" type="Label" parent="WaitingScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("6_p57ef")
+text = "Current Players: 0"
+
+[node name="ReadyCount" type="Label" parent="WaitingScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("6_p57ef")
+text = "Ready Players: 0"
+
+[node name="HostToStart" type="Label" parent="WaitingScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("6_p57ef")
+text = "Waiting the host to start the game..."
+
+[node name="StartGame" type="Button" parent="WaitingScreen/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("6_p57ef")
+text = "Start Game"
+
+[connection signal="pressed" from="WaitingScreen/VBoxContainer/StartGame" to="." method="_on_start_game_pressed"]

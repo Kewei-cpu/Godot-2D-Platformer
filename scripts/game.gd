@@ -1,38 +1,45 @@
 extends Node2D
-
-@onready var multiplayer_ui: Control = $UI/Multiplayer
-@onready var ip: LineEdit = $UI/Multiplayer/VBoxContainer/IP
+class_name Game
 
 const PLAYER = preload("res://scenes/player.tscn")
+@onready var waiting_screen: CanvasLayer = %WaitingScreen
+@onready var player_count: Label = $WaitingScreen/VBoxContainer/PlayerCount
+@onready var ready_count: Label = $WaitingScreen/VBoxContainer/ReadyCount
+@onready var start_game: Button = $WaitingScreen/VBoxContainer/StartGame
 
-var peer = ENetMultiplayerPeer.new()
 var players: Array[Player] = []
+var peer = ENetMultiplayerPeer.new()
 
 
 func _ready() -> void:
-	$MultiplayerSpawner.spawn_function = add_player
+	%MultiplayerSpawner.spawn_function = add_player
+	if GameHandler.is_host:
+		GameHandler.player_ready(multiplayer.get_unique_id())
+		start_game.show()
+	else:
+		GameHandler.player_ready.rpc_id(1, multiplayer.get_unique_id())
 
 
-func _on_host_pressed() -> void:
-	peer.create_server(25565)
-	multiplayer.multiplayer_peer = peer
+func _process(delta: float) -> void:
+	if !GameHandler.is_host:
+		return
 
-	multiplayer.peer_connected.connect(
-		func(pid):
-			print("Peer " + str(pid) + " has joined your game!")
-			$MultiplayerSpawner.spawn(pid)
-	)
+	start_game.visible = GameHandler.is_everyone_ready()
+	update_wating_screen.rpc(multiplayer.get_peers().size() + 1, GameHandler.ready_players.size())
 
-	$MultiplayerSpawner.spawn(multiplayer.get_unique_id())
+	if GameHandler.is_everyone_ready() and GameHandler.game_started:
+		print("All players are ready, starting the game...")
+		hide_wating_screen.rpc()
+		while !GameHandler.new_players.is_empty():
+			var pid = GameHandler.new_players.pop_front()
+			player_joined(pid)
+		GameHandler.game_started = false
 
-	multiplayer_ui.hide()
 
-
-func _on_join_pressed() -> void:
-	peer.create_client(ip.text, 25565)
-	multiplayer.multiplayer_peer = peer
-
-	multiplayer_ui.hide()
+func player_joined(pid):
+	# Called when a player joins the game
+	print("Player added: " + str(pid))
+	%MultiplayerSpawner.spawn(pid)
 
 
 func add_player(n):
@@ -47,3 +54,18 @@ func add_player(n):
 	name_tag.text = "P" + str(len(players))
 
 	return player
+
+
+func _on_start_game_pressed() -> void:
+	GameHandler.game_started = true
+
+
+@rpc("call_local")
+func update_wating_screen(all_player, ready_player):
+	player_count.text = "Current Players: " + str(all_player)
+	ready_count.text = "Ready Players: " + str(ready_player)
+
+
+@rpc("call_local")
+func hide_wating_screen():
+	waiting_screen.hide()
