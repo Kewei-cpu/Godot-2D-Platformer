@@ -22,14 +22,14 @@ extends CharacterBody2D
 const CAMERA = preload("res://scenes/camera.tscn")
 const BULLET = preload("res://scenes/bullet.tscn")
 
-const MAX_SPEED = 900.0
-const JUMP_VELOCITY = -1100.0
+@export var MAX_SPEED = 800.0
+@export var JUMP_VELOCITY = -1200.0
 
-const ACCELERATION = MAX_SPEED / 0.2
-const GROUND_FRICTION = 6000.0
-const AIR_FRICTION = 2000.0
+@export var ACCELERATION = MAX_SPEED / 0.3
+@export var GROUND_FRICTION = 6000.0
+@export var AIR_FRICTION = 2000.0
 
-const MAX_HEALTH = 100
+@export var MAX_HEALTH = 100
 
 const BLOCK_LIST = [0, 1, 2, 3, 4, 5, 6, 7, 8, 16, 17, 18, 19, 20, 21, 22, 23, 24, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 

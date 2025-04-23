@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-@export var speed = 1000
+@export var speed = 100
 @export var damage = 25
 
 
@@ -45,6 +45,12 @@ func _physics_process(delta: float) -> void:
 	remove_bullet.rpc()
 
 
+
+
 @rpc("call_local", "any_peer")
 func remove_bullet():
+	queue_free()
+
+
+func _on_life_timer_timeout() -> void:
 	queue_free()
