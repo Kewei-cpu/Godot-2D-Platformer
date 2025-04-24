@@ -5,9 +5,11 @@ extends CharacterBody2D
 @onready var name_tag: Label = $Name
 
 @onready var character_sprite: AnimatedSprite2D = $CharacterSprite
-@onready var character_collision: CollisionShape2D = $CharacterCollision
+@onready var block_sprite: AnimatedSprite2D = $BlockSprite
+@onready var item_sprite: AnimatedSprite2D = $ItemSprite
 
-@onready var block_sprite: Sprite2D = $BlockSprite
+
+@onready var character_collision: CollisionShape2D = $CharacterCollision
 @onready var block_collision: CollisionShape2D = $BlockCollision
 
 @onready var gun_container: Node2D = $GunContainer
@@ -19,7 +21,6 @@ extends CharacterBody2D
 @onready var jump_request_timer: Timer = $JumpRequestTimer
 
 @onready var terrain: TileMapLayer = $"../LevelMap/Midground"
-
 @onready var spawn_point: Marker2D = $"../LevelMap/SpawnPoint"
 
 const CAMERA = preload("res://scenes/camera.tscn")
@@ -28,22 +29,23 @@ const BULLET = preload("res://scenes/bullet.tscn")
 @export var MAX_SPEED = 175
 @export var JUMP_VELOCITY = -300
 
-@export var ACCELERATION = MAX_SPEED / 0.2
-@export var GROUND_FRICTION = MAX_SPEED / 0.3
-@export var AIR_FRICTION = MAX_SPEED / 0.5
+@export var ACCELERATION = 800
+@export var GROUND_FRICTION = 800
+@export var AIR_FRICTION = 400
 
 @export var MAX_HEALTH = 100
 
-const BLOCK_LIST = [0, 1, 2, 3, 4, 5, 6, 7, 8, 16, 17, 18, 19, 20, 21, 22, 23, 24, 32, 33, 34, 35, 36, 37, 38, 39, 40]
-
-var is_block = false
-var frozen = false
+var _camouflaged = false
+var _frozen = false
 
 var health = MAX_HEALTH
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump"):
 		jump_request_timer.start()
+
+
 func _enter_tree() -> void:
 	set_multiplayer_authority(int(str(name)))
 
@@ -64,40 +66,55 @@ func _process(_delta: float) -> void:
 		return
 
 	if Input.is_action_just_pressed("switch"):
-		if frozen:
+		if is_frozen():
 			return
 
-		is_block = !is_block
-		update_block()
+		set_camouflage(not is_camouflaged())
 
 	if Input.is_action_just_pressed("lock"):
-		if character_sprite.visible:
+		if not is_camouflaged():
 			return
 
-		frozen = !frozen
-		update_frozen()
+		set_frozen(not is_frozen())
 
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
 
-	if frozen:
+	if is_frozen():
 		velocity = Vector2(0, 0)
-		global_position = global_position.snapped(Vector2(64, 64))
+		global_position = global_position.snapped(Vector2(16, 16))
 		return
 
+	handle_shoot()
+
+	var should_jump: bool = handle_jump(delta)
+
+	handle_move(delta)
+
+	var was_on_floor := is_on_floor()
+	move_and_slide()
+
+	if is_on_floor() != was_on_floor:
+		if was_on_floor and not should_jump:
+			coyote_timer.start()
+		else:
+			coyote_timer.stop()
+
+
+func handle_shoot():
 	gun_container.look_at(get_global_mouse_position())
 	gun_sprite.flip_v = get_global_mouse_position().x < global_position.x
 
-	if Input.is_action_just_pressed("shoot") and !is_block:
+	if Input.is_action_just_pressed("shoot") and not is_camouflaged():
 		if !cool_down.is_stopped():
 			return
 		shoot.rpc(multiplayer.get_unique_id())
 		cool_down.start()
 
-	var speed_direction = 1 if velocity.x > 0 else -1 if velocity.x < 0 else 0
 
+func handle_jump(delta):
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -109,9 +126,14 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 		coyote_timer.stop()
 		jump_request_timer.stop()
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
+
+	return should_jump
+
+
+func handle_move(delta):
 	var direction := Input.get_axis("move_left", "move_right")
+	var speed_direction := 1 if velocity.x > 0 else -1 if velocity.x < 0 else 0
+
 	if direction:
 		velocity.x = clampf(velocity.x + direction * ACCELERATION * delta, -MAX_SPEED, MAX_SPEED)
 
@@ -129,15 +151,6 @@ func _physics_process(delta: float) -> void:
 			character_sprite.flip_h = velocity.x < 0
 	else:
 		character_sprite.play("jump")
-	 
-	var was_on_floor := is_on_floor()
-	move_and_slide()
-	
-	if is_on_floor() != was_on_floor:
-		if was_on_floor and not should_jump:
-			coyote_timer.start()
-		else:
-			coyote_timer.stop()
 
 
 func respawn():
@@ -145,41 +158,36 @@ func respawn():
 	global_position = spawn_point.global_position
 	velocity = Vector2(0, 0)
 	health = MAX_HEALTH
-	is_block = false
-	frozen = false
-	call_deferred("update_block")
-	call_deferred("update_frozen")
+	call_deferred("set_camouflage", false)
+	call_deferred("set_frozen", false)
+
+
+func set_camouflage(is_camouflage: bool):
+	_camouflaged = is_camouflage
 	
+	if is_camouflage:
+		block_sprite.frame = randi() % 25 # total 25 blocks
+	
+	character_sprite.visible = !is_camouflage
+	block_sprite.visible = is_camouflage
 
-func update_block():
-	character_sprite.visible = !is_block
-	block_sprite.visible = is_block
+	character_collision.disabled = is_camouflage
+	block_collision.disabled = !is_camouflage
 
-	character_collision.disabled = is_block
-	block_collision.disabled = !is_block
+	gun_container.visible = !is_camouflage
 
-	gun_container.visible = !is_block
-
-	player.set_collision_layer_value(1, is_block)
+	player.set_collision_layer_value(1, is_camouflage)
 
 
-	if is_block:
-		var mouse_pos = get_global_mouse_position()
-		var local_pos = terrain.to_local(mouse_pos)
-		var tile_pos = terrain.local_to_map(local_pos)
-		
-		var source_id = terrain.get_cell_source_id(tile_pos)
-		var atlas_coords = terrain.get_cell_atlas_coords(tile_pos)
-		
-		if source_id != -1:
-			block_sprite.frame_coords = atlas_coords
-			block_sprite.show()
-		
-		if 	!atlas_coords in Terrain.BLOCKS:
-			player.set_collision_layer_value(1, false)
-		
-func update_frozen():
-	name_tag.visible = !frozen
+func set_frozen(is_frozen: bool):
+	_frozen = is_frozen
+	name_tag.visible = !is_frozen
+	
+func is_camouflaged():
+	return _camouflaged
+	
+func is_frozen():
+	return _frozen
 
 
 @rpc("any_peer")

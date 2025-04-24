@@ -1,16 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://n7yk27svvafh"]
+[gd_scene load_steps=7 format=3 uid="uid://n7yk27svvafh"]
 
 [ext_resource type="Texture2D" uid="uid://b7dfulijj28pw" path="res://sprites/bullets/29b.png" id="1_mkf8s"]
 [ext_resource type="Script" uid="uid://xa71ugpny5ee" path="res://scripts/bullet.gd" id="1_y25gk"]
+[ext_resource type="Script" uid="uid://co1jreaqh2xka" path="res://scripts/trail.gd" id="3_l5glv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_y25gk"]
 radius = 3.0
+
+[sub_resource type="Curve" id="Curve_l5glv"]
+_data = [Vector2(0, 0), 0.0, 0.0874167, 0, 0, Vector2(1, 1), 2.31242, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_eoqba"]
+interpolation_mode = 2
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.00282486, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.327402, 0.629969, 0.397604, 0.854902)
 
 [node name="Bullet" type="RigidBody2D"]
 z_index = 10
 collision_mask = 3
 gravity_scale = 0.0
 script = ExtResource("1_y25gk")
+speed = 500
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 10
@@ -27,5 +39,19 @@ wait_time = 5.0
 one_shot = true
 autostart = true
 
+[node name="VanishTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.1
+one_shot = true
+
+[node name="Trail" type="Line2D" parent="."]
+width = 4.0
+width_curve = SubResource("Curve_l5glv")
+gradient = SubResource("Gradient_eoqba")
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("3_l5glv")
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
+[connection signal="timeout" from="VanishTimer" to="." method="_on_life_timer_timeout"]
