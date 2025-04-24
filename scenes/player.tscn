@@ -177,7 +177,7 @@ animations = [{
 
 [sub_resource type="LabelSettings" id="LabelSettings_dqkch"]
 font = ExtResource("3_qhqgy")
-font_size = 24
+font_size = 8
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qlg0r"]
 size = Vector2(15.9, 15.9)
@@ -234,14 +234,12 @@ collision_layer = 2
 script = ExtResource("1_g2els")
 
 [node name="CharacterCollision" type="CollisionShape2D" parent="."]
-position = Vector2(32, -32)
-scale = Vector2(4, 4)
+position = Vector2(0, -8)
 shape = SubResource("CapsuleShape2D_g2els")
 
 [node name="CharacterSprite" type="AnimatedSprite2D" parent="."]
 z_index = 5
-position = Vector2(32, -48)
-scale = Vector2(4, 4)
+position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_tuyoq")
 animation = &"idle"
 autoplay = "idle"
@@ -249,9 +247,11 @@ frame = 2
 frame_progress = 0.518686
 
 [node name="Name" type="Label" parent="."]
-offset_top = -102.0
-offset_right = 66.0
-offset_bottom = -78.0
+offset_left = -13.0
+offset_top = -24.0
+offset_right = 21.0
+offset_bottom = -16.0
+scale = Vector2(0.8, 0.8)
 text = "PID"
 label_settings = SubResource("LabelSettings_dqkch")
 horizontal_alignment = 1
@@ -259,14 +259,12 @@ horizontal_alignment = 1
 [node name="BlockSprite" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(32, -32)
-scale = Vector2(4, 4)
 texture = ExtResource("4_dqkch")
 hframes = 16
 vframes = 16
 
 [node name="BlockCollision" type="CollisionShape2D" parent="."]
-position = Vector2(32, -32)
-scale = Vector2(4, 4)
+position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_qlg0r")
 disabled = true
 
@@ -274,12 +272,12 @@ disabled = true
 replication_config = SubResource("SceneReplicationConfig_qhqgy")
 
 [node name="GunContainer" type="Node2D" parent="."]
-position = Vector2(32, -24)
+position = Vector2(0, -8)
 
 [node name="GunSprite" type="Sprite2D" parent="GunContainer"]
 z_index = 10
-position = Vector2(32, 1)
-scale = Vector2(3, 3)
+position = Vector2(8, 1)
+scale = Vector2(0.75, 0.75)
 texture = ExtResource("5_qlg0r")
 
 [node name="Muzzle" type="Marker2D" parent="GunContainer/GunSprite"]

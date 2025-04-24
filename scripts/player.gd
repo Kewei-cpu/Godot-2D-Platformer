@@ -18,23 +18,26 @@ extends CharacterBody2D
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var jump_request_timer: Timer = $JumpRequestTimer
 
-@onready var terrain = get_parent().get_node("Terrain")
+@onready var terrain: TileMapLayer = $"../LevelMap/Midground"
+
+@onready var spawn_point: Marker2D = $"../LevelMap/SpawnPoint"
+
 const CAMERA = preload("res://scenes/camera.tscn")
 const BULLET = preload("res://scenes/bullet.tscn")
 
-@export var MAX_SPEED = 800.0
-@export var JUMP_VELOCITY = -1200.0
+@export var MAX_SPEED = 175
+@export var JUMP_VELOCITY = -300
 
-@export var ACCELERATION = MAX_SPEED / 0.3
-@export var GROUND_FRICTION = 6000.0
-@export var AIR_FRICTION = 2000.0
+@export var ACCELERATION = MAX_SPEED / 0.2
+@export var GROUND_FRICTION = MAX_SPEED / 0.3
+@export var AIR_FRICTION = MAX_SPEED / 0.5
 
 @export var MAX_HEALTH = 100
 
 const BLOCK_LIST = [0, 1, 2, 3, 4, 5, 6, 7, 8, 16, 17, 18, 19, 20, 21, 22, 23, 24, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 
-@export var is_block = false
-@export var frozen = false
+var is_block = false
+var frozen = false
 
 var health = MAX_HEALTH
 
@@ -138,7 +141,8 @@ func _physics_process(delta: float) -> void:
 
 
 func respawn():
-	global_position = Vector2(64, -384)
+	spawn_point.print_tree_pretty()
+	global_position = spawn_point.global_position
 	velocity = Vector2(0, 0)
 	health = MAX_HEALTH
 	is_block = false

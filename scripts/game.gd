@@ -6,6 +6,9 @@ const PLAYER = preload("res://scenes/player.tscn")
 @onready var player_count: Label = $WaitingScreen/VBoxContainer/PlayerCount
 @onready var ready_count: Label = $WaitingScreen/VBoxContainer/ReadyCount
 @onready var start_game: Button = $WaitingScreen/VBoxContainer/StartGame
+@onready var spawn_point: Marker2D = $LevelMap/SpawnPoint
+
+
 
 var players: Array[Player] = []
 var peer = ENetMultiplayerPeer.new()
@@ -28,13 +31,15 @@ func _process(delta: float) -> void:
 	update_wating_screen.rpc(multiplayer.get_peers().size() + 1, GameHandler.ready_players.size())
 
 	if GameHandler.is_everyone_ready() and GameHandler.game_started:
+		
 		print("All players are ready, starting the game...")
 		hide_wating_screen.rpc()
 		while !GameHandler.new_players.is_empty():
 			var pid = GameHandler.new_players.pop_front()
 			player_joined(pid)
 		GameHandler.game_started = false
-
+	
+		#Transition.cross_fade()
 
 func player_joined(pid):
 	# Called when a player joins the game
@@ -48,7 +53,7 @@ func add_player(n):
 	players.append(player)
 
 	player.name = str(n)
-	player.global_position = Vector2(16, -384)
+	player.global_position = spawn_point.global_position
 
 	var name_tag = player.find_child("Name")
 	name_tag.text = "P" + str(len(players))

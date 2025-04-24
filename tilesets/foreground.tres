@@ -1,0 +1,32 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bp0sjqegwvf7h"]
+
+[ext_resource type="Texture2D" uid="uid://ua8o73go4i4d" path="res://sprites/foreground_/foreground_.png" id="1_qx7tb"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e7mj4"]
+texture = ExtResource("1_qx7tb")
+0:0/animation_columns = 8
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/animation_frame_2/duration = 1.0
+0:0/animation_frame_3/duration = 1.0
+0:0/animation_frame_4/duration = 1.0
+0:0/animation_frame_5/duration = 1.0
+0:0/animation_frame_6/duration = 1.0
+0:0/animation_frame_7/duration = 1.0
+0:0/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+0:5/0 = 0
+0:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+6:7/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_e7mj4")
