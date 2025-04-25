@@ -19,6 +19,7 @@ extends CharacterBody2D
 @onready var cool_down: Timer = $CoolDown
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var jump_request_timer: Timer = $JumpRequestTimer
+@onready var hit_color: Timer = $HitColor
 
 @onready var terrain: TileMapLayer = $"../LevelMap/Midground"
 @onready var spawn_point: Marker2D = $"../LevelMap/SpawnPoint"
@@ -76,6 +77,8 @@ func _process(_delta: float) -> void:
 			return
 
 		set_frozen(not is_frozen())
+		
+	show_hit_color()
 
 
 func _physics_process(delta: float) -> void:
@@ -153,8 +156,20 @@ func handle_move(delta):
 		character_sprite.play("jump")
 
 
+func show_hit_color():
+	if hit_color.is_stopped():
+		character_sprite.modulate = Color(1, 1, 1)
+		block_sprite.modulate = Color(1, 1, 1)
+		item_sprite.modulate = Color(1, 1, 1)
+	
+	else:	
+		character_sprite.modulate = Color(0.906, 0.306, 0.357)
+		block_sprite.modulate = Color(0.906, 0.306, 0.357)
+		item_sprite.modulate = Color(0.906, 0.306, 0.357)
+	
+		print('11')
+
 func respawn():
-	spawn_point.print_tree_pretty()
 	global_position = spawn_point.global_position
 	velocity = Vector2(0, 0)
 	health = MAX_HEALTH
@@ -191,12 +206,15 @@ func is_frozen():
 
 
 @rpc("any_peer")
-func take_damage(damage):
+func bullet_hit(damage, collision_normal, hitback):
 	health -= damage
+	hit_color.start()
 
 	if health <= 0:
 		respawn()
-
+	
+	velocity -= collision_normal * hitback
+	
 
 @rpc("call_local")
 func shoot(pid):

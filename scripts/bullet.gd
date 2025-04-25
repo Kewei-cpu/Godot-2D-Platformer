@@ -1,7 +1,8 @@
 extends RigidBody2D
 
-@export var speed = 1000
-@export var damage = 25
+@export var speed = 500
+@export var damage = 10
+@export var hitback = 100
 
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
@@ -28,7 +29,7 @@ func _physics_process(delta: float) -> void:
 	if body is Player:
 		if body.get_multiplayer_authority() == multiplayer.get_unique_id():
 			return
-		body.take_damage.rpc_id(body.get_multiplayer_authority(), damage)
+		body.bullet_hit.rpc_id(body.get_multiplayer_authority(), damage, collision.get_normal(), hitback)
 
 	if body is TileMapLayer:
 		var coord: Vector2i = body.local_to_map(body.to_local(collision.get_position() - collision.get_normal()))
@@ -36,7 +37,7 @@ func _physics_process(delta: float) -> void:
 	remove_bullet.rpc()
 
 
-@rpc("call_local", "any_peer")
+@rpc("call_local")
 func remove_bullet():
 	has_hit = true
 	sprite_2d.hide()

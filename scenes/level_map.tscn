@@ -1558,6 +1558,7 @@ texture = ExtResource("6_2iehp")
 
 [sub_resource type="TileSet" id="TileSet_xb237"]
 physics_layer_0/collision_layer = 1
+physics_layer_1/collision_layer = 1
 terrain_set_0/mode = 2
 terrain_set_0/terrain_0/name = "Dirt"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
@@ -1615,4 +1616,4 @@ tile_map_data = PackedByteArray("AADx/wAAAAAAAAYAAADx/wEAAAAAAAYAAADy/wAAAAAAAAY
 tile_set = ExtResource("3_e7mj4")
 
 [node name="SpawnPoint" type="Marker2D" parent="."]
-position = Vector2(192, 0)
+position = Vector2(128, -96)

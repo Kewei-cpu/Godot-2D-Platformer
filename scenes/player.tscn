@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=3 uid="uid://cnkylbamt2u8d"]
+[gd_scene load_steps=87 format=3 uid="uid://cnkylbamt2u8d"]
 
 [ext_resource type="Texture2D" uid="uid://xng7rndc0vsj" path="res://sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c56riao304oxf" path="res://scripts/player.gd" id="1_g2els"]
@@ -62,6 +62,15 @@ properties/13/replication_mode = 1
 properties/14/path = NodePath("GunContainer:visible")
 properties/14/spawn = true
 properties/14/replication_mode = 1
+properties/15/path = NodePath("CharacterSprite:modulate")
+properties/15/spawn = true
+properties/15/replication_mode = 1
+properties/16/path = NodePath("BlockSprite:modulate")
+properties/16/spawn = true
+properties/16/replication_mode = 1
+properties/17/path = NodePath("ItemSprite:modulate")
+properties/17/spawn = true
+properties/17/replication_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("1_3vyb7")
@@ -78,6 +87,10 @@ region = Rect2(64, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_qlg0r"]
 atlas = ExtResource("1_3vyb7")
 region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vdulj"]
+atlas = ExtResource("1_3vyb7")
+region = Rect2(0, 192, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
 atlas = ExtResource("1_3vyb7")
@@ -161,6 +174,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qlg0r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vdulj")
 }],
 "loop": true,
 "name": &"idle",
@@ -636,8 +652,8 @@ position = Vector2(8, -12)
 sprite_frames = SubResource("SpriteFrames_tuyoq")
 animation = &"idle"
 autoplay = "idle"
-frame = 2
-frame_progress = 0.518686
+frame = 1
+frame_progress = 0.20301
 
 [node name="BlockSprite" type="AnimatedSprite2D" parent="."]
 visible = false
@@ -648,3 +664,7 @@ sprite_frames = SubResource("SpriteFrames_4gjji")
 visible = false
 position = Vector2(8, -8)
 sprite_frames = SubResource("SpriteFrames_u2ulf")
+
+[node name="HitColor" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true

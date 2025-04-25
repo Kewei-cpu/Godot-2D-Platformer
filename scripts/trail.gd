@@ -1,6 +1,6 @@
 extends Line2D
 
-@export var length = 20
+@export var length = 15
 @onready var vanish_timer: Timer = $"../VanishTimer"
 
 var max_points := 0
@@ -17,7 +17,8 @@ func _physics_process(delta: float) -> void:
 			return
 			
 		for i in n:
-			remove_point(0)
+			if get_point_count():
+				remove_point(0)	
 		total_time = 0
 		return
 
