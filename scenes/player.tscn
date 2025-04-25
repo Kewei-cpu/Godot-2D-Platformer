@@ -598,6 +598,7 @@ animations = [{
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
+collision_mask = 17
 script = ExtResource("1_g2els")
 
 [node name="CharacterCollision" type="CollisionShape2D" parent="."]

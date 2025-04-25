@@ -167,8 +167,6 @@ func show_hit_color():
 		block_sprite.modulate = Color(0.906, 0.306, 0.357)
 		item_sprite.modulate = Color(0.906, 0.306, 0.357)
 	
-		print('11')
-
 func respawn():
 	global_position = spawn_point.global_position
 	velocity = Vector2(0, 0)

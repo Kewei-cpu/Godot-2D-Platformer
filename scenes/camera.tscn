@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://75nysifuupkp"]
 
 [node name="Camera2D" type="Camera2D"]
-offset = Vector2(0, -40)
-zoom = Vector2(3, 3)
+offset = Vector2(0, -20)
+zoom = Vector2(4, 4)
 limit_bottom = 80
 position_smoothing_enabled = true
