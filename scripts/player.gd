@@ -36,6 +36,15 @@ const BULLET = preload("res://scenes/bullet.tscn")
 
 @export var MAX_HEALTH = 100
 
+
+
+@onready var healthbar_background: ColorRect = $HealthbarBackground
+@onready var health_fill: ColorRect = $HealthFill
+@onready var health_label: Label = $HealthLabel
+
+
+
+
 var _camouflaged = false
 var _frozen = false
 
@@ -59,10 +68,17 @@ func _ready() -> void:
 	#if is_multiplayer_authority():
 	#print(1)
 	#name_tag.label_settings.font_color = Color(0.456, 0.777, 0.153)
+	health_label.text = "%d/%d" % [health, MAX_HEALTH]
 	pass
 
 
 func _process(_delta: float) -> void:
+	
+	if Input.is_action_just_pressed("test"):
+		health -= 10
+		on_health_changed()
+	
+	
 	if !is_multiplayer_authority():
 		return
 
@@ -195,6 +211,9 @@ func set_camouflage(is_camouflage: bool):
 func set_frozen(is_frozen: bool):
 	_frozen = is_frozen
 	name_tag.visible = !is_frozen
+	health_fill.visible = !is_frozen
+	health_label.visible = !is_frozen
+	healthbar_background.visible = !is_frozen
 	
 func is_camouflaged():
 	return _camouflaged
@@ -207,7 +226,7 @@ func is_frozen():
 func bullet_hit(damage, collision_normal, hitback):
 	health -= damage
 	hit_color.start()
-
+	on_health_changed()
 	if health <= 0:
 		respawn()
 	
@@ -221,3 +240,25 @@ func shoot(pid):
 	bullet.transform = muzzle.global_transform
 	bullet.global_scale = Vector2(1, 1)
 	bullet.set_multiplayer_authority(pid)
+	
+	
+	
+	
+	#
+
+
+func on_health_changed():
+	if not is_inside_tree():
+		return
+		
+	var health_ratio = float(health) / MAX_HEALTH
+	health_fill.scale.x = health_ratio
+	
+	health_label.text = "%d/%d" % [health, MAX_HEALTH]
+	
+	if health_ratio < 0.3:
+		health_fill.color = Color.RED
+	elif health_ratio < 0.6:
+		health_fill.color = Color.YELLOW
+	else:
+		health_fill.color = Color.GREEN

@@ -653,8 +653,6 @@ position = Vector2(8, -12)
 sprite_frames = SubResource("SpriteFrames_tuyoq")
 animation = &"idle"
 autoplay = "idle"
-frame = 1
-frame_progress = 0.20301
 
 [node name="BlockSprite" type="AnimatedSprite2D" parent="."]
 visible = false
@@ -669,3 +667,23 @@ sprite_frames = SubResource("SpriteFrames_u2ulf")
 [node name="HitColor" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
+
+[node name="HealthbarBackground" type="ColorRect" parent="."]
+offset_left = -8.0
+offset_top = -32.0
+offset_right = 25.0
+offset_bottom = -26.0
+color = Color(0.0954408, 0.319425, 0.449492, 1)
+
+[node name="HealthFill" type="ColorRect" parent="."]
+offset_left = -8.0
+offset_top = -32.0
+offset_right = 25.0
+offset_bottom = -26.0
+color = Color(0, 0.745098, 0.247059, 1)
+
+[node name="HealthLabel" type="Label" parent="."]
+offset_left = -7.0
+offset_top = -56.0
+offset_right = 25.0
+offset_bottom = -33.0
