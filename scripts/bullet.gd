@@ -37,7 +37,7 @@ func _physics_process(delta: float) -> void:
 	remove_bullet.rpc()
 
 
-@rpc("call_local")
+@rpc("call_local", "any_peer")
 func remove_bullet():
 	has_hit = true
 	sprite_2d.hide()

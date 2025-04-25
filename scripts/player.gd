@@ -214,7 +214,7 @@ func bullet_hit(damage, collision_normal, hitback):
 	velocity -= collision_normal * hitback
 	
 
-@rpc("call_local")
+@rpc("call_local", "any_peer")
 func shoot(pid):
 	var bullet = BULLET.instantiate()
 	get_parent().add_child(bullet)
