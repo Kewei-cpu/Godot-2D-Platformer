@@ -22,7 +22,6 @@ z_index = 10
 collision_mask = 3
 gravity_scale = 0.0
 script = ExtResource("1_y25gk")
-speed = 500
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 10
