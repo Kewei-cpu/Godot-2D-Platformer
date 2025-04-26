@@ -1880,7 +1880,7 @@ texture = ExtResource("6_2iehp")
 0:8/0/texture_origin = Vector2i(-8, 0)
 
 [sub_resource type="TileSet" id="TileSet_xb237"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 3
 physics_layer_1/collision_layer = 16
 physics_layer_1/collision_mask = 0
 terrain_set_0/mode = 2

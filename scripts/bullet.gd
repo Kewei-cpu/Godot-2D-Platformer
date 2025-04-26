@@ -12,11 +12,15 @@ extends RigidBody2D
 var velocity: Vector2
 var has_hit := false
 
-
+func _ready() -> void:
+	set_collision_layer_value(3, true) 
+	set_collision_mask_value(1, false) 
+	set_collision_mask_value(2, true)  
+	
 func _physics_process(delta: float) -> void:
 	if has_hit:
 		return
-
+	
 	velocity = transform.x.normalized() * speed
 	var collision = move_and_collide(velocity * delta) 
 
