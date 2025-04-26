@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drid6pwkscfuq"
-path="res://.godot/imported/slime_green.png-d23936e8ad50c1f02045d1fdaace456b.ctex"
+uid="uid://dmiimvof6lid"
+path="res://.godot/imported/Sample-InventorySlotsSet.png-8eacce386e3965b8628e8fec0ff2c371.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/slime_green.png"
-dest_files=["res://.godot/imported/slime_green.png-d23936e8ad50c1f02045d1fdaace456b.ctex"]
+source_file="res://sprites/Sample-InventorySlotsSet.png"
+dest_files=["res://.godot/imported/Sample-InventorySlotsSet.png-8eacce386e3965b8628e8fec0ff2c371.ctex"]
 
 [params]
 
