@@ -78,6 +78,8 @@ func _process(_delta: float) -> void:
 		health -= 10
 		on_health_changed()
 	
+	if Input.is_key_pressed(KEY_F2):
+		respawn()
 	
 	if !is_multiplayer_authority():
 		return
@@ -187,6 +189,7 @@ func respawn():
 	global_position = spawn_point.global_position
 	velocity = Vector2(0, 0)
 	health = MAX_HEALTH
+	on_health_changed()
 	call_deferred("set_camouflage", false)
 	call_deferred("set_frozen", false)
 

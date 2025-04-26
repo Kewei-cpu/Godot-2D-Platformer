@@ -683,7 +683,11 @@ offset_bottom = -26.0
 color = Color(0, 0.745098, 0.247059, 1)
 
 [node name="HealthLabel" type="Label" parent="."]
-offset_left = -7.0
-offset_top = -56.0
-offset_right = 25.0
-offset_bottom = -33.0
+offset_left = -11.0
+offset_top = -32.0
+offset_right = 23.0
+offset_bottom = -24.0
+scale = Vector2(0.8, 0.8)
+text = "health"
+label_settings = SubResource("LabelSettings_dqkch")
+horizontal_alignment = 1
