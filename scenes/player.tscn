@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://cnkylbamt2u8d"]
+[gd_scene load_steps=92 format=3 uid="uid://cnkylbamt2u8d"]
 
 [ext_resource type="Texture2D" uid="uid://xng7rndc0vsj" path="res://sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c56riao304oxf" path="res://scripts/player.gd" id="1_g2els"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://q6fimxc3b1sf" path="res://sprites/midground_/autumn_.png" id="9_d2wvv"]
 [ext_resource type="Texture2D" uid="uid://b22tkofr131ja" path="res://sprites/midground_/winter_.png" id="10_3v2ag"]
 [ext_resource type="Texture2D" uid="uid://bubanbsdbnf1" path="res://sprites/objects_/staticObjects_.png" id="11_d2wvv"]
+[ext_resource type="Texture2D" uid="uid://bvcicttn31htg" path="res://sprites/inventory.png" id="12_3v2ag"]
+[ext_resource type="Texture2D" uid="uid://cgjtr2p7v3vsi" path="res://sprites/objects_/coin_.png" id="13_jej6c"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_dqkch"]
 font = ExtResource("3_qhqgy")
@@ -80,6 +82,15 @@ properties/19/replication_mode = 1
 properties/20/path = NodePath("HealthFill:scale:x")
 properties/20/spawn = true
 properties/20/replication_mode = 1
+properties/21/path = NodePath("HealthbarBackground:visible")
+properties/21/spawn = true
+properties/21/replication_mode = 1
+properties/22/path = NodePath("HealthFill:visible")
+properties/22/spawn = true
+properties/22/replication_mode = 1
+properties/23/path = NodePath("HealthLabel:visible")
+properties/23/spawn = true
+properties/23/replication_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("1_3vyb7")
@@ -605,6 +616,18 @@ animations = [{
 "speed": 0.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vau08"]
+atlas = ExtResource("12_3v2ag")
+region = Rect2(27, 0, 92, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qsb7e"]
+atlas = ExtResource("12_3v2ag")
+region = Rect2(1, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjsmb"]
+atlas = ExtResource("13_jej6c")
+region = Rect2(0, 0, 16, 16)
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 17
@@ -700,3 +723,81 @@ scale = Vector2(0.6, 0.6)
 text = "100"
 label_settings = SubResource("LabelSettings_dqkch")
 horizontal_alignment = 1
+
+[node name="Inventory" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Inventory"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="InventoryIndicator" type="TextureRect" parent="Inventory/MarginContainer"]
+custom_minimum_size = Vector2(368, 96)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+texture = SubResource("AtlasTexture_vau08")
+
+[node name="IndicatorMargin" type="MarginContainer" parent="Inventory/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+
+[node name="InventoryBar" type="TextureRect" parent="Inventory/MarginContainer/IndicatorMargin"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+texture = SubResource("AtlasTexture_qsb7e")
+
+[node name="MarginContainer" type="MarginContainer" parent="Inventory/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="ItemIcon" type="GridContainer" parent="Inventory/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/h_separation = 4
+columns = 5
+
+[node name="ItemIcon0" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("AtlasTexture_qjsmb")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="ItemIcon1" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("AtlasTexture_qjsmb")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="ItemIcon2" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("AtlasTexture_qjsmb")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="ItemIcon3" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("AtlasTexture_qjsmb")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="ItemIcon4" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("AtlasTexture_qjsmb")
+expand_mode = 2
+stretch_mode = 4

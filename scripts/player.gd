@@ -8,7 +8,6 @@ extends CharacterBody2D
 @onready var block_sprite: AnimatedSprite2D = $BlockSprite
 @onready var item_sprite: AnimatedSprite2D = $ItemSprite
 
-
 @onready var character_collision: CollisionShape2D = $CharacterCollision
 @onready var block_collision: CollisionShape2D = $BlockCollision
 
@@ -23,6 +22,9 @@ extends CharacterBody2D
 
 @onready var terrain: TileMapLayer = $"../LevelMap/Midground"
 @onready var spawn_point: Marker2D = $"../LevelMap/SpawnPoint"
+
+@onready var inventory: CanvasLayer = $Inventory
+@onready var indicator_margin: MarginContainer = $Inventory/MarginContainer/IndicatorMargin
 
 const CAMERA = preload("res://scenes/camera.tscn")
 const BULLET = preload("res://scenes/bullet.tscn")
@@ -47,6 +49,8 @@ const BULLET = preload("res://scenes/bullet.tscn")
 
 var _camouflaged = false
 var _frozen = false
+var _inventory:Array[Collectable] = [null, null, null, null, null]
+var current_inventory_slot = 0
 
 var health = MAX_HEALTH
 
@@ -65,14 +69,19 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	#if is_multiplayer_authority():
-	#print(1)
-	#name_tag.label_settings.font_color = Color(0.456, 0.777, 0.153)
-	health_label.text = str(health)
+	if not is_multiplayer_authority():
+		return
+		
+	inventory.show()
 
 
 func _process(_delta: float) -> void:
+	if !is_multiplayer_authority():
+		return
+		
+	handle_slot_change()
 	
+		
 	if Input.is_action_just_pressed("test"):
 		health -= 10
 		on_health_changed()
@@ -80,9 +89,7 @@ func _process(_delta: float) -> void:
 	if Input.is_key_pressed(KEY_F2):
 		respawn()
 	
-	if !is_multiplayer_authority():
-		return
-
+	
 	if Input.is_action_just_pressed("switch"):
 		if is_frozen():
 			return
@@ -172,6 +179,37 @@ func handle_move(delta):
 	else:
 		character_sprite.play("jump")
 
+func handle_slot_change():
+	if Input.is_action_just_pressed("Slot 0"):
+		change_incnentory_slot(0)
+	
+	if Input.is_action_just_pressed("Slot 1"):
+		change_incnentory_slot(1)	
+
+	if Input.is_action_just_pressed("Slot 2"):
+		change_incnentory_slot(2)
+
+	if Input.is_action_just_pressed("Slot 3"):
+		change_incnentory_slot(3)
+
+	if Input.is_action_just_pressed("Slot 4"):
+		change_incnentory_slot(4)
+
+func handle_item_use():
+	if Input.is_action_just_pressed("item_use"):
+		if not _inventory[current_inventory_slot]:
+			return
+		
+		var item: Collectable = _inventory[current_inventory_slot]
+		
+		if not item.useable:
+			return
+		
+		var discard := not item.on_player_use()
+		
+		if discard:
+			_inventory[current_inventory_slot] = null
+		
 
 func show_hit_color():
 	if hit_color.is_stopped():
@@ -224,6 +262,31 @@ func is_frozen():
 	return _frozen
 
 
+
+func change_incnentory_slot(slot: int) -> void:
+	if slot > 4 or slot < 0:
+		return
+	print('change to %s' % slot)
+	indicator_margin.add_theme_constant_override("margin_left", 68 * slot)
+
+
+func add_item_to_inventory(item: Collectable) -> bool:
+#	return true when player has room to collect the item
+	
+	if self._inventory[current_inventory_slot] == null:
+		_inventory[current_inventory_slot] = item
+		return true
+	
+	for slot in range(5):
+		if self._inventory[slot] == null:
+			_inventory[slot] = item
+			return true
+		
+	return false
+	
+	
+	
+
 @rpc("any_peer")
 func bullet_hit(damage, collision_normal, hitback):
 	health -= damage
@@ -235,7 +298,7 @@ func bullet_hit(damage, collision_normal, hitback):
 	velocity -= collision_normal * hitback
 	
 
-@rpc("call_local", "any_peer")
+@rpc("call_local")
 func shoot(pid):
 	var bullet = BULLET.instantiate()
 	get_parent().add_child(bullet)

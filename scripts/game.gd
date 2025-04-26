@@ -51,6 +51,8 @@ func add_player(n):
 	var player = PLAYER.instantiate()
 
 	players.append(player)
+	
+	player.set_multiplayer_authority(n)
 
 	player.name = str(n)
 	player.global_position = spawn_point.global_position
