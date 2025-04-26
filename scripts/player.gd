@@ -27,7 +27,7 @@ extends CharacterBody2D
 const CAMERA = preload("res://scenes/camera.tscn")
 const BULLET = preload("res://scenes/bullet.tscn")
 
-@export var MAX_SPEED = 175
+@export var MAX_SPEED = 150
 @export var JUMP_VELOCITY = -300
 
 @export var ACCELERATION = 800
@@ -68,8 +68,7 @@ func _ready() -> void:
 	#if is_multiplayer_authority():
 	#print(1)
 	#name_tag.label_settings.font_color = Color(0.456, 0.777, 0.153)
-	health_label.text = "%d/%d" % [health, MAX_HEALTH]
-	pass
+	health_label.text = str(health)
 
 
 func _process(_delta: float) -> void:
@@ -244,10 +243,6 @@ func shoot(pid):
 	bullet.global_scale = Vector2(1, 1)
 	bullet.set_multiplayer_authority(pid)
 	
-	
-	
-	
-	#
 
 
 func on_health_changed():
@@ -257,11 +252,11 @@ func on_health_changed():
 	var health_ratio = float(health) / MAX_HEALTH
 	health_fill.scale.x = health_ratio
 	
-	health_label.text = "%d/%d" % [health, MAX_HEALTH]
+	health_label.text = str(health)
 	
 	if health_ratio < 0.3:
-		health_fill.color = Color.RED
+		health_fill.color = Color(0.928, 0.329, 0.199, 0.784)
 	elif health_ratio < 0.6:
-		health_fill.color = Color.YELLOW
+		health_fill.color = Color(0.914, 0.686, 0.165, 0.784)
 	else:
-		health_fill.color = Color.GREEN
+		health_fill.color = Color(0.0, 0.745, 0.247, 0.659)

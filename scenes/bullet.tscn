@@ -19,6 +19,7 @@ colors = PackedColorArray(0, 0, 0, 0, 0.327402, 0.629969, 0.397604, 0.854902)
 
 [node name="Bullet" type="RigidBody2D"]
 z_index = 10
+collision_layer = 0
 collision_mask = 3
 gravity_scale = 0.0
 script = ExtResource("1_y25gk")

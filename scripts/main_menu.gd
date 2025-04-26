@@ -8,5 +8,4 @@ func _on_host_pressed() -> void:
 
 
 func _on_join_pressed() -> void:
-	if ip.text:
-		GameHandler.join(ip.text)
+	GameHandler.join(ip.text)
