@@ -660,7 +660,7 @@ one_shot = true
 z_index = 5
 position = Vector2(8, -12)
 sprite_frames = SubResource("SpriteFrames_tuyoq")
-animation = &"idle"
+animation = &"run"
 autoplay = "idle"
 
 [node name="BlockSprite" type="AnimatedSprite2D" parent="."]
