@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=4 uid="uid://cin65u8s7y6gf"]
+[gd_scene load_steps=16 format=4 uid="uid://cin65u8s7y6gf"]
 
 [ext_resource type="TileSet" uid="uid://bp0sjqegwvf7h" path="res://tilesets/foreground.tres" id="1_26e65"]
 [ext_resource type="Texture2D" uid="uid://bv0r7of1r5ldj" path="res://sprites/midground_/spring_.png" id="2_4mfww"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b22tkofr131ja" path="res://sprites/midground_/winter_.png" id="5_e6xmq"]
 [ext_resource type="Texture2D" uid="uid://bubanbsdbnf1" path="res://sprites/objects_/staticObjects_.png" id="6_2iehp"]
 [ext_resource type="PackedScene" uid="uid://psa4ouhlr0ab" path="res://scenes/kill_zone.tscn" id="8_ublle"]
+[ext_resource type="PackedScene" uid="uid://bix03e0wdjuor" path="res://scenes/blast_item.tscn" id="9_8v2yb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jbwni"]
 texture = ExtResource("2_4mfww")
@@ -1960,3 +1961,16 @@ position = Vector2(144, -16)
 
 [node name="KillZone" parent="." instance=ExtResource("8_ublle")]
 position = Vector2(-1, 132)
+
+[node name="BlastItem" parent="." instance=ExtResource("9_8v2yb")]
+position = Vector2(-16, -24)
+
+[node name="BlastItem2" parent="." instance=ExtResource("9_8v2yb")]
+position = Vector2(-16, -152)
+
+[node name="BlastItem3" parent="." instance=ExtResource("9_8v2yb")]
+position = Vector2(-328, -168)
+
+[connection signal="body_entered" from="BlastItem" to="BlastItem" method="_on_body_entered"]
+[connection signal="body_entered" from="BlastItem2" to="BlastItem2" method="_on_body_entered"]
+[connection signal="body_entered" from="BlastItem3" to="BlastItem3" method="_on_body_entered"]

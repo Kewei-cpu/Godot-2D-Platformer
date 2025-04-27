@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://cnkylbamt2u8d"]
+[gd_scene load_steps=90 format=3 uid="uid://cnkylbamt2u8d"]
 
 [ext_resource type="Texture2D" uid="uid://xng7rndc0vsj" path="res://sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c56riao304oxf" path="res://scripts/player.gd" id="1_g2els"]
@@ -12,7 +12,6 @@
 [ext_resource type="Texture2D" uid="uid://b22tkofr131ja" path="res://sprites/midground_/winter_.png" id="10_3v2ag"]
 [ext_resource type="Texture2D" uid="uid://bubanbsdbnf1" path="res://sprites/objects_/staticObjects_.png" id="11_d2wvv"]
 [ext_resource type="Texture2D" uid="uid://bvcicttn31htg" path="res://sprites/inventory.png" id="12_3v2ag"]
-[ext_resource type="Texture2D" uid="uid://cgjtr2p7v3vsi" path="res://sprites/objects_/coin_.png" id="13_jej6c"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_dqkch"]
 font = ExtResource("3_qhqgy")
@@ -624,10 +623,6 @@ region = Rect2(27, 0, 92, 24)
 atlas = ExtResource("12_3v2ag")
 region = Rect2(1, 0, 24, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qjsmb"]
-atlas = ExtResource("13_jej6c")
-region = Rect2(0, 0, 16, 16)
-
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 17
@@ -770,34 +765,32 @@ columns = 5
 [node name="ItemIcon0" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = SubResource("AtlasTexture_qjsmb")
 expand_mode = 2
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="ItemIcon1" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = SubResource("AtlasTexture_qjsmb")
 expand_mode = 2
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="ItemIcon2" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = SubResource("AtlasTexture_qjsmb")
 expand_mode = 2
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="ItemIcon3" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = SubResource("AtlasTexture_qjsmb")
 expand_mode = 2
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="ItemIcon4" type="TextureRect" parent="Inventory/MarginContainer/MarginContainer/ItemIcon"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = SubResource("AtlasTexture_qjsmb")
 expand_mode = 2
-stretch_mode = 4
+stretch_mode = 5
+
+[node name="Center" type="Marker2D" parent="."]
+position = Vector2(8, -8)
