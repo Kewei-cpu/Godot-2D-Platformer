@@ -97,7 +97,6 @@ const DAMAGED_COBBLESTONE: Vector2i = Vector2i(8, 0)
 const BROKEN_COBBLESTONE: Vector2i = Vector2i(8, 1)
 
 
-
 @rpc("call_local", "any_peer")
 func change_tile(coords: Vector2i, source_id: int = -1, atlas_coords: Vector2i = Vector2i(-1, -1), alternative_tile: int = 0) -> void:
 	set_cell(coords, source_id, atlas_coords, alternative_tile)

@@ -55,20 +55,6 @@ var current_inventory_slot = 0
 var health = MAX_HEALTH
 
 
-var directions = []
-
-
-func shoot_in_all_directions(pid) -> void:
-	for dir in directions:
-		var bullet = BULLET.instantiate()
-		bullet.rotation = dir.angle()
-		bullet.position = muzzle.global_position 
-		get_parent().add_child(bullet)
-		bullet.global_scale = Vector2(1, 1)
-		bullet.set_multiplayer_authority(pid)
-
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump"):
 		jump_request_timer.start()
@@ -83,20 +69,9 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	set_collision_layer_value(1, false)
-	set_collision_layer_value(2, true)
-	
 	if not is_multiplayer_authority():
 		return
 		
-	set_collision_layer_value(1, true)
-	set_collision_layer_value(2, false)
-	
-	for i in range(16):
-		var angle = i * (2 * PI / 16) 
-		directions.append(Vector2(cos(angle), sin(angle)).normalized())
-		
-	print(directions)
 	inventory.show()
 
 
@@ -108,12 +83,11 @@ func _process(_delta: float) -> void:
 	
 		
 	if Input.is_action_just_pressed("test"):
-		shoot_in_all_directions(multiplayer.get_unique_id())
-		
-	
-	if Input.is_key_pressed(KEY_F2):
 		health -= 10
 		on_health_changed()
+	
+	if Input.is_key_pressed(KEY_F2):
+		respawn()
 	
 	
 	if Input.is_action_just_pressed("switch"):

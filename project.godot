@@ -107,12 +107,6 @@ item_use={
 ]
 }
 
-[layer_names]
-
-2d_physics/layer_1="玩家"
-2d_physics/layer_2="敌人"
-2d_physics/layer_3="子弹"
-
 [physics]
 
 common/physics_ticks_per_second=120
