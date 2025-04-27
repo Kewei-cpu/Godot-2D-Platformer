@@ -39,17 +39,14 @@ const BULLET = preload("res://scenes/bullet.tscn")
 @export var MAX_HEALTH = 100
 
 
-
 @onready var healthbar_background: ColorRect = $HealthbarBackground
 @onready var health_fill: ColorRect = $HealthFill
 @onready var health_label: Label = $HealthLabel
 
 
-
-
 var _camouflaged = false
 var _frozen = false
-var _inventory:Array[Collectable] = [null, null, null, null, null]
+var _inventory: Array[Collectable] = [null, null, null, null, null]
 var current_inventory_slot = 0
 
 var health = MAX_HEALTH
@@ -83,8 +80,7 @@ func _process(_delta: float) -> void:
 	
 		
 	if Input.is_action_just_pressed("test"):
-		health -= 10
-		on_health_changed()
+		change_health(-10)
 	
 	if Input.is_key_pressed(KEY_F2):
 		respawn()
@@ -137,7 +133,7 @@ func handle_shoot():
 	if Input.is_action_just_pressed("shoot") and not is_camouflaged():
 		if !cool_down.is_stopped():
 			return
-		shoot.rpc(multiplayer.get_unique_id())
+		shoot()
 		cool_down.start()
 
 
@@ -184,7 +180,7 @@ func handle_slot_change():
 		change_incnentory_slot(0)
 	
 	if Input.is_action_just_pressed("Slot 1"):
-		change_incnentory_slot(1)	
+		change_incnentory_slot(1)
 
 	if Input.is_action_just_pressed("Slot 2"):
 		change_incnentory_slot(2)
@@ -217,7 +213,7 @@ func show_hit_color():
 		block_sprite.modulate = Color(1, 1, 1)
 		item_sprite.modulate = Color(1, 1, 1)
 	
-	else:	
+	else:
 		character_sprite.modulate = Color(0.906, 0.306, 0.357)
 		block_sprite.modulate = Color(0.906, 0.306, 0.357)
 		item_sprite.modulate = Color(0.906, 0.306, 0.357)
@@ -225,8 +221,8 @@ func show_hit_color():
 func respawn():
 	global_position = spawn_point.global_position
 	velocity = Vector2(0, 0)
-	health = MAX_HEALTH
-	on_health_changed()
+	set_health(MAX_HEALTH)
+	update_health_bar()
 	call_deferred("set_camouflage", false)
 	call_deferred("set_frozen", false)
 
@@ -262,7 +258,6 @@ func is_frozen():
 	return _frozen
 
 
-
 func change_incnentory_slot(slot: int) -> void:
 	if slot > 4 or slot < 0:
 		return
@@ -272,7 +267,6 @@ func change_incnentory_slot(slot: int) -> void:
 
 func add_item_to_inventory(item: Collectable) -> bool:
 #	return true when player has room to collect the item
-	
 	if self._inventory[current_inventory_slot] == null:
 		_inventory[current_inventory_slot] = item
 		return true
@@ -285,30 +279,37 @@ func add_item_to_inventory(item: Collectable) -> bool:
 	return false
 	
 	
-	
-
 @rpc("any_peer")
 func bullet_hit(damage, collision_normal, hitback):
-	health -= damage
-	hit_color.start()
-	on_health_changed()
-	if health <= 0:
-		respawn()
+	change_health(-damage)
 	
 	velocity -= collision_normal * hitback
 	
 
-@rpc("call_local")
-func shoot(pid):
-	var bullet = BULLET.instantiate()
-	get_parent().add_child(bullet)
-	bullet.transform = muzzle.global_transform
-	bullet.global_scale = Vector2(1, 1)
-	bullet.set_multiplayer_authority(pid)
+func shoot():
+	var bullet_transform := Transform2D(
+		muzzle.get_global_rotation(),
+		muzzle.get_global_position()
+	)
+	fire_bullet.rpc(
+		multiplayer.get_unique_id(),
+		BULLET,
+		bullet_transform
+	)
+	
 	
 
+@rpc("call_local")
+func fire_bullet(pid, bullet_scene:PackedScene, transform: Transform2D):
+	var bullet = bullet_scene.instantiate()
+	bullet.transform = transform
+	bullet.velocity = velocity
+	bullet.set_multiplayer_authority(pid)
+	
+	get_parent().add_child(bullet)
 
-func on_health_changed():
+
+func update_health_bar():
 	if not is_inside_tree():
 		return
 		
@@ -323,3 +324,16 @@ func on_health_changed():
 		health_fill.color = Color(0.914, 0.686, 0.165, 0.784)
 	else:
 		health_fill.color = Color(0.0, 0.745, 0.247, 0.659)
+
+func change_health(amount: int) -> void:
+	health = clamp(health + amount, 0, MAX_HEALTH)
+	if health == 0:
+		respawn()
+		return
+		
+	update_health_bar()
+
+
+func set_health(value: int) -> void:
+	health = clamp(value, 0, MAX_HEALTH)
+	update_health_bar()

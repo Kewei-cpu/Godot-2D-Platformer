@@ -33,6 +33,7 @@ func _physics_process(delta: float) -> void:
 
 	if body is TileMapLayer:
 		var coord: Vector2i = body.local_to_map(body.to_local(collision.get_position() - collision.get_normal()))
+		# TODO: add terrain damage
 
 	remove_bullet.rpc()
 
