@@ -1,6 +1,6 @@
 extends Node
 
-var player_name: String = "Anony"
+var player_name: String = "Anonymous"
 var players: Array[int] = []
 var peer = ENetMultiplayerPeer.new()
 

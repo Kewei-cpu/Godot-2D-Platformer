@@ -8,7 +8,7 @@ extends RigidBody2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var life_timer: Timer = $LifeTimer
 @onready var vanish_timer: Timer = $VanishTimer
-
+#
 var velocity: Vector2
 var has_hit := false
 
@@ -31,8 +31,8 @@ func _physics_process(delta: float) -> void:
 			return
 		body.bullet_hit.rpc_id(body.get_multiplayer_authority(), damage, collision.get_normal(), hitback)
 
-	if body is TileMapLayer:
-		var coord: Vector2i = body.local_to_map(body.to_local(collision.get_position() - collision.get_normal()))
+	#if body is TileMapLayer:
+		#var coord: Vector2i = body.local_to_map(body.to_local(collision.get_position() - collision.get_normal()))
 		# TODO: add terrain damage
 
 	remove_bullet.rpc()

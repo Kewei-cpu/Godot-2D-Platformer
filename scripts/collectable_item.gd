@@ -33,7 +33,7 @@ func _on_body_entered(body: Node2D) -> void:
 	var is_collected := player.add_item_to_inventory(self)
 
 	if is_collected:
-		hide_item()
+		hide_item.rpc()
 	else:
 		print("No room!")
 

@@ -14,11 +14,13 @@ const PLAYER = preload("res://scenes/player.tscn")
 @onready var seekers_list: ItemList = %SeekersList
 @onready var join_seekers: Button = %JoinSeekers
 
+@onready var is_server = multiplayer.is_server()
 
 @export var names_dict: Dictionary = {}
 @export var ready_players: Array[int] = []
 @export var hiders: Array[int] = []
 @export var seekers: Array[int] = []
+
 
 
 func _ready() -> void:
@@ -32,10 +34,8 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if Input.is_key_pressed(KEY_F3):
-		print(ready_players, hiders, seekers)
-	
-	if !multiplayer.is_server():
+
+	if not is_server:
 		return
 
 	start_game_button.visible = is_everyone_ready()
