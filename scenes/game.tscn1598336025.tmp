@@ -13,6 +13,10 @@
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_p57ef")
+names_dict = null
+ready_players = null
+hiders = null
+seekers = null
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 unique_name_in_owner = true
