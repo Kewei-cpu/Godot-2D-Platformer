@@ -171,7 +171,7 @@ text = "Start Game"
 
 [node name="HideTimer" type="Timer" parent="."]
 unique_name_in_owner = true
-wait_time = 3.0
+wait_time = 30.0
 one_shot = true
 
 [node name="SeekTimer" type="Timer" parent="."]
