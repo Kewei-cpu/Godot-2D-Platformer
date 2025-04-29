@@ -4,12 +4,12 @@ extends Control
 
 
 func _on_host_pressed() -> void:
-	GameHandler.host()
+	MultiplayerHandler.host()
 
 
 func _on_join_pressed() -> void:
-	GameHandler.join(ip.text)
+	MultiplayerHandler.join(ip.text)
 
 
 func _on_name_text_changed(new_text: String) -> void:
-	GameHandler.player_name = new_text
+	MultiplayerHandler.player_name = new_text
