@@ -41,12 +41,12 @@ extends CharacterBody2D
 const CAMERA = preload("res://scenes/camera.tscn")
 const BULLET = preload("res://scenes/bullet.tscn")
 
-@export var MAX_SPEED = 150
+@export var MAX_SPEED = 175
 @export var JUMP_VELOCITY = -300
 
-@export var ACCELERATION = 800
-@export var GROUND_FRICTION = 800
-@export var AIR_FRICTION = 400
+@export var ACCELERATION = 1000
+@export var GROUND_FRICTION = 1000
+@export var AIR_FRICTION = 500
 
 @export var MAX_HEALTH = 100
 
@@ -94,13 +94,11 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("switch"):
 		if is_frozen():
 			return
-
 		set_camouflage(not is_camouflaged())
 
 	if Input.is_action_just_pressed("lock"):
 		if not is_camouflaged():
 			return
-
 		set_frozen(not is_frozen())
 
 	show_hit_color()
@@ -213,8 +211,7 @@ func handle_item_use():
 		if not item.useable:
 			return
 
-		var discard := not await item.on_player_use()
-		print(discard)
+		var discard := not item.on_player_use()
 		if discard:
 			remove_item_from_inventory_slot(current_inventory_slot)
 
@@ -244,7 +241,7 @@ func set_camouflage(is_camouflage: bool):
 	_camouflaged = is_camouflage
 
 	if is_camouflage:
-		block_sprite.frame = randi() % 25  # total 25 blocks
+		block_sprite.frame = randi() % 25 # total 25 blocks
 
 	character_sprite.visible = !is_camouflage
 	block_sprite.visible = is_camouflage
@@ -325,13 +322,13 @@ func bullet_hit(damage, collision_normal, hitback):
 
 func shoot():
 	var bullet_transform := Transform2D(muzzle.get_global_rotation(), muzzle.get_global_position())
-	fire_bullet.rpc(multiplayer.get_unique_id(), BULLET, bullet_transform)
+	fire_bullet.rpc(multiplayer.get_unique_id(), bullet_transform)
 
 
 @rpc("call_local")
-func fire_bullet(pid, bullet_scene: PackedScene, transform: Transform2D):
-	var bullet = bullet_scene.instantiate()
-	bullet.transform = transform
+func fire_bullet(pid, bullet_transform: Transform2D):
+	var bullet = BULLET.instantiate()
+	bullet.transform = bullet_transform
 	bullet.velocity = velocity
 	bullet.set_multiplayer_authority(pid)
 
