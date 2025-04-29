@@ -15,6 +15,13 @@ const PLAYER = preload("res://scenes/player.tscn")
 @onready var status_tooltip: Label = %StatusTooltip
 @onready var start_game_button: Button = %StartGame
 
+@onready var seeker_waiting_screen: CanvasLayer = %SeekerWaitingScreen
+@onready var hide_time_left: Label = %HideTimeLeft
+
+
+@onready var hide_timer: Timer = %HideTimer
+@onready var seek_timer: Timer = %SeekTimer
+
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 
 @onready var is_server = multiplayer.is_server()
@@ -35,9 +42,12 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if Input.is_key_pressed(KEY_F4):
-		print(players)
-
+	if not is_multiplayer_authority():
+		return
+	
+	if not hide_timer.is_stopped():
+		for uid in seekers:
+			update_seeker_waiting_screen.rpc_id(uid, snappedf(hide_timer.time_left, 0.1))
 
 func add_player_to_scene(uid):
 	var player = PLAYER.instantiate()
@@ -133,10 +143,18 @@ func update_waiting_screen():
 		status_tooltip.text = "Waiting for every one to choose a side..."
 		start_game_button.hide()
 		
+@rpc("any_peer")
+func update_seeker_waiting_screen(time_left):
+	hide_time_left.text = str(time_left)
 
 @rpc("call_local")
 func hide_waiting_screen():
 	waiting_screen.hide()
+
+
+@rpc("any_peer")
+func set_seeker_waiting_screen(show: bool):
+	seeker_waiting_screen.visible = show
 
 
 func _on_join_hiders_pressed() -> void:
@@ -157,5 +175,18 @@ func _on_start_game_pressed() -> void:
 	if is_everyone_ready():
 		print("All players_in_game are ready, starting the game...")
 		hide_waiting_screen.rpc()
-		for uid in players:
+		for uid in hiders:
 			multiplayer_spawner.spawn(uid)
+		for uid in seekers:	
+			set_seeker_waiting_screen.rpc_id(uid, true)
+			
+		hide_timer.start()
+
+
+func _on_hide_timer_timeout() -> void:
+	print('timeout')
+	for uid in seekers:
+		set_seeker_waiting_screen.rpc_id(uid, false)
+		multiplayer_spawner.spawn(uid)
+		
+	seek_timer.start()

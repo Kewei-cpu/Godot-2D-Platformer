@@ -38,6 +38,8 @@ extends CharacterBody2D
 @onready var health_fill: ColorRect = $HealthFill
 @onready var health_label: Label = $HealthLabel
 
+@onready var game: Game = get_parent()
+	
 const CAMERA = preload("res://scenes/camera.tscn")
 const BULLET = preload("res://scenes/bullet.tscn")
 
@@ -57,29 +59,35 @@ var current_inventory_slot = 0
 
 var health = MAX_HEALTH
 
+enum Team {
+	HIDER,
+	SEEKER,
+}
+var team: Team
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump"):
 		jump_request_timer.start()
 
 
-func _enter_tree() -> void:
-	set_multiplayer_authority(int(str(name)))
-
-	if is_multiplayer_authority():
-		var camera = CAMERA.instantiate(PackedScene.GEN_EDIT_STATE_DISABLED)
-		add_child(camera)
-
-
 func _ready() -> void:
+	team = Team.HIDER if get_multiplayer_authority() in game.hiders else Team.SEEKER
+
 	if not is_multiplayer_authority():
+		set_collision_layer_value(2, false)
+
+		if multiplayer.get_unique_id() in game.hiders and team == Team.SEEKER or multiplayer.get_unique_id() in game.seekers and team == Team.HIDER:
+			set_collision_layer_value(1, true)
+
 		return
 
 	inventory.show()
-
+	var camera = CAMERA.instantiate()
+	add_child(camera)
 
 func _process(_delta: float) -> void:
-	if !is_multiplayer_authority():
+	if not is_multiplayer_authority():
 		return
 
 	handle_slot_change()
@@ -144,6 +152,11 @@ func handle_jump(delta):
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+		
+	if Input.is_action_just_released("jump"):
+		if velocity.y < JUMP_VELOCITY * 0.5 and not is_on_floor():
+			velocity.y = JUMP_VELOCITY * 0.5
+		
 
 	# Handle jump.
 	var can_jump := is_on_floor() or coyote_timer.time_left > 0.0
@@ -198,14 +211,9 @@ func handle_slot_change():
 
 func handle_item_use():
 	if Input.is_action_just_pressed("item_use"):
-		print(_inventory)
-		print(current_inventory_slot)
-		
 		if _inventory[current_inventory_slot] == null:
 			return
-		
-		print('use')
-		
+	
 		var item: Collectable = _inventory[current_inventory_slot]
 
 		if not item.useable:
@@ -317,7 +325,7 @@ func remove_item_from_inventory_slot(slot: int):
 func bullet_hit(damage, collision_normal, hitback):
 	change_health(-damage)
 
-	velocity -= collision_normal * hitback
+	velocity += collision_normal * hitback
 
 
 func shoot():

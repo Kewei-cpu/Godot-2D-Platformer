@@ -28,7 +28,6 @@ colors = PackedColorArray(0.6, 0.898039, 0.313726, 1, 0.416, 0.745, 0.188, 0.706
 [node name="Bullet" type="RigidBody2D"]
 z_index = 10
 collision_layer = 0
-collision_mask = 3
 gravity_scale = 0.0
 script = ExtResource("1_y25gk")
 
@@ -62,7 +61,7 @@ script = ExtResource("3_l5glv")
 
 [node name="BulletHitParticle" type="CPUParticles2D" parent="."]
 emitting = false
-amount = 20
+amount = 15
 lifetime = 0.5
 one_shot = true
 explosiveness = 0.9

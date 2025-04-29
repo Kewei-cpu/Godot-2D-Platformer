@@ -169,6 +169,57 @@ text = "Start Game"
 
 [node name="LevelMap" parent="." instance=ExtResource("4_iywne")]
 
+[node name="HideTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 3.0
+one_shot = true
+
+[node name="SeekTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 60.0
+one_shot = true
+
+[node name="SeekerWaitingScreen" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="SeekerWaitingScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0664123, 0.344665, 0.25032, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="SeekerWaitingScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SeekerWaitingScreen/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 30
+
+[node name="HideTimeLeft" type="Label" parent="SeekerWaitingScreen/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+theme_override_font_sizes/font_size = 96
+text = "30"
+horizontal_alignment = 1
+
+[node name="HideTimeLabel" type="Label" parent="SeekerWaitingScreen/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+text = "Seeking begins in ..."
+horizontal_alignment = 1
+
 [connection signal="pressed" from="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/JoinHiders" to="." method="_on_join_hiders_pressed"]
 [connection signal="pressed" from="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/JoinSeekers" to="." method="_on_join_seekers_pressed"]
 [connection signal="pressed" from="WaitingScreen/MarginContainer/VBoxContainer/StartGame" to="." method="_on_start_game_pressed"]
+[connection signal="timeout" from="HideTimer" to="." method="_on_hide_timer_timeout"]

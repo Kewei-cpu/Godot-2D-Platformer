@@ -31,19 +31,20 @@ func _physics_process(delta: float) -> void:
 	if body is Player:
 		if body.get_multiplayer_authority() == multiplayer.get_unique_id():
 			return
-		body.bullet_hit.rpc_id(body.get_multiplayer_authority(), damage, collision.get_normal(), hitback)
+		body.bullet_hit.rpc_id(body.get_multiplayer_authority(), damage, velocity.normalized(), hitback)
 
 	#if body is TileMapLayer:
 		#var coord: Vector2i = body.local_to_map(body.to_local(collision.get_position() - collision.get_normal()))
 		# TODO: add terrain damage
 	
-	bullet_hit_particle.emitting = true
+
 
 	remove_bullet.rpc()
 
 
 @rpc("call_local", "any_peer")
 func remove_bullet():
+	bullet_hit_particle.emitting = true
 	has_hit = true
 	sprite_2d.hide()
 	collision_shape_2d.disabled = true
