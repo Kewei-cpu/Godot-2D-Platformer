@@ -213,8 +213,8 @@ func handle_item_use():
 		if not item.useable:
 			return
 
-		var discard := not item.on_player_use()
-
+		var discard := not await item.on_player_use()
+		print(discard)
 		if discard:
 			remove_item_from_inventory_slot(current_inventory_slot)
 

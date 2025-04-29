@@ -31,3 +31,12 @@ disabled = false
 [node name="AnimatedSprite2D" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_6s64y")
 autoplay = "default"
+
+[node name="Lasting_Time" type="Timer" parent="." index="2"]
+wait_time = 3.0
+
+[node name="Delta_time" type="Timer" parent="." index="3"]
+wait_time = 0.15
+
+[connection signal="timeout" from="Lasting_Time" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Delta_time" to="." method="_on_delta_time_timeout"]
