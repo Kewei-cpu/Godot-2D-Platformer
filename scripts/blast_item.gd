@@ -22,7 +22,6 @@ func _on_delta_time_timeout() -> void:
 	fire_bullet_cirecle()
 
 
-
 func fire_bullet_cirecle():
 	for i in range(bullet_count):
 		

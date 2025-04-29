@@ -18,13 +18,10 @@ func _process(delta: float) -> void:
 	on_constant_effect()
 	
 
-	
-
 func _on_body_entered(body: Node2D) -> void:
-	print('enter')
-	
 	if not body is Player:
 		return
+		
 	player = body
 
 	if not player.is_multiplayer_authority():
@@ -47,7 +44,7 @@ func on_player_use() -> bool:
 func on_constant_effect():
 	pass
 
-@rpc("call_local")
+@rpc("call_local", "any_peer")
 func hide_item():
 	collision_shape_2d.set_deferred("disabled",true)
 	animated_sprite_2d.hide()
