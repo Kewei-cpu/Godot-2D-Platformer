@@ -270,8 +270,6 @@ func show_hit_color():
 
 
 func respawn():
-	var spawn_point: Marker2D = spawn_points.get_children().pick_random()
-	global_position = spawn_point.global_position
 	velocity = Vector2(0, 0)
 	dead = false
 	
@@ -403,7 +401,8 @@ func change_health(amount: int) -> void:
 	if health == 0:
 		respawn_timer.start()
 		dead = true
-		
+		var spawn_point: Marker2D = spawn_points.get_children().pick_random()
+		global_position = spawn_point.global_position
 		return
 	
 
