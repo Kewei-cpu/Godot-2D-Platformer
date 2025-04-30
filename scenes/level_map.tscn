@@ -1961,12 +1961,15 @@ position = Vector2(-1, 132)
 
 [node name="BlastItem" parent="." instance=ExtResource("9_8v2yb")]
 position = Vector2(-16, -24)
+radius = 8
 
 [node name="BlastItem2" parent="." instance=ExtResource("9_8v2yb")]
 position = Vector2(-16, -152)
+radius = 8
 
 [node name="BlastItem3" parent="." instance=ExtResource("9_8v2yb")]
 position = Vector2(-328, -168)
+radius = 8
 
 [node name="SpawnPoints" type="Node2D" parent="."]
 unique_name_in_owner = true

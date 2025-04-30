@@ -9,19 +9,6 @@ var vanish_time = 0.5
 
 
 func _physics_process(delta: float) -> void:
-	if get_parent().has_hit:
-		var n := int(total_time / vanish_time * max_points)
-	
-		if n == 0:
-			total_time += delta
-			return
-			
-		for i in n:
-			if get_point_count():
-				remove_point(0)	
-		total_time = 0
-		return
-
 	global_position = Vector2(0, 0)
 	global_rotation = 0
 

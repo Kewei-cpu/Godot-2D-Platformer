@@ -107,6 +107,13 @@ item_use={
 ]
 }
 
+[layer_names]
+
+2d_render/layer_1="Terrain"
+2d_render/layer_2="Hider"
+2d_render/layer_3="Seeker"
+2d_render/layer_5="One way terrain"
+
 [physics]
 
 common/physics_ticks_per_second=120
