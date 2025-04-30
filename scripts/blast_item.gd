@@ -3,7 +3,7 @@ extends Collectable
 @onready var lasting_time: Timer = $Lasting_Time
 @onready var delta_time: Timer = $Delta_time
 
-@export	var radius := 4
+@export	var radius := 8
 @export	var bullet_count := 16
 
 func on_player_use() -> bool:

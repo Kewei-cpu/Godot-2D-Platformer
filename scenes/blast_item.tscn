@@ -22,7 +22,7 @@ animations = [{
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_obo54")
-radius = 4
+radius = 8
 bullet_count = 16
 icon_texture = ExtResource("2_1eogj")
 

@@ -10,6 +10,10 @@ extends RigidBody2D
 @onready var life_timer: Timer = $LifeTimer
 @onready var vanish_timer: Timer = $VanishTimer
 @onready var bullet_hit_particle: CPUParticles2D = $BulletHitParticle
+@onready var trail: Line2D = $Trail
+
+@onready var bullet_gradient_green = preload("res://resources/bullet_gradient_green.tres")
+@onready var bullet_gradient_red = preload("res://resources/bullet_gradient_red.tres")
 
 var velocity: Vector2
 var has_hit := false
@@ -20,14 +24,19 @@ func _physics_process(delta: float) -> void:
 		return
 
 	velocity = transform.x.normalized() * speed
-	var collision = move_and_collide(velocity * delta) 
+	var collision = move_and_collide(velocity * delta)
 
-	if !is_multiplayer_authority():
-		return
 	if !collision:
 		return
 
 	var body = collision.get_collider()
+	if body is Player:
+		bullet_hit_particle.color_ramp = bullet_gradient_red
+	remove_bullet()
+
+	if !is_multiplayer_authority():
+		return
+	
 	if body is Player:
 		if body.get_multiplayer_authority() == multiplayer.get_unique_id():
 			return
@@ -38,13 +47,11 @@ func _physics_process(delta: float) -> void:
 		# TODO: add terrain damage
 	
 
-	remove_bullet.rpc()
-
-
 @rpc("call_local", "any_peer")
 func remove_bullet():
 	bullet_hit_particle.emitting = true
 	has_hit = true
+	trail.queue_free()
 	sprite_2d.hide()
 	collision_shape_2d.disabled = true
 	vanish_timer.start(1)

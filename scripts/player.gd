@@ -59,7 +59,7 @@ const BULLET = preload("res://scenes/bullet.tscn")
 var _camouflaged = false
 var _frozen = false
 var _inventory: Array[Collectable] = [null, null, null, null, null]
-var dead = false	
+var dead = false
 var current_inventory_slot = 0
 
 var health = MAX_HEALTH
@@ -68,8 +68,8 @@ enum Team {
 	HIDER,
 	SEEKER,
 }
-var team: Team
-
+var player_team: Team
+var local_team: Team
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump"):
@@ -77,16 +77,18 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _ready() -> void:
-	team = Team.HIDER if get_multiplayer_authority() in game.hiders else Team.SEEKER
+	player_team = Team.HIDER if get_multiplayer_authority() in game.hiders else Team.SEEKER
 
+	if player_team == Team.HIDER:
+		set_collision_layer_value(2, true)
+		set_collision_mask_value(3, true)
+	else:
+		set_collision_layer_value(3, true)
+		set_collision_mask_value(2, true)
+	
 	if not is_multiplayer_authority():
-		set_collision_layer_value(2, false)
-
-		if multiplayer.get_unique_id() in game.hiders and team == Team.SEEKER or multiplayer.get_unique_id() in game.seekers and team == Team.HIDER:
-			set_collision_layer_value(1, true)
-
 		return
-
+		
 	inventory.show()
 	var camera = CAMERA.instantiate()
 	add_child(camera)
@@ -98,7 +100,7 @@ func _process(_delta: float) -> void:
 
 	handle_dead()
 	
-	if dead: 
+	if dead:
 		return
 		
 	handle_slot_change()
@@ -113,7 +115,7 @@ func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
 		
-	if dead: 
+	if dead:
 		return
 
 	if is_frozen():
@@ -152,7 +154,7 @@ func handle_dead():
 		
 		
 func handle_camouflage():
-	if team == Team.SEEKER:
+	if player_team == Team.SEEKER:
 		return
 
 	if Input.is_action_just_pressed("switch"):
@@ -162,7 +164,7 @@ func handle_camouflage():
 
 
 func handle_freeze():
-	if team == Team.SEEKER:
+	if player_team == Team.SEEKER:
 		return
 
 	if Input.is_action_just_pressed("lock"):
@@ -283,7 +285,7 @@ func set_camouflage(is_camouflage: bool):
 	_camouflaged = is_camouflage
 
 	if is_camouflage:
-		block_sprite.frame = randi() % 25  # total 25 blocks
+		block_sprite.frame = randi() % 25 # total 25 blocks
 
 	character_sprite.visible = !is_camouflage
 	block_sprite.visible = is_camouflage
@@ -374,6 +376,13 @@ func fire_bullet(pid, bullet_transform: Transform2D):
 	bullet.transform = bullet_transform
 	bullet.velocity = velocity
 	bullet.set_multiplayer_authority(pid)
+
+	var bullet_team = Team.HIDER if pid in game.hiders else Team.SEEKER
+
+	if bullet_team == Team.HIDER:
+		bullet.set_collision_mask_value(3, true)
+	else:
+		bullet.set_collision_mask_value(2, true)
 
 	get_parent().add_child(bullet)
 
