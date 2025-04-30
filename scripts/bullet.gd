@@ -38,7 +38,6 @@ func _physics_process(delta: float) -> void:
 		# TODO: add terrain damage
 	
 
-
 	remove_bullet.rpc()
 
 

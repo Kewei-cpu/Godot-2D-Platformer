@@ -171,6 +171,7 @@ theme = ExtResource("6_p57ef")
 text = "Start Game"
 
 [node name="LevelMap" parent="." instance=ExtResource("4_iywne")]
+unique_name_in_owner = true
 
 [node name="HideTimer" type="Timer" parent="."]
 unique_name_in_owner = true

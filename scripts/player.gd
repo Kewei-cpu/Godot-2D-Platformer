@@ -21,8 +21,12 @@ extends CharacterBody2D
 @onready var jump_request_timer: Timer = $JumpRequestTimer
 @onready var hit_color: Timer = $HitColor
 
+@onready var respawn_timer: Timer = $RespawnTimer
+@onready var death_screen: CanvasLayer = %DeathScreen
+@onready var respawn_time_left: Label = %RespawnTimeLeft
+
 @onready var terrain: TileMapLayer = $"../LevelMap/Midground"
-@onready var spawn_point: Marker2D = $"../LevelMap/SpawnPoint"
+@onready var spawn_points: Node2D = $"../LevelMap/SpawnPoints"
 
 @onready var inventory: CanvasLayer = $Inventory
 @onready var indicator_margin: MarginContainer = $Inventory/MarginContainer/IndicatorMargin
@@ -39,7 +43,7 @@ extends CharacterBody2D
 @onready var health_label: Label = $HealthLabel
 
 @onready var game: Game = get_parent()
-	
+
 const CAMERA = preload("res://scenes/camera.tscn")
 const BULLET = preload("res://scenes/bullet.tscn")
 
@@ -55,6 +59,7 @@ const BULLET = preload("res://scenes/bullet.tscn")
 var _camouflaged = false
 var _frozen = false
 var _inventory: Array[Collectable] = [null, null, null, null, null]
+var dead = false	
 var current_inventory_slot = 0
 
 var health = MAX_HEALTH
@@ -86,34 +91,29 @@ func _ready() -> void:
 	var camera = CAMERA.instantiate()
 	add_child(camera)
 
+
 func _process(_delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
 
+	handle_dead()
+	
+	if dead: 
+		return
+		
 	handle_slot_change()
 	handle_item_use()
-
-	if Input.is_action_just_pressed("test"):
-		change_health(-10)
-
-	if Input.is_key_pressed(KEY_F2):
-		respawn()
-
-	if Input.is_action_just_pressed("switch"):
-		if is_frozen():
-			return
-		set_camouflage(not is_camouflaged())
-
-	if Input.is_action_just_pressed("lock"):
-		if not is_camouflaged():
-			return
-		set_frozen(not is_frozen())
+	handle_camouflage()
+	handle_freeze()
 
 	show_hit_color()
 
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
+		return
+		
+	if dead: 
 		return
 
 	if is_frozen():
@@ -137,6 +137,40 @@ func _physics_process(delta: float) -> void:
 			coyote_timer.stop()
 
 
+func handle_dead():
+	if dead:
+		hide()
+		character_collision.disabled = true
+		block_collision.disabled = true
+		death_screen.show()
+		respawn_time_left.text = str(snappedf(respawn_timer.time_left, 0.1))
+	else:
+		show()
+		character_collision.disabled = self.is_camouflaged()
+		block_collision.disabled = not self.is_camouflaged()
+		death_screen.hide()
+		
+		
+func handle_camouflage():
+	if team == Team.SEEKER:
+		return
+
+	if Input.is_action_just_pressed("switch"):
+		if is_frozen():
+			return
+		set_camouflage(not is_camouflaged())
+
+
+func handle_freeze():
+	if team == Team.SEEKER:
+		return
+
+	if Input.is_action_just_pressed("lock"):
+		if not is_camouflaged():
+			return
+		set_frozen(not is_frozen())
+
+
 func handle_shoot():
 	gun_container.look_at(get_global_mouse_position())
 	gun_sprite.flip_v = get_global_mouse_position().x < global_position.x
@@ -152,11 +186,10 @@ func handle_jump(delta):
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-		
+
 	if Input.is_action_just_released("jump"):
 		if velocity.y < JUMP_VELOCITY * 0.5 and not is_on_floor():
 			velocity.y = JUMP_VELOCITY * 0.5
-		
 
 	# Handle jump.
 	var can_jump := is_on_floor() or coyote_timer.time_left > 0.0
@@ -213,7 +246,7 @@ func handle_item_use():
 	if Input.is_action_just_pressed("item_use"):
 		if _inventory[current_inventory_slot] == null:
 			return
-	
+
 		var item: Collectable = _inventory[current_inventory_slot]
 
 		if not item.useable:
@@ -237,8 +270,11 @@ func show_hit_color():
 
 
 func respawn():
+	var spawn_point: Marker2D = spawn_points.get_children().pick_random()
 	global_position = spawn_point.global_position
 	velocity = Vector2(0, 0)
+	dead = false
+	
 	set_health(MAX_HEALTH)
 	update_health_bar()
 	call_deferred("set_camouflage", false)
@@ -249,7 +285,7 @@ func set_camouflage(is_camouflage: bool):
 	_camouflaged = is_camouflage
 
 	if is_camouflage:
-		block_sprite.frame = randi() % 25 # total 25 blocks
+		block_sprite.frame = randi() % 25  # total 25 blocks
 
 	character_sprite.visible = !is_camouflage
 	block_sprite.visible = is_camouflage
@@ -326,6 +362,7 @@ func bullet_hit(damage, collision_normal, hitback):
 	change_health(-damage)
 
 	velocity += collision_normal * hitback
+	hit_color.start()
 
 
 func shoot():
@@ -362,13 +399,18 @@ func update_health_bar():
 
 func change_health(amount: int) -> void:
 	health = clamp(health + amount, 0, MAX_HEALTH)
-	if health == 0:
-		respawn()
-		return
-
 	update_health_bar()
-
+	if health == 0:
+		respawn_timer.start()
+		dead = true
+		
+		return
+	
 
 func set_health(value: int) -> void:
 	health = clamp(value, 0, MAX_HEALTH)
 	update_health_bar()
+
+
+func _on_respawn_timer_timeout() -> void:
+	respawn()
