@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://cc0ytnsq165td"]
+[gd_scene load_steps=9 format=3 uid="uid://cc0ytnsq165td"]
 
 [ext_resource type="Script" uid="uid://blrflx2y4i3o6" path="res://scripts/game.gd" id="1_p57ef"]
+[ext_resource type="Script" uid="uid://mkmol40clssn" path="res://scripts/canvas_rpc.gd" id="2_iywne"]
 [ext_resource type="FontFile" uid="uid://bqoyclilvktou" path="res://fonts/PixelOperator8.ttf" id="3_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://cin65u8s7y6gf" path="res://scenes/level_map.tscn" id="4_iywne"]
 [ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="6_p57ef"]
@@ -21,6 +22,8 @@ spawn_path = NodePath("..")
 
 [node name="WaitingScreen" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
+script = ExtResource("2_iywne")
+metadata/_custom_type_script = "uid://mkmol40clssn"
 
 [node name="ColorRect" type="ColorRect" parent="WaitingScreen"]
 anchors_preset = 15
@@ -171,7 +174,7 @@ text = "Start Game"
 
 [node name="HideTimer" type="Timer" parent="."]
 unique_name_in_owner = true
-wait_time = 30.0
+wait_time = 10.0
 one_shot = true
 
 [node name="SeekTimer" type="Timer" parent="."]
@@ -182,6 +185,8 @@ one_shot = true
 [node name="SeekerWaitingScreen" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 visible = false
+script = ExtResource("2_iywne")
+metadata/_custom_type_script = "uid://mkmol40clssn"
 
 [node name="ColorRect" type="ColorRect" parent="SeekerWaitingScreen"]
 anchors_preset = 15
@@ -204,6 +209,13 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 30
 
+[node name="HideTimeLabel" type="Label" parent="SeekerWaitingScreen/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+text = "Seeking begins in ..."
+horizontal_alignment = 1
+
 [node name="HideTimeLeft" type="Label" parent="SeekerWaitingScreen/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -212,11 +224,88 @@ theme_override_font_sizes/font_size = 96
 text = "30"
 horizontal_alignment = 1
 
-[node name="HideTimeLabel" type="Label" parent="SeekerWaitingScreen/MarginContainer/VBoxContainer"]
+[node name="SeekingTime" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+visible = false
+script = ExtResource("2_iywne")
+metadata/_custom_type_script = "uid://mkmol40clssn"
+
+[node name="PanelContainer" type="PanelContainer" parent="SeekingTime"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -126.0
+offset_right = 126.0
+offset_bottom = 92.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SeekingTime/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SeekingTime/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SeekTimeLabel" type="Label" parent="SeekingTime/PanelContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("6_p57ef")
-text = "Seeking begins in ..."
+theme_override_font_sizes/font_size = 16
+text = "Seeking time left"
+horizontal_alignment = 1
+
+[node name="SeekTimeLeft" type="Label" parent="SeekingTime/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+theme_override_font_sizes/font_size = 32
+text = "60"
+horizontal_alignment = 1
+
+[node name="HidingTime" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+visible = false
+script = ExtResource("2_iywne")
+metadata/_custom_type_script = "uid://mkmol40clssn"
+
+[node name="PanelContainer" type="PanelContainer" parent="HidingTime"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -126.0
+offset_right = 126.0
+offset_bottom = 92.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HidingTime/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HidingTime/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HiderHideTimeLabel" type="Label" parent="HidingTime/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+theme_override_font_sizes/font_size = 16
+text = "Hiding time left"
+horizontal_alignment = 1
+
+[node name="HiderHideTimeLeft" type="Label" parent="HidingTime/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+theme_override_font_sizes/font_size = 32
+text = "60"
 horizontal_alignment = 1
 
 [connection signal="pressed" from="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/JoinHiders" to="." method="_on_join_hiders_pressed"]
