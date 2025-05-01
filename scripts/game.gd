@@ -72,7 +72,7 @@ func add_player_to_scene(uid):
 	var spawn_point: Marker2D = spwan_points.get_children().pick_random()
 	player.global_position = spawn_point.global_position
 
-	var name_tag: Label = player.find_child("Name")
+	var name_tag: Label = player.find_child("NameTag")
 	name_tag.text = get_player_name(uid)
 
 	return player

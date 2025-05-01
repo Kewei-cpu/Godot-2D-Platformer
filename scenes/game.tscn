@@ -175,12 +175,12 @@ unique_name_in_owner = true
 
 [node name="HideTimer" type="Timer" parent="."]
 unique_name_in_owner = true
-wait_time = 10.0
+wait_time = 30.0
 one_shot = true
 
 [node name="SeekTimer" type="Timer" parent="."]
 unique_name_in_owner = true
-wait_time = 60.0
+wait_time = 120.0
 one_shot = true
 
 [node name="SeekerWaitingScreen" type="CanvasLayer" parent="."]

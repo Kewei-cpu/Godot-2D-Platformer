@@ -17,6 +17,80 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3v2ag"]
 size = Vector2(10, 15)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qhqgy"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Name:text")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("CharacterCollision:disabled")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("CharacterSprite:visible")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("BlockSprite:visible")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("BlockCollision:disabled")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("BlockSprite:frame")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath("Name:visible")
+properties/7/spawn = true
+properties/7/replication_mode = 1
+properties/8/path = NodePath("CharacterSprite:animation")
+properties/8/spawn = true
+properties/8/replication_mode = 1
+properties/9/path = NodePath("CharacterSprite:frame")
+properties/9/spawn = true
+properties/9/replication_mode = 1
+properties/10/path = NodePath("CharacterSprite:flip_h")
+properties/10/spawn = true
+properties/10/replication_mode = 1
+properties/11/path = NodePath("GunContainer:rotation")
+properties/11/spawn = true
+properties/11/replication_mode = 1
+properties/12/path = NodePath("GunContainer/GunSprite:flip_v")
+properties/12/spawn = true
+properties/12/replication_mode = 1
+properties/13/path = NodePath("GunContainer:visible")
+properties/13/spawn = true
+properties/13/replication_mode = 1
+properties/14/path = NodePath("CharacterSprite:modulate")
+properties/14/spawn = true
+properties/14/replication_mode = 1
+properties/15/path = NodePath("BlockSprite:modulate")
+properties/15/spawn = true
+properties/15/replication_mode = 1
+properties/16/path = NodePath("ItemSprite:modulate")
+properties/16/spawn = true
+properties/16/replication_mode = 1
+properties/17/path = NodePath("HealthFill:color")
+properties/17/spawn = true
+properties/17/replication_mode = 1
+properties/18/path = NodePath("HealthLabel:text")
+properties/18/spawn = true
+properties/18/replication_mode = 1
+properties/19/path = NodePath("HealthFill:scale:x")
+properties/19/spawn = true
+properties/19/replication_mode = 1
+properties/20/path = NodePath("HealthbarBackground:visible")
+properties/20/spawn = true
+properties/20/replication_mode = 1
+properties/21/path = NodePath("HealthFill:visible")
+properties/21/spawn = true
+properties/21/replication_mode = 1
+properties/22/path = NodePath("HealthLabel:visible")
+properties/22/spawn = true
+properties/22/replication_mode = 1
+properties/23/path = NodePath(".:visible")
+properties/23/spawn = true
+properties/23/replication_mode = 1
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("1_3vyb7")
 region = Rect2(0, 0, 32, 32)
@@ -553,88 +627,18 @@ region = Rect2(1, 0, 24, 24)
 font = ExtResource("3_qhqgy")
 font_size = 8
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qhqgy"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("CharacterCollision:disabled")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("CharacterSprite:visible")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath("BlockSprite:visible")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-properties/4/path = NodePath("BlockCollision:disabled")
-properties/4/spawn = true
-properties/4/replication_mode = 1
-properties/5/path = NodePath("BlockSprite:frame")
-properties/5/spawn = true
-properties/5/replication_mode = 1
-properties/6/path = NodePath("CharacterSprite:animation")
-properties/6/spawn = true
-properties/6/replication_mode = 1
-properties/7/path = NodePath("CharacterSprite:frame")
-properties/7/spawn = true
-properties/7/replication_mode = 1
-properties/8/path = NodePath("CharacterSprite:flip_h")
-properties/8/spawn = true
-properties/8/replication_mode = 1
-properties/9/path = NodePath("GunContainer:rotation")
-properties/9/spawn = true
-properties/9/replication_mode = 1
-properties/10/path = NodePath("GunContainer/GunSprite:flip_v")
-properties/10/spawn = true
-properties/10/replication_mode = 1
-properties/11/path = NodePath("GunContainer:visible")
-properties/11/spawn = true
-properties/11/replication_mode = 1
-properties/12/path = NodePath("CharacterSprite:modulate")
-properties/12/spawn = true
-properties/12/replication_mode = 1
-properties/13/path = NodePath("BlockSprite:modulate")
-properties/13/spawn = true
-properties/13/replication_mode = 1
-properties/14/path = NodePath("ItemSprite:modulate")
-properties/14/spawn = true
-properties/14/replication_mode = 1
-properties/15/path = NodePath("PlayerInfo/NameTag:text")
-properties/15/spawn = true
-properties/15/replication_mode = 1
-properties/16/path = NodePath("PlayerInfo/NameTag:visible")
-properties/16/spawn = true
-properties/16/replication_mode = 1
-properties/17/path = NodePath("PlayerInfo/HealthbarBackground:visible")
-properties/17/spawn = true
-properties/17/replication_mode = 1
-properties/18/path = NodePath("PlayerInfo/HealthFill:visible")
-properties/18/spawn = true
-properties/18/replication_mode = 1
-properties/19/path = NodePath("PlayerInfo/HealthLabel:visible")
-properties/19/spawn = true
-properties/19/replication_mode = 1
-properties/20/path = NodePath("PlayerInfo/HealthFill:color")
-properties/20/spawn = true
-properties/20/replication_mode = 1
-properties/21/path = NodePath("PlayerInfo/HealthFill:scale:x")
-properties/21/spawn = true
-properties/21/replication_mode = 1
-properties/22/path = NodePath("PlayerInfo/HealthLabel:text")
-properties/22/spawn = true
-properties/22/replication_mode = 1
-properties/23/path = NodePath(".:name")
-properties/23/spawn = true
-properties/23/replication_mode = 1
-properties/24/path = NodePath(".:visible")
-properties/24/spawn = true
-properties/24/replication_mode = 1
-
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
 collision_layer = 0
 collision_mask = 17
 script = ExtResource("1_g2els")
+MAX_SPEED = null
+JUMP_VELOCITY = null
+GROUND_ACCELERATION = null
+AIR_ACCELERATION = null
+GROUND_FRICTION = null
+AIR_FRICTION = null
+MAX_HEALTH = null
 
 [node name="CharacterCollision" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true
@@ -647,6 +651,9 @@ visible = false
 position = Vector2(8, -7.5)
 shape = ExtResource("3_smehm")
 disabled = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_qhqgy")
 
 [node name="GunContainer" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -663,9 +670,20 @@ texture = ExtResource("5_qlg0r")
 unique_name_in_owner = true
 position = Vector2(9, 0.5)
 
-[node name="Center" type="Marker2D" parent="."]
+[node name="CoolDown" type="Timer" parent="."]
 unique_name_in_owner = true
-position = Vector2(8, -8)
+wait_time = 0.1
+one_shot = true
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.13
+one_shot = true
+
+[node name="JumpRequestTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.1
+one_shot = true
 
 [node name="CharacterSprite" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
@@ -686,6 +704,11 @@ unique_name_in_owner = true
 visible = false
 position = Vector2(8, -8)
 sprite_frames = SubResource("SpriteFrames_u2ulf")
+
+[node name="HitColor" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.1
+one_shot = true
 
 [node name="Inventory" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
@@ -767,6 +790,15 @@ custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 expand_mode = 2
 stretch_mode = 5
+
+[node name="Center" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(8, -8)
+
+[node name="RespawnTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 3.0
+one_shot = true
 
 [node name="DeathScreen" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
@@ -855,34 +887,4 @@ text = "100"
 label_settings = SubResource("LabelSettings_dqkch")
 horizontal_alignment = 1
 
-[node name="Timers" type="Node" parent="."]
-
-[node name="CoolDown" type="Timer" parent="Timers"]
-unique_name_in_owner = true
-wait_time = 0.1
-one_shot = true
-
-[node name="CoyoteTimer" type="Timer" parent="Timers"]
-unique_name_in_owner = true
-wait_time = 0.13
-one_shot = true
-
-[node name="JumpRequestTimer" type="Timer" parent="Timers"]
-unique_name_in_owner = true
-wait_time = 0.1
-one_shot = true
-
-[node name="HitColor" type="Timer" parent="Timers"]
-unique_name_in_owner = true
-wait_time = 0.1
-one_shot = true
-
-[node name="RespawnTimer" type="Timer" parent="Timers"]
-unique_name_in_owner = true
-wait_time = 3.0
-one_shot = true
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_qhqgy")
-
-[connection signal="timeout" from="Timers/RespawnTimer" to="." method="_on_respawn_timer_timeout"]
+[connection signal="timeout" from="RespawnTimer" to="." method="_on_respawn_timer_timeout"]

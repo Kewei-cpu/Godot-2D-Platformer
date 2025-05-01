@@ -1,46 +1,37 @@
 class_name Player
 extends CharacterBody2D
 
-@onready var player: Player = $"."
-@onready var name_tag: Label = $Name
+@onready var name_tag: Label = %NameTag
 
-@onready var character_sprite: AnimatedSprite2D = $CharacterSprite
-@onready var block_sprite: AnimatedSprite2D = $BlockSprite
-@onready var item_sprite: AnimatedSprite2D = $ItemSprite
+@onready var character_sprite: AnimatedSprite2D = %CharacterSprite
+@onready var block_sprite: AnimatedSprite2D = %BlockSprite
+@onready var item_sprite: AnimatedSprite2D = %ItemSprite
 
-@onready var character_collision: CollisionShape2D = $CharacterCollision
-@onready var block_collision: CollisionShape2D = $BlockCollision
+@onready var character_collision: CollisionShape2D = %CharacterCollision
+@onready var block_collision: CollisionShape2D = %BlockCollision
 
-@onready var gun_container: Node2D = $GunContainer
-@onready var gun_sprite: Sprite2D = $GunContainer/GunSprite
-@onready var muzzle: Marker2D = $GunContainer/GunSprite/Muzzle
-@onready var center: Marker2D = $Center
+@onready var gun_container: Node2D = %GunContainer
+@onready var gun_sprite: Sprite2D = %GunSprite
+@onready var muzzle: Marker2D = %Muzzle
+@onready var center: Marker2D = %Center
 
-@onready var cool_down: Timer = $CoolDown
-@onready var coyote_timer: Timer = $CoyoteTimer
-@onready var jump_request_timer: Timer = $JumpRequestTimer
-@onready var hit_color: Timer = $HitColor
+@onready var cool_down: Timer = %CoolDown
+@onready var coyote_timer: Timer = %CoyoteTimer
+@onready var jump_request_timer: Timer = %JumpRequestTimer
+@onready var hit_color: Timer = %HitColor
 
-@onready var respawn_timer: Timer = $RespawnTimer
+@onready var respawn_timer: Timer = %RespawnTimer
 @onready var death_screen: CanvasLayer = %DeathScreen
 @onready var respawn_time_left: Label = %RespawnTimeLeft
 
 @onready var terrain: TileMapLayer = $"../LevelMap/Midground"
 @onready var spawn_points: Node2D = $"../LevelMap/SpawnPoints"
 
-@onready var inventory: CanvasLayer = $Inventory
-@onready var indicator_margin: MarginContainer = $Inventory/MarginContainer/IndicatorMargin
-@onready var inventory_icon_list: Array[TextureRect] = [
-	$Inventory/MarginContainer/MarginContainer/ItemIcon/ItemIcon0,
-	$Inventory/MarginContainer/MarginContainer/ItemIcon/ItemIcon1,
-	$Inventory/MarginContainer/MarginContainer/ItemIcon/ItemIcon2,
-	$Inventory/MarginContainer/MarginContainer/ItemIcon/ItemIcon3,
-	$Inventory/MarginContainer/MarginContainer/ItemIcon/ItemIcon4
-]
+@onready var inventory: Inventory = %Inventory
 
-@onready var healthbar_background: ColorRect = $HealthbarBackground
-@onready var health_fill: ColorRect = $HealthFill
-@onready var health_label: Label = $HealthLabel
+@onready var healthbar_background: ColorRect = %HealthbarBackground
+@onready var health_fill: ColorRect = %HealthFill
+@onready var health_label: Label = %HealthLabel
 
 @onready var game: Game = get_parent()
 
@@ -50,17 +41,16 @@ const BULLET = preload("res://scenes/bullet.tscn")
 @export var MAX_SPEED = 175
 @export var JUMP_VELOCITY = -300
 
-@export var ACCELERATION = 1000
+@export var GROUND_ACCELERATION = 1200
+@export var AIR_ACCELERATION = 800
 @export var GROUND_FRICTION = 1000
-@export var AIR_FRICTION = 500
+@export var AIR_FRICTION = 600
 
 @export var MAX_HEALTH = 100
 
-var _camouflaged = false
-var _frozen = false
-var _inventory: Array[Collectable] = [null, null, null, null, null]
+var camouflaged = false
+var frozen = false
 var dead = false
-var current_inventory_slot = 0
 
 var health = MAX_HEALTH
 
@@ -79,12 +69,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _ready() -> void:
 	player_team = Team.HIDER if get_multiplayer_authority() in game.hiders else Team.SEEKER
 
-	if player_team == Team.HIDER:
-		set_collision_layer_value(2, true)
-		set_collision_mask_value(3, true)
-	else:
-		set_collision_layer_value(3, true)
-		set_collision_mask_value(2, true)
+	set_player_collision_layer()
 	
 	if not is_multiplayer_authority():
 		return
@@ -103,10 +88,10 @@ func _process(_delta: float) -> void:
 	if dead:
 		return
 		
-	handle_slot_change()
-	handle_item_use()
 	handle_camouflage()
 	handle_freeze()
+	inventory.handle_slot_change()
+	inventory.handle_item_use()
 
 	show_hit_color()
 
@@ -118,7 +103,7 @@ func _physics_process(delta: float) -> void:
 	if dead:
 		return
 
-	if is_frozen():
+	if frozen:
 		velocity = Vector2(0, 0)
 		global_position = global_position.snapped(Vector2(16, 16))
 		return
@@ -148,8 +133,8 @@ func handle_dead():
 		respawn_time_left.text = str(snappedf(respawn_timer.time_left, 0.1))
 	else:
 		show()
-		character_collision.disabled = self.is_camouflaged()
-		block_collision.disabled = not self.is_camouflaged()
+		character_collision.disabled = camouflaged
+		block_collision.disabled = not camouflaged
 		death_screen.hide()
 		
 		
@@ -158,9 +143,9 @@ func handle_camouflage():
 		return
 
 	if Input.is_action_just_pressed("switch"):
-		if is_frozen():
+		if frozen:
 			return
-		set_camouflage(not is_camouflaged())
+		set_camouflage(not camouflaged)
 
 
 func handle_freeze():
@@ -168,16 +153,16 @@ func handle_freeze():
 		return
 
 	if Input.is_action_just_pressed("lock"):
-		if not is_camouflaged():
+		if not camouflaged:
 			return
-		set_frozen(not is_frozen())
+		set_frozen(not frozen)
 
 
 func handle_shoot():
 	gun_container.look_at(get_global_mouse_position())
 	gun_sprite.flip_v = get_global_mouse_position().x < global_position.x
 
-	if Input.is_action_just_pressed("shoot") and not is_camouflaged():
+	if Input.is_action_just_pressed("shoot") and not camouflaged:
 		if !cool_down.is_stopped():
 			return
 		shoot()
@@ -208,14 +193,18 @@ func handle_move(delta):
 	var direction := Input.get_axis("move_left", "move_right")
 	var speed_direction := 1 if velocity.x > 0 else -1 if velocity.x < 0 else 0
 
-	if direction:
-		velocity.x = clampf(velocity.x + direction * ACCELERATION * delta, -MAX_SPEED, MAX_SPEED)
 
-	elif is_on_floor():
-		velocity.x = velocity.x - speed_direction * clampf(GROUND_FRICTION * delta, 0, abs(velocity.x))
+	if is_on_floor():
+		if direction:
+			velocity.x = clampf(velocity.x + direction * GROUND_ACCELERATION * delta, -MAX_SPEED, MAX_SPEED)
+		else:
+			velocity.x -= speed_direction * clampf(GROUND_FRICTION * delta, 0, abs(velocity.x))
 
 	else:
-		velocity.x = velocity.x - speed_direction * clampf(AIR_FRICTION * delta, 0, abs(velocity.x))
+		if direction:
+			velocity.x = clampf(velocity.x + direction * AIR_ACCELERATION * delta, -MAX_SPEED, MAX_SPEED)
+		else:
+			velocity.x -= speed_direction * clampf(AIR_FRICTION * delta, 0, abs(velocity.x))
 
 	if is_on_floor():
 		if velocity.x == 0:
@@ -225,38 +214,6 @@ func handle_move(delta):
 			character_sprite.flip_h = velocity.x < 0
 	else:
 		character_sprite.play("jump")
-
-
-func handle_slot_change():
-	if Input.is_action_just_pressed("Slot 0"):
-		change_inventory_slot(0)
-
-	if Input.is_action_just_pressed("Slot 1"):
-		change_inventory_slot(1)
-
-	if Input.is_action_just_pressed("Slot 2"):
-		change_inventory_slot(2)
-
-	if Input.is_action_just_pressed("Slot 3"):
-		change_inventory_slot(3)
-
-	if Input.is_action_just_pressed("Slot 4"):
-		change_inventory_slot(4)
-
-
-func handle_item_use():
-	if Input.is_action_just_pressed("item_use"):
-		if _inventory[current_inventory_slot] == null:
-			return
-
-		var item: Collectable = _inventory[current_inventory_slot]
-
-		if not item.useable:
-			return
-
-		var discard := not item.on_player_use()
-		if discard:
-			remove_item_from_inventory_slot(current_inventory_slot)
 
 
 func show_hit_color():
@@ -279,10 +236,11 @@ func respawn():
 	update_health_bar()
 	call_deferred("set_camouflage", false)
 	call_deferred("set_frozen", false)
-
+	
+	set_player_collision_layer()
 
 func set_camouflage(is_camouflage: bool):
-	_camouflaged = is_camouflage
+	camouflaged = is_camouflage
 
 	if is_camouflage:
 		block_sprite.frame = randi() % 25 # total 25 blocks
@@ -295,66 +253,28 @@ func set_camouflage(is_camouflage: bool):
 
 	gun_container.visible = !is_camouflage
 
-	player.set_collision_layer_value(1, is_camouflage)
+	set_collision_layer_value(1, is_camouflage)
 
 
 func set_frozen(is_frozen: bool):
-	_frozen = is_frozen
+	frozen = is_frozen
 	name_tag.visible = !is_frozen
 	health_fill.visible = !is_frozen
 	health_label.visible = !is_frozen
 	healthbar_background.visible = !is_frozen
 
 
-func is_camouflaged():
-	return _camouflaged
+func clear_player_collision_layer():
+	set_collision_layer_value(2, false)
+	set_collision_layer_value(3, false)
 
-
-func is_frozen():
-	return _frozen
-
-
-func change_inventory_slot(slot: int) -> void:
-	if slot > 4 or slot < 0:
-		return
-	indicator_margin.add_theme_constant_override("margin_left", 68 * slot)
-	current_inventory_slot = slot
-
-
-func get_empty_inventory_slot() -> int:
-	# if the selected is empty, return the selected slot
-	# otherwise return the first empty slot
-	# if inventory is full, return -1
-	if _inventory[current_inventory_slot] == null:
-		return current_inventory_slot
-
-	for slot in range(5):
-		if _inventory[slot] == null:
-			return slot
-
-	return -1
-
-
-func add_item_to_inventory(item: Collectable) -> bool:
-	# return whether there's room to pick up
-	var slot := get_empty_inventory_slot()
-
-	if slot == -1:
-		return false
-
-	add_item_to_inventory_slot(item, slot)
-	return true
-
-
-func add_item_to_inventory_slot(item: Collectable, slot: int):
-	# no safety check, please be cautious!
-	_inventory[slot] = item
-	inventory_icon_list[slot].texture = item.icon_texture
-
-
-func remove_item_from_inventory_slot(slot: int):
-	_inventory[slot] = null
-	inventory_icon_list[slot].texture = null
+func set_player_collision_layer():
+	if player_team == Team.HIDER:
+		set_collision_layer_value(2, true)
+		set_collision_mask_value(3, true)
+	else:
+		set_collision_layer_value(3, true)
+		set_collision_mask_value(2, true)
 
 
 @rpc("any_peer")
@@ -369,6 +289,13 @@ func shoot():
 	var bullet_transform := Transform2D(muzzle.get_global_rotation(), muzzle.get_global_position())
 	fire_bullet.rpc(multiplayer.get_unique_id(), bullet_transform)
 
+func die():
+	respawn_timer.start()
+	dead = true
+	clear_player_collision_layer()
+
+	var spawn_point: Marker2D = spawn_points.get_children().pick_random()
+	global_position = spawn_point.global_position
 
 @rpc("call_local")
 func fire_bullet(pid, bullet_transform: Transform2D):
@@ -408,11 +335,7 @@ func change_health(amount: int) -> void:
 	health = clamp(health + amount, 0, MAX_HEALTH)
 	update_health_bar()
 	if health == 0:
-		respawn_timer.start()
-		dead = true
-		var spawn_point: Marker2D = spawn_points.get_children().pick_random()
-		global_position = spawn_point.global_position
-		return
+		die()
 	
 
 func set_health(value: int) -> void:
