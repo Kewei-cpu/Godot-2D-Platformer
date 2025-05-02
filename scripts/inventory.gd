@@ -1,7 +1,7 @@
 class_name Inventory
 extends CanvasLayer
 
-@onready var inventory_indicator: TextureRect = %InventoryIndicator
+@onready var indicator_margin: MarginContainer = %IndicatorMargin
 
 @onready var item_icon_0: TextureRect = %ItemIcon0
 @onready var item_icon_1: TextureRect = %ItemIcon1
@@ -30,7 +30,12 @@ func handle_slot_change():
 
 	if Input.is_action_just_pressed("Slot 4"):
 		change_inventory_slot(4)
-
+		
+	if Input.is_action_just_pressed("Previous Slot"):
+		change_inventory_slot((current_slot + 4) % 5)
+				
+	if Input.is_action_just_pressed("Next Slot"):
+		change_inventory_slot((current_slot + 1) % 5)
 
 func handle_item_use():
 	if Input.is_action_just_pressed("item_use"):
@@ -50,7 +55,7 @@ func handle_item_use():
 func change_inventory_slot(slot: int) -> void:
 	if slot > 4 or slot < 0:
 		return
-	inventory_indicator.add_theme_constant_override("margin_left", 68 * slot)
+	indicator_margin.add_theme_constant_override("margin_left", 68 * slot)
 	current_slot = slot
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://cnkylbamt2u8d"]
+[gd_scene load_steps=94 format=3 uid="uid://cnkylbamt2u8d"]
 
 [ext_resource type="Texture2D" uid="uid://xng7rndc0vsj" path="res://sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c56riao304oxf" path="res://scripts/player.gd" id="1_g2els"]
@@ -12,7 +12,9 @@
 [ext_resource type="Texture2D" uid="uid://bubanbsdbnf1" path="res://sprites/objects_/staticObjects_.png" id="11_d2wvv"]
 [ext_resource type="Script" uid="uid://dm8864n3xsh5d" path="res://scripts/inventory.gd" id="11_jej6c"]
 [ext_resource type="Texture2D" uid="uid://bvcicttn31htg" path="res://sprites/inventory.png" id="12_3v2ag"]
+[ext_resource type="Script" uid="uid://dwww5w48wmlno" path="res://scripts/enemy_indicator.gd" id="13_f1ej7"]
 [ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="13_jej6c"]
+[ext_resource type="Texture2D" uid="uid://die52bydbgo4i" path="res://sprites/arrow.png" id="14_oprun"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3v2ag"]
 size = Vector2(10, 15)
@@ -689,7 +691,6 @@ sprite_frames = SubResource("SpriteFrames_u2ulf")
 
 [node name="Inventory" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
-visible = false
 script = ExtResource("11_jej6c")
 
 [node name="MarginContainer" type="MarginContainer" parent="Inventory"]
@@ -703,7 +704,7 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="InventoryIndicator" type="TextureRect" parent="Inventory/MarginContainer"]
+[node name="InventoryBar" type="TextureRect" parent="Inventory/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(368, 96)
 layout_mode = 2
@@ -712,10 +713,12 @@ size_flags_vertical = 8
 texture = SubResource("AtlasTexture_vau08")
 
 [node name="IndicatorMargin" type="MarginContainer" parent="Inventory/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 0
 
-[node name="InventoryBar" type="TextureRect" parent="Inventory/MarginContainer/IndicatorMargin"]
+[node name="InventoryIndicator" type="TextureRect" parent="Inventory/MarginContainer/IndicatorMargin"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -811,6 +814,30 @@ theme_override_font_sizes/font_size = 96
 text = "3.0"
 horizontal_alignment = 1
 
+[node name="EnemyIndicator" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+visible = false
+script = ExtResource("13_f1ej7")
+
+[node name="Arrow" type="TextureRect" parent="EnemyIndicator"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+texture = ExtResource("14_oprun")
+expand_mode = 3
+stretch_mode = 5
+metadata/_edit_use_anchors_ = true
+
 [node name="PlayerInfo" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -819,6 +846,7 @@ offset_bottom = 40.0
 
 [node name="NameTag" type="Label" parent="PlayerInfo"]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = -15.0
 offset_top = -29.0
 offset_right = 79.0
@@ -830,6 +858,7 @@ horizontal_alignment = 1
 
 [node name="HealthbarBackground" type="ColorRect" parent="PlayerInfo"]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = -4.0
 offset_top = -23.0
 offset_right = 20.0
@@ -838,6 +867,7 @@ color = Color(0.0954408, 0.319425, 0.449492, 1)
 
 [node name="HealthFill" type="ColorRect" parent="PlayerInfo"]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = -3.0
 offset_top = -22.0
 offset_right = 19.0
@@ -846,6 +876,7 @@ color = Color(0, 0.745, 0, 0.659)
 
 [node name="HealthLabel" type="Label" parent="PlayerInfo"]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = -4.0
 offset_top = -23.0
 offset_right = 36.0
@@ -884,5 +915,8 @@ one_shot = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_qhqgy")
+
+[node name="VisibleNotifier" type="VisibleOnScreenNotifier2D" parent="."]
+unique_name_in_owner = true
 
 [connection signal="timeout" from="Timers/RespawnTimer" to="." method="_on_respawn_timer_timeout"]

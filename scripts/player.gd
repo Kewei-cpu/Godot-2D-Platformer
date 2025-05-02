@@ -28,6 +28,7 @@ extends CharacterBody2D
 @onready var spawn_points: Node2D = $"../LevelMap/SpawnPoints"
 
 @onready var inventory: Inventory = %Inventory
+@onready var enemy_indicator: CanvasLayer = %EnemyIndicator
 
 @onready var healthbar_background: ColorRect = %HealthbarBackground
 @onready var health_fill: ColorRect = %HealthFill
@@ -61,6 +62,7 @@ enum Team {
 var player_team: Team
 var local_team: Team
 
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump"):
 		jump_request_timer.start()
@@ -70,10 +72,10 @@ func _ready() -> void:
 	player_team = Team.HIDER if get_multiplayer_authority() in game.hiders else Team.SEEKER
 
 	set_player_collision_layer()
-	
+
 	if not is_multiplayer_authority():
 		return
-		
+
 	inventory.show()
 	var camera = CAMERA.instantiate()
 	add_child(camera)
@@ -84,10 +86,10 @@ func _process(_delta: float) -> void:
 		return
 
 	handle_dead()
-	
+
 	if dead:
 		return
-		
+
 	handle_camouflage()
 	handle_freeze()
 	inventory.handle_slot_change()
@@ -95,11 +97,17 @@ func _process(_delta: float) -> void:
 
 	show_hit_color()
 
+	if Input.is_key_pressed(KEY_F1):
+		var enemy := game.hiders if player_team == Team.SEEKER else game.seekers
+		for uid in enemy:
+			var enemy_player = get_node("../" + str(uid))
+			enemy_indicator.set_target(enemy_player)
+
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
-		
+
 	if dead:
 		return
 
@@ -136,8 +144,8 @@ func handle_dead():
 		character_collision.disabled = camouflaged
 		block_collision.disabled = not camouflaged
 		death_screen.hide()
-		
-		
+
+
 func handle_camouflage():
 	if player_team == Team.SEEKER:
 		return
@@ -193,7 +201,6 @@ func handle_move(delta):
 	var direction := Input.get_axis("move_left", "move_right")
 	var speed_direction := 1 if velocity.x > 0 else -1 if velocity.x < 0 else 0
 
-
 	if is_on_floor():
 		if direction:
 			velocity.x = clampf(velocity.x + direction * GROUND_ACCELERATION * delta, -MAX_SPEED, MAX_SPEED)
@@ -231,19 +238,20 @@ func show_hit_color():
 func respawn():
 	velocity = Vector2(0, 0)
 	dead = false
-	
+
 	set_health(MAX_HEALTH)
 	update_health_bar()
 	call_deferred("set_camouflage", false)
 	call_deferred("set_frozen", false)
-	
+
 	set_player_collision_layer()
+
 
 func set_camouflage(is_camouflage: bool):
 	camouflaged = is_camouflage
 
 	if is_camouflage:
-		block_sprite.frame = randi() % 25 # total 25 blocks
+		block_sprite.frame = randi() % 25  # total 25 blocks
 
 	character_sprite.visible = !is_camouflage
 	block_sprite.visible = is_camouflage
@@ -268,6 +276,7 @@ func clear_player_collision_layer():
 	set_collision_layer_value(2, false)
 	set_collision_layer_value(3, false)
 
+
 func set_player_collision_layer():
 	if player_team == Team.HIDER:
 		set_collision_layer_value(2, true)
@@ -289,6 +298,7 @@ func shoot():
 	var bullet_transform := Transform2D(muzzle.get_global_rotation(), muzzle.get_global_position())
 	fire_bullet.rpc(multiplayer.get_unique_id(), bullet_transform)
 
+
 func die():
 	respawn_timer.start()
 	dead = true
@@ -296,6 +306,7 @@ func die():
 
 	var spawn_point: Marker2D = spawn_points.get_children().pick_random()
 	global_position = spawn_point.global_position
+
 
 @rpc("call_local")
 func fire_bullet(pid, bullet_transform: Transform2D):
@@ -336,7 +347,7 @@ func change_health(amount: int) -> void:
 	update_health_bar()
 	if health == 0:
 		die()
-	
+
 
 func set_health(value: int) -> void:
 	health = clamp(value, 0, MAX_HEALTH)
