@@ -74,14 +74,19 @@ func _ready() -> void:
 	if not is_multiplayer_authority():
 		return
 
-	if player_team == Team.HIDER:
-		cool_down.wait_time = 0.2
-		MAX_SPEED = 125
 
 	inventory.show()
 	var camera = CAMERA.instantiate()
+	
+	if player_team == Team.HIDER:
+		cool_down.wait_time = 0.2
+		MAX_SPEED = 125
+	else:
+		camera.zoom = Vector2(3, 3)
+	
 	add_child(camera)
-
+	
+	
 
 func _process(_delta: float) -> void:
 	if not is_multiplayer_authority():
