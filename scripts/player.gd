@@ -5,7 +5,6 @@ extends CharacterBody2D
 
 @onready var character_sprite: AnimatedSprite2D = %CharacterSprite
 @onready var block_sprite: AnimatedSprite2D = %BlockSprite
-@onready var item_sprite: AnimatedSprite2D = %ItemSprite
 
 @onready var character_collision: CollisionShape2D = %CharacterCollision
 @onready var block_collision: CollisionShape2D = %BlockCollision
@@ -227,12 +226,10 @@ func show_hit_color():
 	if hit_color.is_stopped():
 		character_sprite.modulate = Color(1, 1, 1)
 		block_sprite.modulate = Color(1, 1, 1)
-		item_sprite.modulate = Color(1, 1, 1)
 
 	else:
 		character_sprite.modulate = Color(0.906, 0.306, 0.357)
 		block_sprite.modulate = Color(0.906, 0.306, 0.357)
-		item_sprite.modulate = Color(0.906, 0.306, 0.357)
 
 
 func respawn():
@@ -249,9 +246,18 @@ func respawn():
 
 func set_camouflage(is_camouflage: bool):
 	camouflaged = is_camouflage
+	
 
+	
 	if is_camouflage:
-		block_sprite.frame = randi() % 25  # total 25 blocks
+		var random_camouflage = randi() % 48 # total 48 sprites
+		
+		if random_camouflage < 25:
+			block_sprite.play("block")
+			block_sprite.frame = random_camouflage
+		else:
+			block_sprite.play("item")
+			block_sprite.frame = random_camouflage - 25
 
 	character_sprite.visible = !is_camouflage
 	block_sprite.visible = is_camouflage
@@ -261,8 +267,6 @@ func set_camouflage(is_camouflage: bool):
 
 	gun_container.visible = !is_camouflage
 
-	set_collision_layer_value(1, is_camouflage)
-
 
 func set_frozen(is_frozen: bool):
 	frozen = is_frozen
@@ -270,11 +274,28 @@ func set_frozen(is_frozen: bool):
 	health_fill.visible = !is_frozen
 	health_label.visible = !is_frozen
 	healthbar_background.visible = !is_frozen
-
+	
+	clear_player_collision_layer()
+	if player_team == Team.HIDER:
+		set_collision_layer_value(2, !is_frozen)
+		if character_sprite.animation == "block":
+			set_collision_layer_value(4, is_frozen)
+		else:
+			set_collision_layer_value(6, is_frozen)
+	else:
+		set_collision_layer_value(3, !is_frozen)
+		if character_sprite.animation == "block":
+			set_collision_layer_value(5, is_frozen)
+		else:
+			set_collision_layer_value(7, is_frozen)
 
 func clear_player_collision_layer():
 	set_collision_layer_value(2, false)
 	set_collision_layer_value(3, false)
+	set_collision_layer_value(4, false)
+	set_collision_layer_value(5, false)
+	set_collision_layer_value(6, false)
+	set_collision_layer_value(7, false)
 
 
 func set_player_collision_layer():
@@ -319,8 +340,12 @@ func fire_bullet(pid, bullet_transform: Transform2D):
 
 	if bullet_team == Team.HIDER:
 		bullet.set_collision_mask_value(3, true)
+		bullet.set_collision_mask_value(5, true)
+		bullet.set_collision_mask_value(7, true)
 	else:
 		bullet.set_collision_mask_value(2, true)
+		bullet.set_collision_mask_value(4, true)
+		bullet.set_collision_mask_value(6, true)
 
 	get_parent().add_child(bullet)
 

@@ -119,10 +119,14 @@ item_use={
 
 [layer_names]
 
-2d_render/layer_1="Terrain"
-2d_render/layer_2="Hider"
-2d_render/layer_3="Seeker"
-2d_render/layer_5="One way terrain"
+2d_physics/layer_1="Terrain"
+2d_physics/layer_2="Hider"
+2d_physics/layer_3="Seeker"
+2d_physics/layer_4="HiderCamouflagedBlock"
+2d_physics/layer_5="SeekerCamouflagedBlock"
+2d_physics/layer_6="HiderCamouflagedObject"
+2d_physics/layer_7="SeekerCamouflagedObject"
+2d_physics/layer_9="One Way Terrain"
 
 [physics]
 

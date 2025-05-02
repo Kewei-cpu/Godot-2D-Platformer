@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://c83knwqjyh4rm" path="res://scripts/collectable_item.gd" id="1_cb4fd"]
 
 [node name="CollectableItem" type="Area2D"]
+collision_layer = 0
+collision_mask = 126
 script = ExtResource("1_cb4fd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
