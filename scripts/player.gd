@@ -76,6 +76,7 @@ func _ready() -> void:
 
 	if player_team == Team.HIDER:
 		cool_down.wait_time = 0.2
+		MAX_SPEED = 125
 
 	inventory.show()
 	var camera = CAMERA.instantiate()
