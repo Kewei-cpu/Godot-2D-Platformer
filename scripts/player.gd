@@ -278,13 +278,13 @@ func set_frozen(is_frozen: bool):
 	clear_player_collision_layer()
 	if player_team == Team.HIDER:
 		set_collision_layer_value(2, !is_frozen)
-		if character_sprite.animation == "block":
+		if block_sprite.animation == "block":
 			set_collision_layer_value(4, is_frozen)
 		else:
 			set_collision_layer_value(6, is_frozen)
 	else:
 		set_collision_layer_value(3, !is_frozen)
-		if character_sprite.animation == "block":
+		if block_sprite.animation == "block":
 			set_collision_layer_value(5, is_frozen)
 		else:
 			set_collision_layer_value(7, is_frozen)

@@ -24,7 +24,6 @@ MultiplayerHandler="*res://scenes/multiplayer_handler.tscn"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/size/resizable=false
 window/stretch/mode="viewport"
 
 [dotnet]
