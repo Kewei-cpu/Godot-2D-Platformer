@@ -3,6 +3,7 @@ extends Node
 var player_name: String = "Anonymous"
 var peer = ENetMultiplayerPeer.new()
 
+
 func host(port = 25565) -> void:
 	peer.create_server(port)
 	multiplayer.multiplayer_peer = peer
@@ -10,7 +11,7 @@ func host(port = 25565) -> void:
 	await Transition.fade_to_black()
 	get_tree().change_scene_to_file("res://scenes/game.tscn")
 	Transition.fade_from_black()
-	
+
 
 func join(ip, port = 25565) -> void:
 	peer.create_client(ip, port)

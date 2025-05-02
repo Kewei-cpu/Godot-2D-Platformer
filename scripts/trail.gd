@@ -15,12 +15,8 @@ func _physics_process(delta: float) -> void:
 	var point: Vector2 = get_parent().global_position
 
 	add_point(point)
-	
+
 	max_points = max(max_points, get_point_count())
 
 	while get_point_count() > length:
 		remove_point(0)
-
-	
-
-		

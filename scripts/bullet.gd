@@ -1,6 +1,5 @@
 extends RigidBody2D
 
-
 @export var speed = 500
 @export var damage = 10
 @export var hitback = 100
@@ -36,16 +35,16 @@ func _physics_process(delta: float) -> void:
 
 	if !is_multiplayer_authority():
 		return
-	
+
 	if body is Player:
 		if body.get_multiplayer_authority() == multiplayer.get_unique_id():
 			return
 		body.bullet_hit.rpc_id(body.get_multiplayer_authority(), damage, velocity.normalized(), hitback)
 
 	#if body is TileMapLayer:
-		#var coord: Vector2i = body.local_to_map(body.to_local(collision.get_position() - collision.get_normal()))
-		# TODO: add terrain damage
-	
+	#var coord: Vector2i = body.local_to_map(body.to_local(collision.get_position() - collision.get_normal()))
+	# TODO: add terrain damage
+
 
 @rpc("call_local", "any_peer")
 func remove_bullet():

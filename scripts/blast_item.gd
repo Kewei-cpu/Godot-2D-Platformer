@@ -3,16 +3,18 @@ extends Collectable
 @onready var lasting_time: Timer = $Lasting_Time
 @onready var delta_time: Timer = $Delta_time
 
-@export	var radius := 8
-@export	var bullet_count := 16
+@export var radius := 8
+@export var bullet_count := 16
+
 
 func on_player_use() -> bool:
 	lasting_time.start()
 	delta_time.start()
-	
+
 	fire_bullet_cirecle()
 
 	return false
+
 
 func _on_timer_timeout() -> void:
 	queue_free()

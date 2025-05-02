@@ -59,7 +59,6 @@ enum Team {
 	SEEKER,
 }
 var player_team: Team
-var local_team: Team
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -74,6 +73,9 @@ func _ready() -> void:
 
 	if not is_multiplayer_authority():
 		return
+
+	if player_team == Team.HIDER:
+		cool_down.wait_time = 0.2
 
 	inventory.show()
 	var camera = CAMERA.instantiate()
@@ -246,12 +248,10 @@ func respawn():
 
 func set_camouflage(is_camouflage: bool):
 	camouflaged = is_camouflage
-	
 
-	
 	if is_camouflage:
-		var random_camouflage = randi() % 48 # total 48 sprites
-		
+		var random_camouflage = randi() % 48  # total 48 sprites
+
 		if random_camouflage < 25:
 			block_sprite.play("block")
 			block_sprite.frame = random_camouflage
@@ -274,7 +274,7 @@ func set_frozen(is_frozen: bool):
 	health_fill.visible = !is_frozen
 	health_label.visible = !is_frozen
 	healthbar_background.visible = !is_frozen
-	
+
 	clear_player_collision_layer()
 	if player_team == Team.HIDER:
 		set_collision_layer_value(2, !is_frozen)
@@ -288,6 +288,7 @@ func set_frozen(is_frozen: bool):
 			set_collision_layer_value(5, is_frozen)
 		else:
 			set_collision_layer_value(7, is_frozen)
+
 
 func clear_player_collision_layer():
 	set_collision_layer_value(2, false)

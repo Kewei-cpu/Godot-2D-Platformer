@@ -30,12 +30,13 @@ func handle_slot_change():
 
 	if Input.is_action_just_pressed("Slot 4"):
 		change_inventory_slot(4)
-		
+
 	if Input.is_action_just_pressed("Previous Slot"):
 		change_inventory_slot((current_slot + 4) % 5)
-				
+
 	if Input.is_action_just_pressed("Next Slot"):
 		change_inventory_slot((current_slot + 1) % 5)
+
 
 func handle_item_use():
 	if Input.is_action_just_pressed("item_use"):
