@@ -864,7 +864,7 @@ horizontal_alignment = 1
 
 [node name="CoolDown" type="Timer" parent="Timers"]
 unique_name_in_owner = true
-wait_time = 0.1
+wait_time = 0.15
 one_shot = true
 
 [node name="CoyoteTimer" type="Timer" parent="Timers"]

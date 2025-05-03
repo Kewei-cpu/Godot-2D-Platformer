@@ -51,6 +51,8 @@ const BULLET = preload("res://scenes/bullet.tscn")
 var camouflaged = false
 var frozen = false
 var dead = false
+var camouflage_list: Array[int] = []
+var current_camouflage = 0
 
 var health = MAX_HEALTH
 
@@ -79,15 +81,16 @@ func _ready() -> void:
 	var camera = CAMERA.instantiate()
 	
 	if player_team == Team.HIDER:
-		cool_down.wait_time = 0.2
-		MAX_SPEED = 125
+		cool_down.wait_time = 0.25
+		MAX_SPEED = 150
+		camouflage_list.append(randi_range(0, 24))
+		camouflage_list.append(randi_range(25, 47))
 	else:
 		camera.zoom = Vector2(3, 3)
 	
 	add_child(camera)
 	
 	
-
 func _process(_delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
@@ -179,7 +182,7 @@ func handle_shoot():
 	gun_container.look_at(get_global_mouse_position())
 	gun_sprite.flip_v = get_global_mouse_position().x < global_position.x
 
-	if Input.is_action_just_pressed("shoot") and not camouflaged:
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and not camouflaged:
 		if !cool_down.is_stopped():
 			return
 		shoot()
@@ -258,7 +261,8 @@ func set_camouflage(is_camouflage: bool):
 	camouflaged = is_camouflage
 
 	if is_camouflage:
-		var random_camouflage = randi() % 48  # total 48 sprites
+		current_camouflage = (current_camouflage + 1) % 2
+		var random_camouflage = camouflage_list[current_camouflage]
 
 		if random_camouflage < 25:
 			block_sprite.play("block")
