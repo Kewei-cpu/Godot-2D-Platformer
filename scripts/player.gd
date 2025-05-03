@@ -383,7 +383,7 @@ func update_health_bar():
 func change_health(amount: int) -> void:
 	health = clamp(health + amount, 0, MAX_HEALTH)
 	update_health_bar()
-	if health == 0:
+	if health <= 0:
 		die()
 
 
