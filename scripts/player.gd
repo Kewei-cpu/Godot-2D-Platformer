@@ -107,8 +107,10 @@ func _process(_delta: float) -> void:
 	if Input.is_key_pressed(KEY_F1):
 		var enemy := game.hiders if player_team == Team.SEEKER else game.seekers
 		for uid in enemy:
-			var enemy_player = get_node("../" + str(uid))
-			enemy_indicator.set_target(enemy_player)
+			var enemy_player = get_node_or_null("../" + str(uid))
+			
+			if enemy_player:
+				enemy_indicator.add_target(enemy_player)
 
 
 func _physics_process(delta: float) -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=3 uid="uid://cnkylbamt2u8d"]
+[gd_scene load_steps=92 format=3 uid="uid://cnkylbamt2u8d"]
 
 [ext_resource type="Texture2D" uid="uid://xng7rndc0vsj" path="res://sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c56riao304oxf" path="res://scripts/player.gd" id="1_g2els"]
@@ -12,9 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://bubanbsdbnf1" path="res://sprites/objects_/staticObjects_.png" id="11_d2wvv"]
 [ext_resource type="Script" uid="uid://dm8864n3xsh5d" path="res://scripts/inventory.gd" id="11_jej6c"]
 [ext_resource type="Texture2D" uid="uid://bvcicttn31htg" path="res://sprites/inventory.png" id="12_3v2ag"]
-[ext_resource type="Script" uid="uid://dwww5w48wmlno" path="res://scripts/enemy_indicator.gd" id="13_f1ej7"]
+[ext_resource type="PackedScene" uid="uid://yib4hv3f76rq" path="res://scenes/enemy_indicator.tscn" id="13_f1ej7"]
 [ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="13_jej6c"]
-[ext_resource type="Texture2D" uid="uid://die52bydbgo4i" path="res://sprites/arrow.png" id="14_oprun"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3v2ag"]
 size = Vector2(10, 15)
@@ -810,29 +809,8 @@ theme_override_font_sizes/font_size = 96
 text = "3.0"
 horizontal_alignment = 1
 
-[node name="EnemyIndicator" type="CanvasLayer" parent="."]
+[node name="EnemyIndicator" parent="." instance=ExtResource("13_f1ej7")]
 unique_name_in_owner = true
-visible = false
-script = ExtResource("13_f1ej7")
-
-[node name="Arrow" type="TextureRect" parent="EnemyIndicator"]
-unique_name_in_owner = true
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -40.0
-offset_right = 40.0
-offset_bottom = 40.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(40, 40)
-texture = ExtResource("14_oprun")
-expand_mode = 3
-stretch_mode = 5
-metadata/_edit_use_anchors_ = true
 
 [node name="PlayerInfo" type="Control" parent="."]
 layout_mode = 3

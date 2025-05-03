@@ -2454,7 +2454,7 @@ tile_map_data = PackedByteArray("AACF/7v/AgAHAAAAAACF/7z/AgAHAAAAAACF/73/AgAHAAA
 tile_set = ExtResource("3_e7mj4")
 
 [node name="KillZone" parent="." instance=ExtResource("8_ublle")]
-position = Vector2(-1, 112)
+position = Vector2(0, 101)
 
 [node name="BlastItem" parent="." instance=ExtResource("9_8v2yb")]
 position = Vector2(-16, -24)
