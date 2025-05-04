@@ -6,11 +6,13 @@ extends Area2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
-var player: Player = null
+var player: Player
 var time := 0.0
+
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
+
 
 func _process(delta: float) -> void:
 	animated_sprite_2d.position.y = -3 + 3 * sin(2 * time)

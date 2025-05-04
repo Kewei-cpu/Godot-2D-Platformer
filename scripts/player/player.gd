@@ -354,6 +354,7 @@ func die():
 	respawn_timer.start()
 	dead = true
 	clear_player_collision_layer()
+	effect_bar.clear_all_effects()
 
 	var spawn_point: Marker2D = spawn_points.get_children().pick_random()
 	global_position = spawn_point.global_position
