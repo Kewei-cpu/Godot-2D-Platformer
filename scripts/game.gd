@@ -37,7 +37,6 @@ var seekers: Array[int] = []
 
 var running := false
 
-
 func _ready() -> void:
 	multiplayer_spawner.spawn_function = add_player_to_scene
 	if multiplayer.is_server():
@@ -48,6 +47,11 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("back") and not running:
+		await Transition.fade_to_black()
+		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+		Transition.fade_from_black()
+	
 	if not is_server:
 		return
 
@@ -60,7 +64,7 @@ func _process(_delta: float) -> void:
 	if not seek_timer.is_stopped():
 		update_seeking_time_display.rpc(snappedf(seek_timer.time_left, 0.1))
 
-	if Input.is_action_just_pressed("restart game"):
+	if Input.is_key_pressed(KEY_F4):
 		restart_game()
 
 
@@ -84,10 +88,8 @@ func restart_game():
 		return
 
 	for uid in players:
-		var player = get_node_or_null(str(uid))
-		
-		if player:
-			player.queue_free()
+		var player = get_node(str(uid))
+		player.queue_free()
 
 	hide_timer.stop()
 	seek_timer.stop()
@@ -224,7 +226,7 @@ func _on_start_game_pressed() -> void:
 			hiding_time.show_rpc.rpc_id(uid)
 		for uid in seekers:
 			seeker_waiting_screen.show_rpc.rpc_id(uid)
-
+		
 		hide_timer.start()
 		running = true
 

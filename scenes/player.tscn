@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=3 uid="uid://cnkylbamt2u8d"]
+[gd_scene load_steps=92 format=3 uid="uid://cnkylbamt2u8d"]
 
 [ext_resource type="Texture2D" uid="uid://xng7rndc0vsj" path="res://sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c56riao304oxf" path="res://scripts/player.gd" id="1_g2els"]
@@ -12,7 +12,6 @@
 [ext_resource type="Texture2D" uid="uid://bubanbsdbnf1" path="res://sprites/objects_/staticObjects_.png" id="11_d2wvv"]
 [ext_resource type="Script" uid="uid://dm8864n3xsh5d" path="res://scripts/inventory.gd" id="11_jej6c"]
 [ext_resource type="Texture2D" uid="uid://bvcicttn31htg" path="res://sprites/inventory.png" id="12_3v2ag"]
-[ext_resource type="Script" uid="uid://dua5g2xufmeg8" path="res://scripts/effect_bar.gd" id="12_oprun"]
 [ext_resource type="PackedScene" uid="uid://yib4hv3f76rq" path="res://scenes/enemy_indicator.tscn" id="13_f1ej7"]
 [ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="13_jej6c"]
 
@@ -766,28 +765,6 @@ custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 expand_mode = 2
 stretch_mode = 5
-
-[node name="EffectBar" type="CanvasLayer" parent="."]
-unique_name_in_owner = true
-visible = false
-script = ExtResource("12_oprun")
-
-[node name="MarginContainer" type="MarginContainer" parent="EffectBar"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="HBoxContainer" type="HBoxContainer" parent="EffectBar/MarginContainer"]
-layout_direction = 3
-layout_mode = 2
-size_flags_vertical = 0
-theme_override_constants/separation = 4
 
 [node name="DeathScreen" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
