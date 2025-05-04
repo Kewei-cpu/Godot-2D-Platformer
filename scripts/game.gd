@@ -36,7 +36,6 @@ var hiders: Array[int] = []
 var seekers: Array[int] = []
 
 var running := false
-var start = false
 
 func _ready() -> void:
 	multiplayer_spawner.spawn_function = add_player_to_scene
@@ -48,8 +47,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	
-	if Input.is_action_just_pressed("back") and start == false:
+	if Input.is_action_just_pressed("back") and not running:
 		await Transition.fade_to_black()
 		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 		Transition.fade_from_black()
@@ -218,7 +216,6 @@ func _on_join_seekers_pressed() -> void:
 
 
 func _on_start_game_pressed() -> void:
-	start = true
 	if not is_server:
 		return
 
@@ -243,7 +240,6 @@ func _on_hide_timer_timeout() -> void:
 		seeking_time.show_rpc.rpc_id(uid)
 
 	for uid in seekers:
-		
 		seeker_waiting_screen.hide_rpc.rpc_id(uid)
 		multiplayer_spawner.spawn(uid)
 		seeking_time.show_rpc.rpc_id(uid)
