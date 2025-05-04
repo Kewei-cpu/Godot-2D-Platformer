@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://cl2r4512srjd4"]
+
+[ext_resource type="PackedScene" uid="uid://dt021y4r6rh7c" path="res://scenes/effect/effect.tscn" id="1_4e33a"]
+[ext_resource type="Script" uid="uid://bapjlftcqdju6" path="res://scripts/effect/jump_boost_effect.gd" id="2_4e33a"]
+[ext_resource type="Texture2D" uid="uid://bak3kt71haj8m" path="res://sprites/effects/EffectSprite_jump-boost.png" id="3_4e33a"]
+
+[node name="SpeedEffect" instance=ExtResource("1_4e33a")]
+script = ExtResource("2_4e33a")
+
+[node name="EffectTexture" parent="MarginContainer" index="0"]
+texture = ExtResource("3_4e33a")
+
+[node name="EffectTimer" parent="." index="1"]
+wait_time = 10.0

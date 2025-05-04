@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Transition="*res://scenes/transition.tscn"
-MultiplayerHandler="*res://scenes/multiplayer_handler.tscn"
+Transition="*res://scenes/game/transition.tscn"
+MultiplayerHandler="*res://scenes/game/multiplayer_handler.tscn"
 
 [display]
 
