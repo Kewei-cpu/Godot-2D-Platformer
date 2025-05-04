@@ -60,7 +60,7 @@ func _process(_delta: float) -> void:
 	if not seek_timer.is_stopped():
 		update_seeking_time_display.rpc(snappedf(seek_timer.time_left, 0.1))
 
-	if Input.is_key_pressed(KEY_F4):
+	if Input.is_action_just_pressed("restart game"):
 		restart_game()
 
 
@@ -84,8 +84,10 @@ func restart_game():
 		return
 
 	for uid in players:
-		var player = get_node(str(uid))
-		player.queue_free()
+		var player = get_node_or_null(str(uid))
+		
+		if player:
+			player.queue_free()
 
 	hide_timer.stop()
 	seek_timer.stop()

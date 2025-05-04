@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://drxfqxh5p8stc"]
+
+[ext_resource type="PackedScene" uid="uid://dt021y4r6rh7c" path="res://scenes/effect.tscn" id="1_b6jte"]
+[ext_resource type="Script" uid="uid://5kihoifwifp0" path="res://scripts/regeneration_effect.gd" id="2_b6jte"]
+[ext_resource type="Texture2D" uid="uid://wkf08wjqhwje" path="res://sprites/effects/EffectSprite_regeneration.png" id="3_b6jte"]
+
+[node name="Effect" instance=ExtResource("1_b6jte")]
+script = ExtResource("2_b6jte")
+
+[node name="EffectTexture" parent="MarginContainer" index="0"]
+texture = ExtResource("3_b6jte")
+
+[node name="EffectTimer" parent="." index="1"]
+wait_time = 5.0
+
+[node name="RegenerationTimer" type="Timer" parent="." index="3"]
+wait_time = 0.5

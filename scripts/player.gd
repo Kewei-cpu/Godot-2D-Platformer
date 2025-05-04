@@ -26,6 +26,7 @@ extends CharacterBody2D
 @onready var terrain: TileMapLayer = $"../LevelMap/Midground"
 @onready var spawn_points: Node2D = $"../LevelMap/SpawnPoints"
 
+@onready var effect_bar: EffectBar = %EffectBar
 @onready var inventory: Inventory = %Inventory
 @onready var enemy_indicator: CanvasLayer = %EnemyIndicator
 
@@ -107,14 +108,25 @@ func _process(_delta: float) -> void:
 
 	show_hit_color()
 
-	if Input.is_key_pressed(KEY_F1):
-		var enemy := game.hiders if player_team == Team.SEEKER else game.seekers
-		for uid in enemy:
-			var enemy_player = get_node_or_null("../" + str(uid))
-			
-			if enemy_player:
-				enemy_indicator.add_target(enemy_player)
-
+	#if Input.is_key_pressed(KEY_F1):
+		#var enemy := game.hiders if player_team == Team.SEEKER else game.seekers
+		#for uid in enemy:
+			#var enemy_player = get_node_or_null("../" + str(uid))
+			#
+			#if enemy_player:
+				#enemy_indicator.add_target(enemy_player)
+	
+	if Input.is_action_just_pressed("test1"):
+		effect_bar.add_effect(load("res://scenes/speed_effect.tscn"))
+	
+	if Input.is_action_just_pressed("test2"):
+		effect_bar.add_effect(load("res://scenes/slowness_effect.tscn"))
+	
+	if Input.is_action_just_pressed("test3"):
+		effect_bar.add_effect(load("res://scenes/regeneration_effect.tscn"))
+	
+	if Input.is_action_just_pressed("test4"):
+		effect_bar.add_effect(load("res://scenes/jump_boost_effect.tscn"))
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
@@ -182,7 +194,7 @@ func handle_shoot():
 	gun_container.look_at(get_global_mouse_position())
 	gun_sprite.flip_v = get_global_mouse_position().x < global_position.x
 
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and not camouflaged:
+	if Input.is_action_pressed("shoot") and not camouflaged:
 		if !cool_down.is_stopped():
 			return
 		shoot()
