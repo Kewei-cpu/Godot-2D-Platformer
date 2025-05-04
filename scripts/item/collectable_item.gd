@@ -9,6 +9,8 @@ extends Area2D
 var player: Player = null
 var time := 0.0
 
+func _ready() -> void:
+	body_entered.connect(_on_body_entered)
 
 func _process(delta: float) -> void:
 	animated_sprite_2d.position.y = -3 + 3 * sin(2 * time)

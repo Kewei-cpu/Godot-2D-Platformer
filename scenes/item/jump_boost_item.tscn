@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://bui7unh8mpv7w"]
+
+[ext_resource type="PackedScene" uid="uid://bsjd7x05gaifn" path="res://scenes/item/collectable_item.tscn" id="1_j8xjo"]
+[ext_resource type="Script" uid="uid://wwar0t6kxyk3" path="res://scripts/item/jump_boost_item.gd" id="2_j8xjo"]
+[ext_resource type="Texture2D" uid="uid://bak3kt71haj8m" path="res://sprites/effects/EffectSprite_jump-boost.png" id="3_j8xjo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_twysl"]
+radius = 9.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bwau0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_j8xjo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 0.0
+}]
+
+[node name="JumpBoostItem" instance=ExtResource("1_j8xjo")]
+script = ExtResource("2_j8xjo")
+icon_texture = ExtResource("3_j8xjo")
+
+[node name="CollisionShape2D" parent="." index="0"]
+shape = SubResource("CircleShape2D_twysl")
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+sprite_frames = SubResource("SpriteFrames_bwau0")
+autoplay = "default"

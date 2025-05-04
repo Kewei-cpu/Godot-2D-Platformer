@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://dhqac7kdxa7i8"]
+
+[ext_resource type="PackedScene" uid="uid://bsjd7x05gaifn" path="res://scenes/item/collectable_item.tscn" id="1_un071"]
+[ext_resource type="Script" uid="uid://dhrj0qk4oabym" path="res://scripts/item/regeneration_item.gd" id="2_5n7o8"]
+[ext_resource type="Texture2D" uid="uid://wkf08wjqhwje" path="res://sprites/effects/EffectSprite_regeneration.png" id="3_5n7o8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_twysl"]
+radius = 9.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dg077"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_5n7o8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 0.0
+}]
+
+[node name="RegenerationItem" instance=ExtResource("1_un071")]
+script = ExtResource("2_5n7o8")
+icon_texture = ExtResource("3_5n7o8")
+
+[node name="CollisionShape2D" parent="." index="0"]
+shape = SubResource("CircleShape2D_twysl")
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+sprite_frames = SubResource("SpriteFrames_dg077")
+autoplay = "default"

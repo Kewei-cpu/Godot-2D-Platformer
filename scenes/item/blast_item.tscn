@@ -26,7 +26,6 @@ icon_texture = ExtResource("2_1eogj")
 
 [node name="CollisionShape2D" parent="." index="0"]
 shape = SubResource("CircleShape2D_hn4ow")
-disabled = false
 
 [node name="AnimatedSprite2D" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_6s64y")
