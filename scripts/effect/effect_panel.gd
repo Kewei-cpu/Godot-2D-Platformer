@@ -11,7 +11,6 @@ var flickering := false
 func _ready() -> void:
 	player = get_node("../../../../")
 	on_effect_start()
-	effect_timer.start()
 	
 	effect_timer.timeout.connect(on_effect_end)
 	effect_timer.timeout.connect(queue_free)

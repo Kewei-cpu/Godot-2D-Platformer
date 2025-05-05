@@ -207,9 +207,11 @@ func handle_shoot():
 	if Input.is_action_pressed("shoot") and not camouflaged:
 		if !cool_down.is_stopped():
 			return
-		shoot()
+		shoot(Projectile.Bullet)
 		cool_down.start()
 
+	if Input.is_action_just_pressed("throw") and not camouflaged:
+		shoot(Projectile.Grenade)
 
 func handle_jump(delta):
 	# Add the gravity.
@@ -350,9 +352,9 @@ func bullet_hit(damage, collision_normal, hitback):
 	hit_color.start()
 
 
-func shoot():
+func shoot(projectile: int = Projectile.Bullet):
 	var bullet_transform := Transform2D(muzzle.get_global_rotation(), muzzle.get_global_position())
-	spawn_projectile.rpc(multiplayer.get_unique_id(), Projectile.Bullet, bullet_transform)
+	spawn_projectile.rpc(multiplayer.get_unique_id(), projectile, bullet_transform)
 
 
 func die():

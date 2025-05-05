@@ -13,8 +13,7 @@ extends RigidBody2D
 func _ready() -> void:
 	linear_velocity = transform.x.normalized() * speed + initial_velocity
 	angular_velocity = 0.0
-
-	life_timer.start()
+	
 
 func hide_all():
 	sprite_2d.hide()
