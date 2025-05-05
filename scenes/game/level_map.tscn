@@ -2527,7 +2527,3 @@ position = Vector2(-144, -136)
 
 [node name="SpeedItem4" parent="." instance=ExtResource("13_6sptd")]
 position = Vector2(184, -160)
-
-[connection signal="body_entered" from="BlastItem" to="BlastItem" method="_on_body_entered"]
-[connection signal="body_entered" from="BlastItem2" to="BlastItem2" method="_on_body_entered"]
-[connection signal="body_entered" from="BlastItem3" to="BlastItem3" method="_on_body_entered"]

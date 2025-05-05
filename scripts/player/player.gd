@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody2D
 
-@onready var name_tag: Label = %NameTag
+@onready var camera: Camera2D = %Camera
 
 @onready var character_sprite: AnimatedSprite2D = %CharacterSprite
 @onready var block_sprite: AnimatedSprite2D = %BlockSprite
@@ -30,14 +30,15 @@ extends CharacterBody2D
 @onready var inventory: Inventory = %Inventory
 @onready var enemy_indicator: CanvasLayer = %EnemyIndicator
 
+@onready var name_tag: Label = %NameTag
 @onready var healthbar_background: ColorRect = %HealthbarBackground
 @onready var health_fill: ColorRect = %HealthFill
 @onready var health_label: Label = %HealthLabel
 
 @onready var game: Game = get_parent()
 
-const CAMERA = preload("res://scenes/player/camera.tscn")
-const BULLET = preload("res://scenes/player/bullet.tscn")
+const BULLET = preload("res://scenes/projectile/bullet.tscn")
+const GRENADE = preload("res://scenes/projectile/grenade.tscn")
 
 const SPEED_EFFECT = preload("res://scenes/effect/speed_effect.tscn")
 const SLOWNESS_EFFECT = preload("res://scenes/effect/slowness_effect.tscn")
@@ -66,6 +67,12 @@ enum Team {
 	HIDER,
 	SEEKER,
 }
+
+enum Projectile {
+	Bullet,
+	Grenade
+}
+
 var player_team: Team
 
 
@@ -82,10 +89,9 @@ func _ready() -> void:
 	if not is_multiplayer_authority():
 		return
 
-
 	inventory.show()
-	var camera = CAMERA.instantiate()
-	
+	camera.enabled = true
+
 	if player_team == Team.HIDER:
 		cool_down.wait_time = 0.25
 		MAX_SPEED = 150
@@ -93,10 +99,8 @@ func _ready() -> void:
 		camouflage_list.append(randi_range(25, 47))
 	else:
 		camera.zoom = Vector2(3, 3)
-	
-	add_child(camera)
-	
-	
+
+
 func _process(_delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
@@ -114,24 +118,25 @@ func _process(_delta: float) -> void:
 	show_hit_color()
 
 	#if Input.is_key_pressed(KEY_F1):
-		#var enemy := game.hiders if player_team == Team.SEEKER else game.seekers
-		#for uid in enemy:
-			#var enemy_player = get_node_or_null("../" + str(uid))
-			#
-			#if enemy_player:
-				#enemy_indicator.add_target(enemy_player)
-	
+	#var enemy := game.hiders if player_team == Team.SEEKER else game.seekers
+	#for uid in enemy:
+	#var enemy_player = get_node_or_null("../" + str(uid))
+	#
+	#if enemy_player:
+	#enemy_indicator.add_target(enemy_player)
+
 	if Input.is_action_just_pressed("test1"):
 		effect_bar.add_effect(SPEED_EFFECT)
-	
+
 	if Input.is_action_just_pressed("test2"):
 		effect_bar.add_effect(SLOWNESS_EFFECT)
-	
+
 	if Input.is_action_just_pressed("test3"):
 		effect_bar.add_effect(REGENERATION_EFFECT)
-	
+
 	if Input.is_action_just_pressed("test4"):
 		effect_bar.add_effect(JUMP_BOOST_EFFECT)
+
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
@@ -347,7 +352,7 @@ func bullet_hit(damage, collision_normal, hitback):
 
 func shoot():
 	var bullet_transform := Transform2D(muzzle.get_global_rotation(), muzzle.get_global_position())
-	fire_bullet.rpc(multiplayer.get_unique_id(), bullet_transform)
+	spawn_projectile.rpc(multiplayer.get_unique_id(), Projectile.Bullet, bullet_transform)
 
 
 func die():
@@ -361,24 +366,32 @@ func die():
 
 
 @rpc("call_local")
-func fire_bullet(pid, bullet_transform: Transform2D):
-	var bullet = BULLET.instantiate()
-	bullet.transform = bullet_transform
-	bullet.velocity = velocity
-	bullet.set_multiplayer_authority(pid)
+func spawn_projectile(pid, _projectile: int, _transform: Transform2D):
+	var projectile: Projectile
+	
+	if _projectile == Projectile.Bullet:
+		projectile = BULLET.instantiate()
+	elif _projectile == Projectile.Grenade:
+		projectile = GRENADE.instantiate()
+	else:
+		return
+		
+	projectile.transform = _transform
+	projectile.initial_velocity = velocity * 0.5
+	projectile.set_multiplayer_authority(pid)
 
 	var bullet_team = Team.HIDER if pid in game.hiders else Team.SEEKER
 
 	if bullet_team == Team.HIDER:
-		bullet.set_collision_mask_value(3, true)
-		bullet.set_collision_mask_value(5, true)
-		bullet.set_collision_mask_value(7, true)
+		projectile.set_collision_mask_value(3, true)
+		projectile.set_collision_mask_value(5, true)
+		projectile.set_collision_mask_value(7, true)
 	else:
-		bullet.set_collision_mask_value(2, true)
-		bullet.set_collision_mask_value(4, true)
-		bullet.set_collision_mask_value(6, true)
+		projectile.set_collision_mask_value(2, true)
+		projectile.set_collision_mask_value(4, true)
+		projectile.set_collision_mask_value(6, true)
 
-	get_parent().add_child(bullet)
+	get_parent().add_child(projectile)
 
 
 func update_health_bar():

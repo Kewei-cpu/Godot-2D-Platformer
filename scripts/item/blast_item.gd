@@ -30,4 +30,4 @@ func fire_bullet_cirecle():
 		var angle := (i * 2 * PI) / bullet_count + randf() * PI / bullet_count
 		var bullet_transform := Transform2D(angle, Vector2.from_angle(angle) * radius + player.center.global_position)
 
-		player.fire_bullet.rpc(player.get_multiplayer_authority(), bullet_transform)
+		player.spawn_projectile.rpc(player.get_multiplayer_authority(), player.Projectile.Bullet, bullet_transform)
