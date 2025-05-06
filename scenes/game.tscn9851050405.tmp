@@ -1,0 +1,172 @@
+[gd_scene load_steps=8 format=3 uid="uid://cc0ytnsq165td"]
+
+[ext_resource type="Script" uid="uid://blrflx2y4i3o6" path="res://scripts/game.gd" id="1_p57ef"]
+[ext_resource type="FontFile" uid="uid://bqoyclilvktou" path="res://fonts/PixelOperator8.ttf" id="3_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://cin65u8s7y6gf" path="res://scenes/level_map.tscn" id="4_iywne"]
+[ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="6_p57ef"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lbhrr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iywne"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p57ef"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_p57ef")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+unique_name_in_owner = true
+_spawnable_scenes = PackedStringArray("uid://cnkylbamt2u8d")
+spawn_path = NodePath("..")
+
+[node name="WaitingScreen" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="ColorRect" type="ColorRect" parent="WaitingScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0980392, 0.313726, 0.752941, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="WaitingScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WaitingScreen/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WaitingScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PlayerCount" type="Label" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme = ExtResource("6_p57ef")
+text = "Current Players: 0"
+
+[node name="ReadyCount" type="Label" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme = ExtResource("6_p57ef")
+text = "Ready Players: 0"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+theme_override_styles/separator = SubResource("StyleBoxEmpty_lbhrr")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Hider" type="Label" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+text = "Hiders"
+
+[node name="HidersList" type="ItemList" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("6_p57ef")
+theme_override_constants/v_separation = 10
+theme_override_constants/h_separation = 10
+theme_override_fonts/font = ExtResource("3_lbhrr")
+theme_override_font_sizes/font_size = 32
+
+[node name="HSeparator" type="HSeparator" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_iywne")
+
+[node name="JoinHiders" type="Button" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+text = "Join Hiders"
+
+[node name="VSeparator" type="VSeparator" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 50
+theme_override_styles/separator = SubResource("StyleBoxEmpty_p57ef")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Seeker" type="Label" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+text = "Seekers"
+
+[node name="SeekersList" type="ItemList" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("6_p57ef")
+theme_override_constants/v_separation = 10
+theme_override_constants/h_separation = 10
+theme_override_fonts/font = ExtResource("3_lbhrr")
+theme_override_font_sizes/font_size = 32
+
+[node name="HSeparator" type="HSeparator" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_iywne")
+
+[node name="JoinSeekers" type="Button" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+text = "Join Seekers"
+
+[node name="HSeparator2" type="HSeparator" parent="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+theme_override_styles/separator = SubResource("StyleBoxEmpty_lbhrr")
+
+[node name="HostToStart" type="Label" parent="WaitingScreen/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+text = "Waiting the host to start the game..."
+
+[node name="StartGame" type="Button" parent="WaitingScreen/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme = ExtResource("6_p57ef")
+text = "Start Game"
+
+[node name="LevelMap" parent="." instance=ExtResource("4_iywne")]
+
+[connection signal="pressed" from="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/JoinHiders" to="." method="_on_join_hiders_pressed"]
+[connection signal="pressed" from="WaitingScreen/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/JoinSeekers" to="." method="_on_join_seekers_pressed"]
+[connection signal="pressed" from="WaitingScreen/MarginContainer/VBoxContainer/StartGame" to="." method="_on_start_game_pressed"]
