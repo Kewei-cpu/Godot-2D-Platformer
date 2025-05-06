@@ -15,7 +15,7 @@ func _ready() -> void:
 	effect_timer.timeout.connect(on_effect_end)
 	effect_timer.timeout.connect(queue_free)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if effect_timer.is_stopped():
 		return
 	

@@ -14,7 +14,7 @@ func set_target(_target: Player) -> void:
 	show()
 
 
-func _process(delta) -> void:
+func _process(_delta) -> void:
 	if not target:
 		return
 

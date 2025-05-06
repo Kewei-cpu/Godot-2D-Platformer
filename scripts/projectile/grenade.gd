@@ -1,7 +1,7 @@
 extends Projectile
 
 var Poison = preload("res://scenes/effect/poison_effect.tscn")
-var EffectArea = preload("res://scenes/effect/effect_area.tscn")
+var Area = preload("res://scenes/effect/effect_area.tscn")
 
 func _on_explode_timer_timeout() -> void:
 	if not is_multiplayer_authority():
@@ -15,7 +15,7 @@ func _on_explode_timer_timeout() -> void:
 func spawn_effect_area():
 	var game: Game = get_parent()
 	
-	var area: EffectArea = EffectArea.instantiate()
+	var area: EffectArea = Area.instantiate()
 	area.position = global_position
 	area.effect = Poison
 	
