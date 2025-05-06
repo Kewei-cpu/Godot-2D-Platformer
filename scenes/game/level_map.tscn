@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://cin65u8s7y6gf"]
+[gd_scene load_steps=18 format=4 uid="uid://cin65u8s7y6gf"]
 
 [ext_resource type="TileSet" uid="uid://bp0sjqegwvf7h" path="res://tilesets/foreground.tres" id="1_26e65"]
 [ext_resource type="Texture2D" uid="uid://bv0r7of1r5ldj" path="res://sprites/midground_/spring_.png" id="2_4mfww"]
@@ -9,10 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bubanbsdbnf1" path="res://sprites/objects_/staticObjects_.png" id="6_2iehp"]
 [ext_resource type="Texture2D" uid="uid://coctjgmsm04wr" path="res://sprites/objects_/object_plus.png" id="7_e6xmq"]
 [ext_resource type="PackedScene" uid="uid://psa4ouhlr0ab" path="res://scenes/game/kill_zone.tscn" id="8_ublle"]
-[ext_resource type="PackedScene" uid="uid://bix03e0wdjuor" path="res://scenes/item/blast_item.tscn" id="9_8v2yb"]
-[ext_resource type="PackedScene" uid="uid://bui7unh8mpv7w" path="res://scenes/item/jump_boost_item.tscn" id="11_t5rpn"]
-[ext_resource type="PackedScene" uid="uid://dhqac7kdxa7i8" path="res://scenes/item/regeneration_item.tscn" id="12_460ci"]
-[ext_resource type="PackedScene" uid="uid://dcigfdc2dxghb" path="res://scenes/item/speed_item.tscn" id="13_6sptd"]
+[ext_resource type="PackedScene" uid="uid://bd12phu4qvwrd" path="res://scenes/item/item_spawner.tscn" id="14_6sptd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jbwni"]
 texture = ExtResource("2_4mfww")
@@ -2459,15 +2456,6 @@ tile_set = ExtResource("3_e7mj4")
 [node name="KillZone" parent="." instance=ExtResource("8_ublle")]
 position = Vector2(0, 101)
 
-[node name="BlastItem" parent="." instance=ExtResource("9_8v2yb")]
-position = Vector2(-120, -296)
-
-[node name="BlastItem2" parent="." instance=ExtResource("9_8v2yb")]
-position = Vector2(-888, -256)
-
-[node name="BlastItem3" parent="." instance=ExtResource("9_8v2yb")]
-position = Vector2(112, -592)
-
 [node name="SpawnPoints" type="Node2D" parent="."]
 unique_name_in_owner = true
 
@@ -2501,29 +2489,19 @@ position = Vector2(440, -24)
 [node name="SpawnPoint10" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(1128, 24)
 
-[node name="JumpBoostItem" parent="." instance=ExtResource("11_t5rpn")]
-position = Vector2(-792, -416)
+[node name="ItemSpawners" type="Node2D" parent="."]
 
-[node name="JumpBoostItem2" parent="." instance=ExtResource("11_t5rpn")]
-position = Vector2(424, -432)
+[node name="ItemSpawner" parent="ItemSpawners" instance=ExtResource("14_6sptd")]
+position = Vector2(-392, -440)
 
-[node name="RegenerationItem" parent="." instance=ExtResource("12_460ci")]
+[node name="ItemSpawner2" parent="ItemSpawners" instance=ExtResource("14_6sptd")]
+position = Vector2(-592, 24)
+
+[node name="ItemSpawner3" parent="ItemSpawners" instance=ExtResource("14_6sptd")]
+position = Vector2(360, -184)
+
+[node name="ItemSpawner4" parent="ItemSpawners" instance=ExtResource("14_6sptd")]
+position = Vector2(408, -440)
+
+[node name="ItemSpawner5" parent="ItemSpawners" instance=ExtResource("14_6sptd")]
 position = Vector2(-264, -768)
-
-[node name="RegenerationItem2" parent="." instance=ExtResource("12_460ci")]
-position = Vector2(-600, 56)
-
-[node name="SpeedItem" parent="." instance=ExtResource("13_6sptd")]
-position = Vector2(-112, -424)
-
-[node name="SpeedItem2" parent="." instance=ExtResource("13_6sptd")]
-position = Vector2(912, 64)
-
-[node name="SpeedItem3" parent="." instance=ExtResource("13_6sptd")]
-position = Vector2(-984, 64)
-
-[node name="JumpBoostItem3" parent="." instance=ExtResource("11_t5rpn")]
-position = Vector2(-144, -136)
-
-[node name="SpeedItem4" parent="." instance=ExtResource("13_6sptd")]
-position = Vector2(184, -160)

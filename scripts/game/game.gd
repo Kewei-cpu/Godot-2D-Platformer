@@ -37,6 +37,9 @@ var seekers: Array[int] = []
 
 var running := false
 
+signal game_started
+signal game_stopped
+
 
 func _ready() -> void:
 	multiplayer_spawner.spawn_function = add_player_to_scene
@@ -98,7 +101,7 @@ func restart_game():
 	waiting_screen.show_rpc.rpc()
 
 	running = false
-
+	emit_signal("game_stopped")
 
 func is_everyone_ready() -> bool:
 	return players.size() == hiders.size() + seekers.size()
@@ -226,6 +229,7 @@ func _on_start_game_pressed() -> void:
 			seeker_waiting_screen.show_rpc.rpc_id(uid)
 
 		hide_timer.start()
+		game_started.emit()
 		running = true
 
 

@@ -87,6 +87,7 @@ func add_item_to_inventory(item: Collectable) -> bool:
 
 func add_item_to_inventory_slot(item: Collectable, slot: int):
 	# no safety check, please be cautious!
+	item.call_deferred("reparent", get_parent())
 	inventory[slot] = item
 	inventory_icon_list[slot].texture = item.icon_texture
 

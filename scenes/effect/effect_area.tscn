@@ -220,7 +220,7 @@ scale = Vector2(1e-05, 1e-05)
 shape = SubResource("CircleShape2D_wtovf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-modulate = Color(1, 1, 1, 0.462745)
+modulate = Color(1, 1, 1, 0.235294)
 scale = Vector2(1e-05, 1e-05)
 sprite_frames = SubResource("SpriteFrames_ywyv5")
 autoplay = "default"
