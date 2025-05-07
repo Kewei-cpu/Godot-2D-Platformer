@@ -9,7 +9,7 @@ signal server_disconnected
 
 const PORT = 7000
 const MAX_CONNECTIONS = 20
-const DEFAULT_SERVER_IP = "127.0.0.1"  # IPv4 localhost
+const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
 
 # This will contain player info for every player,
 # with the keys being each player's unique IDs.
@@ -85,6 +85,12 @@ func player_loaded():
 func _on_player_connected(id):
 	_register_player.rpc_id(id, player_info)
 
+	if multiplayer.get_unique_id() in hiders:
+		join_hiders.rpc_id(id, multiplayer.get_unique_id())
+
+	elif multiplayer.get_unique_id() in seekers:
+		join_seekers.rpc_id(id, multiplayer.get_unique_id())
+
 
 @rpc("any_peer", "reliable")
 func _register_player(new_player_info):
@@ -142,7 +148,7 @@ func _on_server_disconnected():
 	server_disconnected.emit()
 
 
-@rpc("authority", "call_local", "reliable")
+@rpc("authority", "reliable")
 func disconnect_player():
 	if multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()

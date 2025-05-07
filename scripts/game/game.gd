@@ -33,7 +33,6 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("quit"):
-		print("quit")
 		MultiplayerHandler.disconnect_player()
 
 	if not is_server:
@@ -80,7 +79,9 @@ func add_player_to_scene(uid):
 
 func remove_player_from_scene(uid):
 	var player = get_node(str(uid))
-	player.queue_free()
+	
+	if player:
+		player.queue_free()
 
 
 @rpc("authority", "call_local", "reliable")

@@ -19,7 +19,8 @@ extends Control
 
 func _process(_delta: float) -> void:
 	update_waiting_screen()
-
+	if Input.is_action_just_pressed("quit"):
+		MultiplayerHandler.disconnect_player()
 
 func update_waiting_screen():
 	player_count.text = "Current Players: " + str(MultiplayerHandler.players.size())
