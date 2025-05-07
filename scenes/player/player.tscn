@@ -631,21 +631,23 @@ properties/24/replication_mode = 1
 properties/25/path = NodePath("BlockSprite:animation")
 properties/25/spawn = true
 properties/25/replication_mode = 1
+properties/26/path = NodePath("PointLight2D:enabled")
+properties/26/spawn = true
+properties/26/replication_mode = 1
 
 [sub_resource type="Gradient" id="Gradient_fcs02"]
-interpolation_mode = 2
 interpolation_color_space = 2
-offsets = PackedFloat32Array(0, 0.644258)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+offsets = PackedFloat32Array(0, 0.602241, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.477191, 0.477191, 0.477191, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_myrg7"]
 gradient = SubResource("Gradient_fcs02")
-width = 160
-height = 160
+width = 240
+height = 240
 use_hdr = true
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 1)
+fill_to = Vector2(1, 0.498576)
 
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
@@ -944,9 +946,7 @@ scale = Vector2(0.6, 0.95)
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(8, -10)
-color = Color(1.2, 1.2, 1.2, 1)
-energy = 1.43
+range_layer_min = -1
 texture = SubResource("GradientTexture2D_myrg7")
-texture_scale = 1.86
 
 [connection signal="timeout" from="Timers/RespawnTimer" to="." method="_on_respawn_timer_timeout"]

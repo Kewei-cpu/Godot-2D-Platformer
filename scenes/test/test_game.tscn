@@ -3134,6 +3134,10 @@ texture = ExtResource("12_1303a")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="LevelMap"]
 environment = SubResource("Environment_6sptd")
 
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="LevelMap"]
+energy = 0.8
+blend_mode = 1
+
 [node name="Player" type="CharacterBody2D" parent="."]
 z_index = 5
 position = Vector2(-144, 64)

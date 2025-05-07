@@ -5,6 +5,7 @@ extends Area2D
 @export var useable: bool = true
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var point_light_2d: PointLight2D = $PointLight2D
 
 var player: Player
 var time := 0.0
@@ -51,7 +52,7 @@ func on_constant_effect():
 func hide_item():
 	collision_shape_2d.set_deferred("disabled", true)
 	animated_sprite_2d.hide()
-
+	point_light_2d.enabled = false
 
 @rpc("call_local")
 func destroy():

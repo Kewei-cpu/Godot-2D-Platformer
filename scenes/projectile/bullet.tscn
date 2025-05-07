@@ -30,4 +30,7 @@ scale_amount_max = 3.0
 scale_amount_curve = SubResource("Curve_4cpvq")
 color_ramp = ExtResource("4_y6rml")
 
+[node name="PointLight2D" parent="." index="5"]
+color = Color(0.662, 1.6, 0.618, 1)
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

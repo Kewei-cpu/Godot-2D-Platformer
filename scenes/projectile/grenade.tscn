@@ -29,4 +29,7 @@ wait_time = 3.0
 one_shot = true
 autostart = true
 
+[node name="PointLight2D" parent="." index="5"]
+color = Color(1.6, 0.398, 0.502, 1)
+
 [connection signal="timeout" from="ExplodeTimer" to="." method="_on_explode_timer_timeout"]

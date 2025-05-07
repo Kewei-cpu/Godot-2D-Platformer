@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dpm68ux3x6wp3"]
+[gd_scene load_steps=12 format=3 uid="uid://dpm68ux3x6wp3"]
 
 [ext_resource type="Script" uid="uid://cairvaejb6cva" path="res://scripts/projectile/projectile.gd" id="1_lw0th"]
 [ext_resource type="Texture2D" uid="uid://b7dfulijj28pw" path="res://sprites/bullets/29b.png" id="2_fnbuj"]
@@ -28,6 +28,41 @@ gradient = SubResource("Gradient_lw0th")
 use_hdr = true
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Animation" id="Animation_lw0th"]
+resource_name = "fade"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.5, -0.25, 0, 0.422432, -0.0133764, 0, -0.0775679, -0.0130733, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+
+[sub_resource type="Animation" id="Animation_tldn6"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fnbuj"]
+_data = {
+&"RESET": SubResource("Animation_tldn6"),
+&"fade": SubResource("Animation_lw0th")
+}
 
 [node name="Projectile" type="RigidBody2D"]
 z_index = 10
@@ -61,6 +96,12 @@ end_cap_mode = 2
 script = ExtResource("3_tncby")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+range_layer_min = -1
 texture = SubResource("GradientTexture2D_tldn6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_fnbuj")
+}
 
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
