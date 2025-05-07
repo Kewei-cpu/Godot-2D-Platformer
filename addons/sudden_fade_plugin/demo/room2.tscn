@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmu8wlits5ww7"]
+
+[ext_resource type="Texture2D" uid="uid://tobea8yf2vij" path="res://addons/sudden_fade_plugin/demo/icon.svg" id="1_owswg"]
+[ext_resource type="Script" uid="uid://c6215vuol8ms2" path="res://addons/sudden_fade_plugin/fade_transition_manager.gd" id="2_x2o37"]
+
+[node name="Room2" type="Node"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(555, 306)
+texture = ExtResource("1_owswg")
+
+[node name="FadeTransitionManager" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_x2o37")
+metadata/_custom_type_script = "uid://c6215vuol8ms2"

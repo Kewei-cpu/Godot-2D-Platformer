@@ -3,17 +3,6 @@ class_name Game
 
 const PLAYER = preload("res://scenes/player/player.tscn")
 
-@onready var waiting_screen: CanvasLayerRPC = %WaitingScreen
-@onready var player_count: Label = %PlayerCount
-@onready var ready_count: Label = %ReadyCount
-
-@onready var hiders_list: ItemList = %HidersList
-@onready var join_hiders: Button = %JoinHiders
-@onready var seekers_list: ItemList = %SeekersList
-@onready var join_seekers: Button = %JoinSeekers
-@onready var status_tooltip: Label = %StatusTooltip
-@onready var start_game_button: Button = %StartGame
-
 @onready var seeker_waiting_screen: CanvasLayerRPC = %SeekerWaitingScreen
 @onready var hide_time_left: Label = %HideTimeLeft
 
@@ -26,31 +15,27 @@ const PLAYER = preload("res://scenes/player/player.tscn")
 @onready var seek_timer: Timer = %SeekTimer
 
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
-@onready var spwan_points: Node2D = %LevelMap/SpawnPoints
+@onready var spawn_points: Node2D = %LevelMap/SpawnPoints
 
 @onready var is_server = multiplayer.is_server()
 
-var players: Array[int] = []
-var names_dict: Dictionary = {}
-var hiders: Array[int] = []
-var seekers: Array[int] = []
-
-var running := false
-
-signal game_started
-signal game_stopped
+@onready var players: Dictionary = MultiplayerHandler.players
+@onready var hiders: Array[int] = MultiplayerHandler.hiders
+@onready var seekers: Array[int] = MultiplayerHandler.seekers
 
 
 func _ready() -> void:
 	multiplayer_spawner.spawn_function = add_player_to_scene
-	if multiplayer.is_server():
-		player_ready(multiplayer.get_unique_id(), MultiplayerHandler.player_name)
-	else:
-		player_ready.rpc_id(1, multiplayer.get_unique_id(), MultiplayerHandler.player_name)
-		start_game_button.hide()
+	MultiplayerHandler.server_disconnected.connect(MultiplayerHandler.disconnect_player)
+	MultiplayerHandler.player_disconnected.connect(remove_player_from_scene)
+	MultiplayerHandler.player_loaded.rpc_id(1)
 
 
 func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("quit"):
+		print("quit")
+		MultiplayerHandler.disconnect_player()
+
 	if not is_server:
 		return
 
@@ -63,8 +48,19 @@ func _process(_delta: float) -> void:
 	if not seek_timer.is_stopped():
 		update_seeking_time_display.rpc(snappedf(seek_timer.time_left, 0.1))
 
-	if Input.is_action_just_pressed("restart game"):
-		restart_game()
+	if Input.is_action_just_pressed("restart"):
+		back_to_lobby.rpc()
+
+
+func start_game():
+	for uid in hiders:
+		multiplayer_spawner.spawn(uid)
+		hiding_time.show_rpc.rpc_id(uid)
+
+	for uid in seekers:
+		seeker_waiting_screen.show_rpc.rpc_id(uid)
+
+	hide_timer.start()
 
 
 func add_player_to_scene(uid):
@@ -73,118 +69,25 @@ func add_player_to_scene(uid):
 
 	player.name = str(uid)
 
-	var spawn_point: Marker2D = spwan_points.get_children().pick_random()
+	var spawn_point: Marker2D = spawn_points.get_children().pick_random()
 	player.global_position = spawn_point.global_position
 
 	var name_tag: Label = player.find_child("NameTag")
-	name_tag.text = get_player_name(uid)
+	name_tag.text = MultiplayerHandler.get_player_name(uid)
 
 	return player
 
 
-func restart_game():
-	if not running:
-		return
-
-	for uid in players:
-		var player = get_node_or_null(str(uid))
-		
-		if player:
-			player.queue_free()
-
-	hide_timer.stop()
-	seek_timer.stop()
-	seeker_waiting_screen.hide_rpc.rpc()
-	seeking_time.hide_rpc.rpc()
-	hiding_time.hide_rpc.rpc()
-
-	waiting_screen.show_rpc.rpc()
-
-	running = false
-	emit_signal("game_stopped")
-
-func is_everyone_ready() -> bool:
-	return players.size() == hiders.size() + seekers.size()
+func remove_player_from_scene(uid):
+	var player = get_node(str(uid))
+	player.queue_free()
 
 
-func get_player_name(uid: int) -> String:
-	if uid in names_dict:
-		return names_dict[uid]
-	return "Unknown Player"
-
-
-@rpc("any_peer")
-func player_ready(uid: int, player_name: String):
-	names_dict[uid] = player_name
-	players.append(uid)
-
-	print("Player %s is ready! (uid: %s)" % [get_player_name(uid), uid])
-	update_players_info.rpc(players, names_dict, hiders, seekers)
-
-
-@rpc("any_peer")
-func join_hider(uid: int):
-	if uid in hiders:
-		print("Player %s is already in hiders (uid: %s)" % [get_player_name(uid), uid])
-		return
-
-	if uid in seekers:
-		seekers.erase(uid)
-
-	print("Player %s joined hiders (uid: %s)" % [get_player_name(uid), uid])
-
-	hiders.append(uid)
-	update_players_info.rpc(players, names_dict, hiders, seekers)
-
-
-@rpc("any_peer")
-func join_seeker(uid: int):
-	if uid in seekers:
-		print("Player %s is already in seekers (uid: %s)" % [get_player_name(uid), uid])
-		return
-
-	if uid in hiders:
-		hiders.erase(uid)
-
-	print("Player %s joined seekers (uid: %s)" % [get_player_name(uid), uid])
-
-	seekers.append(uid)
-
-	update_players_info.rpc(players, names_dict, hiders, seekers)
-
-
-@rpc("call_local")
-func update_players_info(_players, _names_dict, _hiders, _seekers):
-	if not multiplayer.is_server():
-		players = _players
-		names_dict = _names_dict
-		hiders = _hiders
-		seekers = _seekers
-
-	update_waiting_screen()
-
-
-func update_waiting_screen():
-	player_count.text = "Current Players: " + str(players.size())
-	ready_count.text = "Ready Players: " + str(hiders.size() + seekers.size())
-
-	hiders_list.clear()
-
-	for uid in hiders:
-		hiders_list.add_item(get_player_name(uid))
-
-	seekers_list.clear()
-
-	for uid in seekers:
-		seekers_list.add_item(get_player_name(uid))
-
-	if is_everyone_ready():
-		status_tooltip.text = "Waiting for the host start the game..."
-		if is_server:
-			start_game_button.show()
-	else:
-		status_tooltip.text = "Waiting for every player to choose a side..."
-		start_game_button.hide()
+@rpc("authority", "call_local", "reliable")
+func back_to_lobby():
+	await Fade.fade_out(0.5, Color.BLACK, "Noise").finished
+	get_tree().change_scene_to_file("res://scenes/game/lobby.tscn")
+	Fade.fade_in(0.5, Color.BLACK, "Diamond")
 
 
 @rpc("call_local", "any_peer")
@@ -200,37 +103,6 @@ func update_hider_hide_time_display(time_left):
 @rpc("call_local", "any_peer")
 func update_seeking_time_display(time_left):
 	seek_time_left.text = str(time_left)
-
-
-func _on_join_hiders_pressed() -> void:
-	if multiplayer.is_server():
-		join_hider(multiplayer.get_unique_id())
-	else:
-		join_hider.rpc_id(1, multiplayer.get_unique_id())
-
-
-func _on_join_seekers_pressed() -> void:
-	if multiplayer.is_server():
-		join_seeker(multiplayer.get_unique_id())
-	else:
-		join_seeker.rpc_id(1, multiplayer.get_unique_id())
-
-
-func _on_start_game_pressed() -> void:
-	if not is_server:
-		return
-
-	if is_everyone_ready():
-		waiting_screen.hide_rpc.rpc()
-		for uid in hiders:
-			multiplayer_spawner.spawn(uid)
-			hiding_time.show_rpc.rpc_id(uid)
-		for uid in seekers:
-			seeker_waiting_screen.show_rpc.rpc_id(uid)
-
-		hide_timer.start()
-		game_started.emit()
-		running = true
 
 
 func _on_hide_timer_timeout() -> void:

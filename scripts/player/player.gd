@@ -38,6 +38,7 @@ extends CharacterBody2D
 @onready var point_light_2d: PointLight2D = $PointLight2D
 
 @onready var game: Game = get_parent()
+@onready var is_authority = is_multiplayer_authority()
 
 const BULLET = preload("res://scenes/projectile/bullet.tscn")
 const GRENADE = preload("res://scenes/projectile/grenade.tscn")
@@ -46,6 +47,7 @@ const SPEED_EFFECT = preload("res://scenes/effect/speed_effect.tscn")
 const SLOWNESS_EFFECT = preload("res://scenes/effect/slowness_effect.tscn")
 const REGENERATION_EFFECT = preload("res://scenes/effect/regeneration_effect.tscn")
 const JUMP_BOOST_EFFECT = preload("res://scenes/effect/jump_boost_effect.tscn")
+
 
 @export var MAX_SPEED = 175
 @export var JUMP_VELOCITY = -300
@@ -101,7 +103,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if not is_multiplayer_authority():
+	if not is_authority:
 		return
 
 	handle_dead()
@@ -124,21 +126,21 @@ func _process(_delta: float) -> void:
 	#if enemy_player:
 	#enemy_indicator.add_target(enemy_player)
 
-	if Input.is_action_just_pressed("test1"):
-		effect_bar.add_effect(SPEED_EFFECT)
-
-	if Input.is_action_just_pressed("test2"):
-		effect_bar.add_effect(SLOWNESS_EFFECT)
-
-	if Input.is_action_just_pressed("test3"):
-		effect_bar.add_effect(REGENERATION_EFFECT)
-
-	if Input.is_action_just_pressed("test4"):
-		effect_bar.add_effect(JUMP_BOOST_EFFECT)
+	#if Input.is_action_just_pressed("test1"):
+		#effect_bar.add_effect(SPEED_EFFECT)
+#
+	#if Input.is_action_just_pressed("test2"):
+		#effect_bar.add_effect(SLOWNESS_EFFECT)
+#
+	#if Input.is_action_just_pressed("test3"):
+		#effect_bar.add_effect(REGENERATION_EFFECT)
+#
+	#if Input.is_action_just_pressed("test4"):
+		#effect_bar.add_effect(JUMP_BOOST_EFFECT)
 
 
 func _physics_process(delta: float) -> void:
-	if !is_multiplayer_authority():
+	if not is_authority:
 		return
 
 	if dead:

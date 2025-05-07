@@ -9,9 +9,6 @@ extends Node2D
 
 var spawned_item: Collectable
 
-func _ready() -> void:
-	game.game_started.connect(reset_spawn_timer)
-	game.game_stopped.connect(spawn_timer.stop)
 
 
 func _process(_delta: float) -> void:

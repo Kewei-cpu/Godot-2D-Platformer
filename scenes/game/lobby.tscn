@@ -1,0 +1,173 @@
+[gd_scene load_steps=7 format=3 uid="uid://dikjh8jlb131a"]
+
+[ext_resource type="Script" uid="uid://dhp7tmkowu2rn" path="res://scripts/game/lobby.gd" id="1_xg681"]
+[ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="2_1kcxf"]
+[ext_resource type="FontFile" uid="uid://bqoyclilvktou" path="res://fonts/PixelOperator8.ttf" id="3_7ih8y"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l77js"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6keh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dtlbi"]
+
+[node name="Lobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xg681")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0980392, 0.313726, 0.752941, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PlayerCount" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme = ExtResource("2_1kcxf")
+text = "Current Players: 0"
+
+[node name="ReadyCount" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme = ExtResource("2_1kcxf")
+text = "Ready Players: 0"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+theme_override_styles/separator = SubResource("StyleBoxEmpty_l77js")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Hider" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_1kcxf")
+text = "Hiders"
+
+[node name="HidersList" type="ItemList" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_1kcxf")
+theme_override_constants/v_separation = 10
+theme_override_constants/h_separation = 10
+theme_override_fonts/font = ExtResource("3_7ih8y")
+theme_override_font_sizes/font_size = 32
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_m6keh")
+
+[node name="JoinHiders" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme = ExtResource("2_1kcxf")
+text = "Join Hiders"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 50
+theme_override_styles/separator = SubResource("StyleBoxEmpty_dtlbi")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Seeker" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("2_1kcxf")
+text = "Seekers"
+
+[node name="SeekersList" type="ItemList" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_1kcxf")
+theme_override_constants/v_separation = 10
+theme_override_constants/h_separation = 10
+theme_override_fonts/font = ExtResource("3_7ih8y")
+theme_override_font_sizes/font_size = 32
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_m6keh")
+
+[node name="JoinSeekers" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme = ExtResource("2_1kcxf")
+text = "Join Seekers"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+theme_override_styles/separator = SubResource("StyleBoxEmpty_l77js")
+
+[node name="StatusTooltip" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme = ExtResource("2_1kcxf")
+text = "Waiting for every one to choose a side..."
+
+[node name="StartGame" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme = ExtResource("2_1kcxf")
+text = "Start Game"
+
+[connection signal="item_activated" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HidersList" to="." method="_on_hiders_list_item_activated"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/JoinHiders" to="." method="_on_join_hiders_pressed"]
+[connection signal="item_activated" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/SeekersList" to="." method="_on_seekers_list_item_activated"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/JoinSeekers" to="." method="_on_join_seekers_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/StartGame" to="." method="_on_start_game_pressed"]

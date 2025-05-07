@@ -13,5 +13,6 @@ max_spawn_time = 30.0
 
 [node name="SpawnTimer" type="Timer" parent="."]
 one_shot = true
+autostart = true
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

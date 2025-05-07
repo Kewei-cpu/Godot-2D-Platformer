@@ -87,4 +87,5 @@ mouse_filter = 2
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/IP" to="." method="_on_ip_text_changed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/Name" to="." method="_on_name_text_changed"]
