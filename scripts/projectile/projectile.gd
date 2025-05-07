@@ -8,6 +8,7 @@ extends RigidBody2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var life_timer: Timer = $LifeTimer
 @onready var trail: Line2D = $Trail
+@onready var point_light_2d: PointLight2D = $PointLight2D
 
 
 func _ready() -> void:
@@ -18,6 +19,8 @@ func _ready() -> void:
 func hide_all():
 	sprite_2d.hide()
 	collision_shape_2d.disabled = true
+	point_light_2d.enabled = false
+	#gravity_scale = 0
 	trail.hide()
 
 

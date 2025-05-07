@@ -35,6 +35,8 @@ extends CharacterBody2D
 @onready var health_fill: ColorRect = %HealthFill
 @onready var health_label: Label = %HealthLabel
 
+@onready var point_light_2d: PointLight2D = $PointLight2D
+
 @onready var game: Game = get_parent()
 
 const BULLET = preload("res://scenes/projectile/bullet.tscn")
@@ -68,10 +70,7 @@ enum Team {
 	SEEKER,
 }
 
-enum Projectile {
-	Bullet,
-	Grenade
-}
+enum Projectile { Bullet, Grenade }
 
 var player_team: Team
 
@@ -213,6 +212,7 @@ func handle_shoot():
 	if Input.is_action_just_pressed("throw") and not camouflaged:
 		shoot(Projectile.Grenade)
 
+
 func handle_jump(delta):
 	# Add the gravity.
 	if not is_on_floor():
@@ -265,8 +265,8 @@ func show_hit_color():
 		block_sprite.modulate = Color(1, 1, 1)
 
 	else:
-		character_sprite.modulate = Color(0.906, 0.306, 0.357)
-		block_sprite.modulate = Color(0.906, 0.306, 0.357)
+		character_sprite.modulate = Color(3, 0.8, 0.8)
+		block_sprite.modulate = Color(3, 0.8, 0.8)
 
 
 func respawn():
@@ -310,7 +310,8 @@ func set_frozen(is_frozen: bool):
 	health_fill.visible = !is_frozen
 	health_label.visible = !is_frozen
 	healthbar_background.visible = !is_frozen
-
+	point_light_2d.enabled = !is_frozen
+	
 	clear_player_collision_layer()
 	if player_team == Team.HIDER:
 		set_collision_layer_value(2, !is_frozen)
@@ -370,14 +371,14 @@ func die():
 @rpc("call_local")
 func spawn_projectile(pid, _projectile: int, _transform: Transform2D):
 	var projectile: Projectile
-	
+
 	if _projectile == Projectile.Bullet:
 		projectile = BULLET.instantiate()
 	elif _projectile == Projectile.Grenade:
 		projectile = GRENADE.instantiate()
 	else:
 		return
-		
+
 	projectile.transform = _transform
 	projectile.initial_velocity = velocity * 0.5
 	projectile.set_multiplayer_authority(pid)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=3 uid="uid://cnkylbamt2u8d"]
+[gd_scene load_steps=95 format=3 uid="uid://cnkylbamt2u8d"]
 
 [ext_resource type="Texture2D" uid="uid://xng7rndc0vsj" path="res://sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c56riao304oxf" path="res://scripts/player/player.gd" id="1_g2els"]
@@ -632,6 +632,21 @@ properties/25/path = NodePath("BlockSprite:animation")
 properties/25/spawn = true
 properties/25/replication_mode = 1
 
+[sub_resource type="Gradient" id="Gradient_fcs02"]
+interpolation_mode = 2
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.644258)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_myrg7"]
+gradient = SubResource("Gradient_fcs02")
+width = 160
+height = 160
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
 collision_layer = 0
@@ -924,5 +939,14 @@ replication_config = SubResource("SceneReplicationConfig_qhqgy")
 
 [node name="VisibleNotifier" type="VisibleOnScreenNotifier2D" parent="."]
 unique_name_in_owner = true
+position = Vector2(8, -9.5)
+scale = Vector2(0.6, 0.95)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(8, -10)
+color = Color(1.2, 1.2, 1.2, 1)
+energy = 1.43
+texture = SubResource("GradientTexture2D_myrg7")
+texture_scale = 1.86
 
 [connection signal="timeout" from="Timers/RespawnTimer" to="." method="_on_respawn_timer_timeout"]
