@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bh1gevjk5ngpp"]
+
+[ext_resource type="Script" uid="uid://cqexatwkjv4bi" path="res://scripts/game/local_stats.gd" id="1_bohrf"]
+
+[node name="LocalStats" type="Node"]
+script = ExtResource("1_bohrf")

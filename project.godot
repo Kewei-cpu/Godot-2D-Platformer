@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 MultiplayerHandler="*res://scenes/game/multiplayer_handler.tscn"
+LocalStats="*res://scenes/game/local_stats.tscn"
 
 [display]
 
