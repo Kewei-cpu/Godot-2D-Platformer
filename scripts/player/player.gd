@@ -42,12 +42,12 @@ extends CharacterBody2D
 
 const BULLET = preload("res://scenes/projectile/bullet.tscn")
 const GRENADE = preload("res://scenes/projectile/grenade.tscn")
+const FLASHBANG = preload("res://scenes/projectile/flashbang.tscn")
 
 const SPEED_EFFECT = preload("res://scenes/effect/speed_effect.tscn")
 const SLOWNESS_EFFECT = preload("res://scenes/effect/slowness_effect.tscn")
 const REGENERATION_EFFECT = preload("res://scenes/effect/regeneration_effect.tscn")
 const JUMP_BOOST_EFFECT = preload("res://scenes/effect/jump_boost_effect.tscn")
-
 
 @export var MAX_SPEED = 175
 @export var JUMP_VELOCITY = -300
@@ -67,12 +67,9 @@ var current_camouflage = 0
 
 var health = MAX_HEALTH
 
-enum Team {
-	HIDER,
-	SEEKER,
-}
+enum Team { HIDER, SEEKER }
 
-enum Projectile { Bullet, Grenade }
+enum Projectile { Bullet, Grenade, Flashbang }
 
 var player_team: Team
 
@@ -127,16 +124,18 @@ func _process(_delta: float) -> void:
 	#enemy_indicator.add_target(enemy_player)
 
 	#if Input.is_action_just_pressed("test1"):
-		#effect_bar.add_effect(SPEED_EFFECT)
+	#effect_bar.add_effect(SPEED_EFFECT)
+
+
 #
-	#if Input.is_action_just_pressed("test2"):
-		#effect_bar.add_effect(SLOWNESS_EFFECT)
+#if Input.is_action_just_pressed("test2"):
+#effect_bar.add_effect(SLOWNESS_EFFECT)
 #
-	#if Input.is_action_just_pressed("test3"):
-		#effect_bar.add_effect(REGENERATION_EFFECT)
+#if Input.is_action_just_pressed("test3"):
+#effect_bar.add_effect(REGENERATION_EFFECT)
 #
-	#if Input.is_action_just_pressed("test4"):
-		#effect_bar.add_effect(JUMP_BOOST_EFFECT)
+#if Input.is_action_just_pressed("test4"):
+#effect_bar.add_effect(JUMP_BOOST_EFFECT)
 
 
 func _physics_process(delta: float) -> void:
@@ -212,7 +211,7 @@ func handle_shoot():
 		cool_down.start()
 
 	if Input.is_action_just_pressed("throw") and not camouflaged:
-		shoot(Projectile.Grenade)
+		shoot(Projectile.Flashbang)
 
 
 func handle_jump(delta):
@@ -267,8 +266,8 @@ func show_hit_color():
 		block_sprite.modulate = Color(1, 1, 1)
 
 	else:
-		character_sprite.modulate = Color(3, 0.8, 0.8)
-		block_sprite.modulate = Color(3, 0.8, 0.8)
+		character_sprite.modulate = Color(3, 0.5, 0.5)
+		block_sprite.modulate = Color(3, 0.5, 0.5)
 
 
 func respawn():
@@ -313,7 +312,7 @@ func set_frozen(is_frozen: bool):
 	health_label.visible = !is_frozen
 	healthbar_background.visible = !is_frozen
 	point_light_2d.enabled = !is_frozen
-	
+
 	clear_player_collision_layer()
 	if player_team == Team.HIDER:
 		set_collision_layer_value(2, !is_frozen)
@@ -378,6 +377,8 @@ func spawn_projectile(pid, _projectile: int, _transform: Transform2D):
 		projectile = BULLET.instantiate()
 	elif _projectile == Projectile.Grenade:
 		projectile = GRENADE.instantiate()
+	elif _projectile == Projectile.Flashbang:
+		projectile = FLASHBANG.instantiate()
 	else:
 		return
 

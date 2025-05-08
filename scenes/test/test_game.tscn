@@ -3187,7 +3187,7 @@ position = Vector2(8, -8)
 
 [node name="CharacterSprite" type="AnimatedSprite2D" parent="Player"]
 unique_name_in_owner = true
-modulate = Color(3, 0.8, 0.8, 1)
+modulate = Color(10, 1.5, 1.5, 1)
 z_index = 5
 position = Vector2(8, -12)
 sprite_frames = SubResource("SpriteFrames_tuyoq")

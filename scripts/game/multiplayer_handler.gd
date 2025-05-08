@@ -65,9 +65,9 @@ func remove_multiplayer_peer():
 # do Lobby.load_game.rpc(filepath)
 @rpc("call_local", "reliable")
 func load_game(game_scene_path):
-	Fade.crossfade_prepare()
+	await Fade.fade_out(1, Color.BLACK, "Noise").finished
 	get_tree().change_scene_to_file(game_scene_path)
-	Fade.crossfade_execute()
+	Fade.fade_in(0.5, Color.BLACK, "Noise")
 
 
 # Every peer will call this when they have loaded the game scene.
@@ -154,4 +154,4 @@ func disconnect_player():
 		multiplayer.multiplayer_peer.close()
 	await Fade.fade_out(0.5, Color.BLACK, "Noise").finished
 	get_tree().change_scene_to_file("res://scenes/game/main_menu.tscn")
-	Fade.fade_in(0.5, Color.BLACK, "Diamond")
+	Fade.fade_in(0.5, Color.BLACK, "Noise")

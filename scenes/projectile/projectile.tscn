@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dpm68ux3x6wp3"]
+[gd_scene load_steps=13 format=3 uid="uid://dpm68ux3x6wp3"]
 
 [ext_resource type="Script" uid="uid://cairvaejb6cva" path="res://scripts/projectile/projectile.gd" id="1_lw0th"]
 [ext_resource type="Texture2D" uid="uid://b7dfulijj28pw" path="res://sprites/bullets/29b.png" id="2_fnbuj"]
@@ -29,6 +29,20 @@ use_hdr = true
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
+[sub_resource type="Animation" id="Animation_tldn6"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.5, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
 [sub_resource type="Animation" id="Animation_lw0th"]
 resource_name = "fade"
 length = 0.5
@@ -44,8 +58,8 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5)
 }
 
-[sub_resource type="Animation" id="Animation_tldn6"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_fnbuj"]
+resource_name = "flash"
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -53,15 +67,16 @@ tracks/0/path = NodePath("PointLight2D:energy")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(10, -0.25, 0, 0.834331, -0.0167694, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fnbuj"]
 _data = {
 &"RESET": SubResource("Animation_tldn6"),
-&"fade": SubResource("Animation_lw0th")
+&"fade": SubResource("Animation_lw0th"),
+&"flash": SubResource("Animation_fnbuj")
 }
 
 [node name="Projectile" type="RigidBody2D"]
@@ -96,6 +111,7 @@ end_cap_mode = 2
 script = ExtResource("3_tncby")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+energy = 0.5
 range_layer_min = -1
 texture = SubResource("GradientTexture2D_tldn6")
 

@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5axnn3tak1k1"]
+
+[ext_resource type="PackedScene" uid="uid://dpm68ux3x6wp3" path="res://scenes/projectile/projectile.tscn" id="1_tepiw"]
+[ext_resource type="Script" uid="uid://d34q3y6gpuixu" path="res://scripts/projectile/flashbang.gd" id="2_tepiw"]
+[ext_resource type="Texture2D" uid="uid://4urmuunxa8da" path="res://sprites/bullets/29a.png" id="3_acvre"]
+
+[sub_resource type="Gradient" id="Gradient_hvjek"]
+colors = PackedColorArray(0, 0, 0, 0, 0.761235, 0.577368, 0.252537, 0.815686)
+
+[node name="Flashbang" instance=ExtResource("1_tepiw")]
+angular_damp = 10.0
+script = ExtResource("2_tepiw")
+speed = 100.0
+
+[node name="Sprite2D" parent="." index="0"]
+scale = Vector2(1, 1)
+texture = ExtResource("3_acvre")
+
+[node name="CollisionShape2D" parent="." index="1"]
+scale = Vector2(1, 1)
+
+[node name="LifeTimer" parent="." index="2"]
+wait_time = 4.0
+
+[node name="Trail" parent="." index="3"]
+width = 6.0
+gradient = SubResource("Gradient_hvjek")
+length = 30
+
+[node name="ExplodeTimer" type="Timer" parent="." index="4"]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[node name="PointLight2D" parent="." index="5"]
+color = Color(1.2, 0.8, 0.4, 1)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." index="7"]
+scale = Vector2(0.3, 0.3)
+
+[connection signal="timeout" from="ExplodeTimer" to="." method="_on_explode_timer_timeout"]

@@ -6,10 +6,9 @@ const PLAYER = preload("res://scenes/player/player.tscn")
 @onready var seeker_waiting_screen: CanvasLayerRPC = %SeekerWaitingScreen
 @onready var hide_time_left: Label = %HideTimeLeft
 
-@onready var seeking_time: CanvasLayerRPC = %SeekingTime
-@onready var seek_time_left: Label = %SeekTimeLeft
-@onready var hiding_time: CanvasLayerRPC = %HidingTime
-@onready var hider_hide_time_left: Label = %HiderHideTimeLeft
+@onready var time_display: CanvasLayerRPC = %TimeDisplay
+@onready var time_label: LabelRPC = %TimeLabel
+@onready var time_left: LabelRPC = %TimeLeft
 
 @onready var hide_timer: Timer = %HideTimer
 @onready var seek_timer: Timer = %SeekTimer
@@ -23,6 +22,7 @@ const PLAYER = preload("res://scenes/player/player.tscn")
 @onready var hiders: Array[int] = MultiplayerHandler.hiders
 @onready var seekers: Array[int] = MultiplayerHandler.seekers
 
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func _ready() -> void:
 	multiplayer_spawner.spawn_function = add_player_to_scene
@@ -39,22 +39,21 @@ func _process(_delta: float) -> void:
 		return
 
 	if not hide_timer.is_stopped():
-		for uid in seekers:
-			update_seeker_waiting_screen.rpc_id(uid, snappedf(hide_timer.time_left, 0.1))
-		for uid in hiders:
-			update_hider_hide_time_display.rpc_id(uid, snappedf(hide_timer.time_left, 0.1))
+		time_left.set_text_rpc.rpc(str(snappedf(hide_timer.time_left, 0.1)))
 
 	if not seek_timer.is_stopped():
-		update_seeking_time_display.rpc(snappedf(seek_timer.time_left, 0.1))
+		time_left.set_text_rpc.rpc(str(snappedf(seek_timer.time_left, 0.1)))
 
 	if Input.is_action_just_pressed("restart"):
 		back_to_lobby.rpc()
-
+	
+	if Input.is_action_just_pressed("test1"):
+		play_flash()
 
 func start_game():
 	for uid in hiders:
 		multiplayer_spawner.spawn(uid)
-		hiding_time.show_rpc.rpc_id(uid)
+		time_display.show_rpc.rpc_id(uid)
 
 	for uid in seekers:
 		seeker_waiting_screen.show_rpc.rpc_id(uid)
@@ -91,32 +90,26 @@ func back_to_lobby():
 	Fade.fade_in(0.5, Color.BLACK, "Diamond")
 
 
-@rpc("call_local", "any_peer")
-func update_seeker_waiting_screen(time_left):
-	hide_time_left.text = str(time_left)
-
-
-@rpc("call_local", "any_peer")
-func update_hider_hide_time_display(time_left):
-	hider_hide_time_left.text = str(time_left)
-
-
-@rpc("call_local", "any_peer")
-func update_seeking_time_display(time_left):
-	seek_time_left.text = str(time_left)
-
 
 func _on_hide_timer_timeout() -> void:
 	if not is_server:
 		return
 
 	for uid in hiders:
-		hiding_time.hide_rpc.rpc_id(uid)
-		seeking_time.show_rpc.rpc_id(uid)
+		time_label.set_text_rpc.rpc_id(uid ,"Seeking time left")
 
 	for uid in seekers:
 		seeker_waiting_screen.hide_rpc.rpc_id(uid)
 		multiplayer_spawner.spawn(uid)
-		seeking_time.show_rpc.rpc_id(uid)
-
+		time_display.show_rpc.rpc_id(uid)
+		time_label.set_text_rpc.rpc_id(uid ,"Seeking time left")
+		
 	seek_timer.start()
+
+
+@rpc("any_peer", "call_local")
+func play_flash():
+	if animation_player.is_playing():
+		animation_player.stop()
+		
+	animation_player.play("flash")
