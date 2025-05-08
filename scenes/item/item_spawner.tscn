@@ -1,14 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://bd12phu4qvwrd"]
+[gd_scene load_steps=8 format=3 uid="uid://bd12phu4qvwrd"]
 
 [ext_resource type="Script" uid="uid://c2spcpdowvqjo" path="res://scripts/item/item_spawner.gd" id="1_4p8e2"]
 [ext_resource type="PackedScene" uid="uid://bix03e0wdjuor" path="res://scenes/item/blast_item.tscn" id="2_h8ocb"]
 [ext_resource type="PackedScene" uid="uid://bui7unh8mpv7w" path="res://scenes/item/jump_boost_item.tscn" id="3_jwrl3"]
 [ext_resource type="PackedScene" uid="uid://dhqac7kdxa7i8" path="res://scenes/item/regeneration_item.tscn" id="4_di5o1"]
 [ext_resource type="PackedScene" uid="uid://dcigfdc2dxghb" path="res://scenes/item/speed_item.tscn" id="5_k7ksw"]
+[ext_resource type="PackedScene" uid="uid://dupyy352hpry6" path="res://scenes/item/grenade_item.tscn" id="6_jwrl3"]
+[ext_resource type="PackedScene" uid="uid://x3mvv70sv26k" path="res://scenes/item/flashbang_item.tscn" id="7_di5o1"]
 
 [node name="ItemSpawner" type="Node2D"]
 script = ExtResource("1_4p8e2")
-item_list = Array[PackedScene]([ExtResource("2_h8ocb"), ExtResource("3_jwrl3"), ExtResource("4_di5o1"), ExtResource("5_k7ksw")])
+item_list = Array[PackedScene]([ExtResource("2_h8ocb"), ExtResource("3_jwrl3"), ExtResource("4_di5o1"), ExtResource("5_k7ksw"), ExtResource("6_jwrl3"), ExtResource("7_di5o1")])
 max_spawn_time = 30.0
 
 [node name="SpawnTimer" type="Timer" parent="."]

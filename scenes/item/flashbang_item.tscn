@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://x3mvv70sv26k"]
+
+[ext_resource type="PackedScene" uid="uid://bsjd7x05gaifn" path="res://scenes/item/collectable_item.tscn" id="1_ttfiv"]
+[ext_resource type="Script" uid="uid://lhu7twqkkres" path="res://scripts/item/flashbang_item.gd" id="2_ttfiv"]
+[ext_resource type="Texture2D" uid="uid://4urmuunxa8da" path="res://sprites/bullets/29a.png" id="3_tf4g2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_twysl"]
+radius = 9.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jgghc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_tf4g2")
+}],
+"loop": false,
+"name": &"default",
+"speed": 0.0
+}]
+
+[node name="FlashbangItem" instance=ExtResource("1_ttfiv")]
+script = ExtResource("2_ttfiv")
+icon_texture = ExtResource("3_tf4g2")
+
+[node name="CollisionShape2D" parent="." index="0"]
+shape = SubResource("CircleShape2D_twysl")
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jgghc")
+autoplay = "default"

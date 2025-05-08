@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bsw2e32x72acg"]
+[gd_scene load_steps=7 format=3 uid="uid://bsw2e32x72acg"]
 
 [ext_resource type="Script" uid="uid://xa71ugpny5ee" path="res://scripts/projectile/bullet.gd" id="1_4cpvq"]
 [ext_resource type="PackedScene" uid="uid://dpm68ux3x6wp3" path="res://scenes/projectile/projectile.tscn" id="1_ih1i6"]
@@ -7,6 +7,18 @@
 [sub_resource type="Curve" id="Curve_4cpvq"]
 _data = [Vector2(0.00804289, 0.997979), 0.0, 0.0, 0, 0, Vector2(1, 0.498912), 0.0, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_lw0th"]
+interpolation_mode = 2
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.694678)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ih1i6"]
+gradient = SubResource("Gradient_lw0th")
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
 
 [node name="Bullet" instance=ExtResource("1_ih1i6")]
 script = ExtResource("1_4cpvq")
@@ -32,5 +44,6 @@ color_ramp = ExtResource("4_y6rml")
 
 [node name="PointLight2D" parent="." index="5"]
 color = Color(0.662, 1.6, 0.618, 1)
+texture = SubResource("GradientTexture2D_ih1i6")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

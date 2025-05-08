@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://dupyy352hpry6"]
+
+[ext_resource type="PackedScene" uid="uid://bsjd7x05gaifn" path="res://scenes/item/collectable_item.tscn" id="1_40bak"]
+[ext_resource type="Script" uid="uid://5ua0j171u4vb" path="res://scripts/item/grenade_item.gd" id="2_40bak"]
+[ext_resource type="Texture2D" uid="uid://vaqqneoke7r7" path="res://sprites/bullets/29d.png" id="3_cxl4k"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_twysl"]
+radius = 9.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sbtgh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_cxl4k")
+}],
+"loop": false,
+"name": &"default",
+"speed": 0.0
+}]
+
+[node name="GrenadeItem" instance=ExtResource("1_40bak")]
+script = ExtResource("2_40bak")
+icon_texture = ExtResource("3_cxl4k")
+
+[node name="CollisionShape2D" parent="." index="0"]
+shape = SubResource("CircleShape2D_twysl")
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_sbtgh")
+autoplay = "default"

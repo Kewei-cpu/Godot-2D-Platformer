@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c5axnn3tak1k1"]
+[gd_scene load_steps=7 format=3 uid="uid://c5axnn3tak1k1"]
 
 [ext_resource type="PackedScene" uid="uid://dpm68ux3x6wp3" path="res://scenes/projectile/projectile.tscn" id="1_tepiw"]
 [ext_resource type="Script" uid="uid://d34q3y6gpuixu" path="res://scripts/projectile/flashbang.gd" id="2_tepiw"]
@@ -6,6 +6,18 @@
 
 [sub_resource type="Gradient" id="Gradient_hvjek"]
 colors = PackedColorArray(0, 0, 0, 0, 0.761235, 0.577368, 0.252537, 0.815686)
+
+[sub_resource type="Gradient" id="Gradient_lw0th"]
+interpolation_mode = 2
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.694678)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tepiw"]
+gradient = SubResource("Gradient_lw0th")
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
 
 [node name="Flashbang" instance=ExtResource("1_tepiw")]
 angular_damp = 10.0
@@ -34,6 +46,7 @@ autostart = true
 
 [node name="PointLight2D" parent="." index="5"]
 color = Color(1.2, 0.8, 0.4, 1)
+texture = SubResource("GradientTexture2D_tepiw")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." index="7"]
 scale = Vector2(0.3, 0.3)

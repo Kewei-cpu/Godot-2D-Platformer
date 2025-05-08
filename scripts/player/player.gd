@@ -67,9 +67,9 @@ var current_camouflage = 0
 
 var health = MAX_HEALTH
 
-enum Team { HIDER, SEEKER }
+enum Team {HIDER, SEEKER}
 
-enum Projectile { Bullet, Grenade, Flashbang }
+enum Projectile {Bullet, Grenade, Flashbang}
 
 var player_team: Team
 
@@ -209,9 +209,6 @@ func handle_shoot():
 			return
 		shoot(Projectile.Bullet)
 		cool_down.start()
-
-	if Input.is_action_just_pressed("throw") and not camouflaged:
-		shoot(Projectile.Flashbang)
 
 
 func handle_jump(delta):
