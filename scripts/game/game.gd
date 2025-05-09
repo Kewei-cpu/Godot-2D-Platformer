@@ -4,7 +4,7 @@ class_name Game
 const PLAYER = preload("res://scenes/player/player.tscn")
 
 @onready var seeker_waiting_screen: CanvasLayerRPC = %SeekerWaitingScreen
-@onready var hide_time_left: Label = %HideTimeLeft
+@onready var hide_time_left: LabelRPC = %HideTimeLeft
 
 @onready var time_display: CanvasLayerRPC = %TimeDisplay
 @onready var time_label: LabelRPC = %TimeLabel
@@ -40,6 +40,7 @@ func _process(_delta: float) -> void:
 
 	if not hide_timer.is_stopped():
 		time_left.set_text_rpc.rpc(str(snappedf(hide_timer.time_left, 0.1)))
+		hide_time_left.set_text_rpc.rpc(str(snappedf(hide_timer.time_left, 0.1)))
 
 	if not seek_timer.is_stopped():
 		time_left.set_text_rpc.rpc(str(snappedf(seek_timer.time_left, 0.1)))

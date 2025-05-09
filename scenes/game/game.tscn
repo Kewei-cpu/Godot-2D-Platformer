@@ -6,6 +6,20 @@
 [ext_resource type="Script" uid="uid://d23f6kkxm0bm2" path="res://scripts/game/label_rpc.gd" id="5_lfrn8"]
 [ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="6_p57ef"]
 
+[sub_resource type="Animation" id="Animation_5i0tg"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Flash/ColorRect:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
 [sub_resource type="Animation" id="Animation_lfrn8"]
 resource_name = "flash"
 length = 2.0
@@ -19,20 +33,6 @@ tracks/0/keys = {
 "handle_modes": PackedInt32Array(0, 0),
 "points": PackedFloat32Array(1.00373, -0.0333333, -0.00298572, 2.01909, -0.00692958, 0, -0.0804279, -0.00161768, 0.25, 0),
 "times": PackedFloat32Array(-0.0333333, 2)
-}
-
-[sub_resource type="Animation" id="Animation_5i0tg"]
-length = 0.001
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Flash/ColorRect:modulate:a")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bdhmt"]
@@ -104,6 +104,8 @@ theme = ExtResource("6_p57ef")
 theme_override_font_sizes/font_size = 96
 text = "30"
 horizontal_alignment = 1
+script = ExtResource("5_lfrn8")
+metadata/_custom_type_script = "uid://d23f6kkxm0bm2"
 
 [node name="TimeDisplay" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
