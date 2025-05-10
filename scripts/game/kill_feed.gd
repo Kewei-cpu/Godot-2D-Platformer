@@ -2,7 +2,7 @@ extends CanvasLayer
 class_name KillFeed
 @onready var feed_container = $FeedContainer/VBoxContainer
 
-const KILL_FEED_ITEM = preload("res://scenes/game/kill_feed_item.tscn")
+const KILL_FEED_ITEM = preload("res://scenes/game/kill_feed_text.tscn")
 
 var death_messages = [
 	"{victim}没有恐高症",

@@ -1,6 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bfshvs2n88xyp"]
-
-[ext_resource type="Script" uid="uid://cb3xjdcg7vk4q" path="res://scripts/game/kill_feed_item.gd" id="1_dpuve"]
+[gd_scene load_steps=4 format=3 uid="uid://bfshvs2n88xyp"]
 
 [sub_resource type="Animation" id="Animation_dpuve"]
 resource_name = "default"
@@ -55,7 +53,6 @@ _data = {
 modulate = Color(1, 1, 1, 0)
 offset_right = 40.0
 offset_bottom = 23.0
-script = ExtResource("1_dpuve")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
