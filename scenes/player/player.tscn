@@ -1,7 +1,8 @@
-[gd_scene load_steps=95 format=3 uid="uid://cnkylbamt2u8d"]
+[gd_scene load_steps=96 format=3 uid="uid://cnkylbamt2u8d"]
 
 [ext_resource type="Texture2D" uid="uid://xng7rndc0vsj" path="res://sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c56riao304oxf" path="res://scripts/player/player.gd" id="1_g2els"]
+[ext_resource type="Script" uid="uid://duchyfb30ntlq" path="res://scripts/player/camera.gd" id="2_myrg7"]
 [ext_resource type="FontFile" uid="uid://bqoyclilvktou" path="res://fonts/PixelOperator8.ttf" id="3_qhqgy"]
 [ext_resource type="Shape2D" uid="uid://dvygrg2tvt4wd" path="res://collisions/block.tres" id="3_smehm"]
 [ext_resource type="Texture2D" uid="uid://bv0r7of1r5ldj" path="res://sprites/midground_/spring_.png" id="4_qlg0r"]
@@ -663,6 +664,7 @@ enabled = false
 zoom = Vector2(5, 5)
 limit_bottom = 136
 position_smoothing_enabled = true
+script = ExtResource("2_myrg7")
 
 [node name="CharacterCollision" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true

@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody2D
 
-@onready var camera: Camera2D = %Camera
+@onready var camera: PlayerCamera = %Camera
 
 @onready var character_sprite: AnimatedSprite2D = %CharacterSprite
 @onready var block_sprite: AnimatedSprite2D = %BlockSprite
@@ -129,8 +129,8 @@ func _process(_delta: float) -> void:
 	#if enemy_player:
 	#enemy_indicator.add_target(enemy_player)
 
-	#if Input.is_action_just_pressed("test1"):
-	#effect_bar.add_effect(SPEED_EFFECT)
+	if Input.is_action_just_pressed("test1"):
+		effect_bar.add_effect(SPEED_EFFECT)
 
 
 #

@@ -35,9 +35,6 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("quit"):
 		MultiplayerHandler.disconnect_player()
-	
-	if Input.is_action_just_pressed("test1"):
-		remove_player_from_scene.rpc(multiplayer.get_unique_id())
 
 	if not is_server:
 		return
