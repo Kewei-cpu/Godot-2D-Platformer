@@ -21,6 +21,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 MultiplayerHandler="*res://scenes/game/multiplayer_handler.tscn"
 LocalStats="*res://scenes/game/local_stats.tscn"
 
@@ -36,7 +37,7 @@ project/assembly_name="2D Platformer"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdscript_formatter/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/gdscript_formatter/plugin.cfg")
 
 [input]
 
