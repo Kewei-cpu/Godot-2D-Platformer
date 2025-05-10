@@ -131,17 +131,6 @@ func _process(_delta: float) -> void:
 		#effect_bar.add_effect(SPEED_EFFECT)
 
 
-#
-#if Input.is_action_just_pressed("test2"):
-#effect_bar.add_effect(SLOWNESS_EFFECT)
-#
-#if Input.is_action_just_pressed("test3"):
-#effect_bar.add_effect(REGENERATION_EFFECT)
-#
-#if Input.is_action_just_pressed("test4"):
-#effect_bar.add_effect(JUMP_BOOST_EFFECT)
-
-
 func _physics_process(delta: float) -> void:
 	if not is_authority:
 		return
@@ -366,6 +355,9 @@ func shoot(projectile: int = Projectile.Bullet):
 
 
 func die():
+	if dead:
+		return
+
 	var killer_id = get_last_damage_source()
 	var killer_name = game.players.get(killer_id, {}).get("name", "unknown")
 	var victim_name = name_tag.text
@@ -378,6 +370,7 @@ func die():
 	
 	if player_team == Team.HIDER:
 		game.remove_player_from_scene.rpc(get_multiplayer_authority())
+		game.hider_die(get_multiplayer_authority())
 		return
 	
 	respawn_timer.start()

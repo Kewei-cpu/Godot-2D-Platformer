@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cc0ytnsq165td"]
+[gd_scene load_steps=15 format=3 uid="uid://cc0ytnsq165td"]
 
 [ext_resource type="Script" uid="uid://blrflx2y4i3o6" path="res://scripts/game/game.gd" id="1_p57ef"]
 [ext_resource type="Script" uid="uid://mkmol40clssn" path="res://scripts/game/canvas_rpc.gd" id="2_iywne"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://d23f6kkxm0bm2" path="res://scripts/game/label_rpc.gd" id="5_lfrn8"]
 [ext_resource type="PackedScene" uid="uid://3c5rfbrwr1y" path="res://scenes/game/kill_feed.tscn" id="6_5i0tg"]
 [ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="6_p57ef"]
+[ext_resource type="Script" uid="uid://fth5brdbw74i" path="res://scripts/game/win_screen.gd" id="7_87uf6"]
+[ext_resource type="FontFile" uid="uid://bqjqtb4v1fm28" path="res://fonts/PixelOperator8-Bold.ttf" id="8_2a8rs"]
 
 [sub_resource type="Animation" id="Animation_5i0tg"]
 length = 0.001
@@ -40,6 +42,43 @@ tracks/0/keys = {
 _data = {
 &"RESET": SubResource("Animation_5i0tg"),
 &"flash": SubResource("Animation_lfrn8")
+}
+
+[sub_resource type="Animation" id="Animation_87uf6"]
+resource_name = "flicker"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_2a8rs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4j704"]
+_data = {
+&"RESET": SubResource("Animation_2a8rs"),
+&"flicker": SubResource("Animation_87uf6")
 }
 
 [node name="Game" type="Node2D"]
@@ -175,4 +214,36 @@ mouse_filter = 2
 unique_name_in_owner = true
 layer = 2
 
+[node name="WinScreen" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+visible = false
+script = ExtResource("7_87uf6")
+metadata/_custom_type_script = "uid://mkmol40clssn"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WinScreen"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelRPC" type="Label" parent="WinScreen/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.619821, 0.879135, 0.937231, 1)
+theme_override_fonts/font = ExtResource("8_2a8rs")
+theme_override_font_sizes/font_size = 100
+text = "Hiders Win !!!"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="WinScreen"]
+libraries = {
+&"": SubResource("AnimationLibrary_4j704")
+}
+
 [connection signal="timeout" from="HideTimer" to="." method="_on_hide_timer_timeout"]
+[connection signal="timeout" from="SeekTimer" to="." method="_on_seek_timer_timeout"]

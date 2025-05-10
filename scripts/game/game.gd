@@ -7,6 +7,7 @@ const PLAYER = preload("res://scenes/player/player.tscn")
 @onready var hide_time_left: LabelRPC = %HideTimeLeft
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var kill_feed: KillFeed = %KillFeed
+@onready var win_screen: CanvasLayer = %WinScreen
 
 @onready var time_display: CanvasLayerRPC = %TimeDisplay
 @onready var time_label: LabelRPC = %TimeLabel
@@ -24,6 +25,7 @@ const PLAYER = preload("res://scenes/player/player.tscn")
 @onready var hiders: Array[int] = MultiplayerHandler.hiders
 @onready var seekers: Array[int] = MultiplayerHandler.seekers
 
+var dead_hiders: Array[int] = []
 
 func _ready() -> void:
 	multiplayer_spawner.spawn_function = add_player_to_scene
@@ -113,3 +115,17 @@ func play_flash():
 		animation_player.stop()
 		
 	animation_player.play("flash")
+
+
+@rpc("any_peer", "call_local", "reliable")
+func hider_die(uid: int):
+	dead_hiders.append(uid)
+	
+	if hiders.size() and dead_hiders.size() == hiders.size():
+		hide_timer.paused = true
+		seek_timer.paused = true
+		win_screen.seekers_win.rpc()
+
+
+func _on_seek_timer_timeout() -> void:
+	win_screen.hiders_win.rpc()
