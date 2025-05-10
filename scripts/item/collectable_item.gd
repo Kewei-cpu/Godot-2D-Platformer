@@ -26,14 +26,14 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 
 	player = body
-
+	
 	if not player.is_multiplayer_authority():
 		return
 
 	var is_collected: bool = player.inventory.add_item_to_inventory(self)
 
 	if is_collected:
-		hide_item.rpc()
+		item_collected.rpc(player.get_multiplayer_authority())
 	else:
 		print("No room!")
 
@@ -49,7 +49,9 @@ func on_constant_effect():
 
 
 @rpc("call_local", "any_peer")
-func hide_item():
+func item_collected(uid: int):
+	var player: Player = get_node("/root/Game/" + str(uid))
+	call_deferred("reparent", player)
 	collision_shape_2d.set_deferred("disabled", true)
 	animated_sprite_2d.hide()
 	point_light_2d.enabled = false

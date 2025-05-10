@@ -35,7 +35,8 @@ func _ready():
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
-
+func is_server():
+	return multiplayer.get_unique_id() == 1
 
 func join_game(address = ""):
 	if address.is_empty():

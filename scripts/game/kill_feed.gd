@@ -6,69 +6,59 @@ class_name KillFeed
 const KILL_FEED_ITEM = preload("res://scenes/game/kill_feed_text.tscn")
 
 var death_messages_by_cause = {
-	DeathCause.DeathCause.FALL: [
-		"{victim} tried to swim",
-		"{victim} proved they can't swim",
-		"The sea embraced {victim}",
-		"{victim} failed their mermaid date",
-		"{victim} forgot how to float",
-		"{victim} failed the swimming test",
-		"{victim} sank into the abyss",
-		"Water rejected {victim}",
-		"{victim}'s diving career ended here",
-		"{victim} discovered water pressure is too strong",
-		"{victim} tried to challenge water density",
-		"Liquids defeated {victim}",
-		"{victim}'s scuba gear malfunctioned",
-		"{victim} became fish food"
+	DeathCause.DeathCause.FALL:
+	[
+		"[color=orange_red]{victim}[/color] tried to swim",
+		"[color=orange_red]{victim}[/color] proved they can't swim",
+		"The sea embraced [color=orange_red]{victim}[/color]",
+		"[color=orange_red]{victim}[/color] failed their mermaid date",
+		"[color=orange_red]{victim}[/color] forgot how to float",
+		"[color=orange_red]{victim}[/color] failed the swimming test",
+		"[color=orange_red]{victim}[/color] sank into the abyss",
+		"Water rejected [color=orange_red]{victim}[/color]",
+		"[color=orange_red]{victim}[/color]'s diving career ended here",
+		"[color=orange_red]{victim}[/color] discovered water pressure is too strong",
+		"[color=orange_red]{victim}[/color] tried to challenge water density",
+		"Liquids defeated [color=orange_red]{victim}[/color]",
+		"[color=orange_red]{victim}[/color]'s scuba gear malfunctioned",
+		"[color=orange_red]{victim}[/color] became fish food"
 	],
-	DeathCause.DeathCause.SHOT: [
-		"{killer} precisely hit {victim}",
-		"{victim} was turned into Swiss cheese by {killer}",
-		"{killer}'s bullet found {victim}",
-		"{victim} experienced {killer}'s marksmanship",
-		"{killer} put a hole in {victim}",
-		"Lead supplements injected into {victim}'s body",
-		"{victim} became {killer}'s target practice",
-		"{killer}'s bullet had intimate contact with {victim}",
-		"{victim} tried to catch bullets with bare hands",
-		"{killer}'s shooting practice ended with {victim}",
-		"{victim} was physically convinced by {killer}",
-		"A metal storm swept through {victim}",
-		"{killer} signed {victim} with bullets",
-		"{victim}'s bulletproof vest failed quality check"
+	DeathCause.DeathCause.SHOT:
+	[
+		"[color=sky_blue]{victim}[/color] precisely hit [color=orange_red]{victim}[/color]",
+		"[color=sky_blue]{victim}[/color]'s bullet found [color=orange_red]{victim}[/color]",
+		"[color=sky_blue]{victim}[/color] put a hole in [color=orange_red]{victim}[/color]",
+		"Lead supplements injected into [color=orange_red]{victim}[/color]'s body",
+		"[color=orange_red]{victim}[/color] tried to catch bullets with bare hands",
+		"A metal storm swept through [color=orange_red]{victim}[/color]",
+		"[color=orange_red]{victim}[/color]'s bulletproof vest failed quality check"
 	],
-	DeathCause.DeathCause.EXPLOSION: [
-		"{victim} became fireworks",
-		"{killer} detonated {victim}",
-		"{victim} experienced explosive art",
-		"{victim}'s molecular structure was rearranged",
-		"{killer} gave {victim} a chemistry lesson",
-		"{victim} tried to hug TNT",
-		"The shockwave warmly embraced {victim}",
-		"{victim}'s fragments scattered everywhere",
-		"{killer}'s demolition experiment succeeded",
-		"{victim} participated in distributed reorganization",
-		"{victim}'s body parts gained free movement",
-		"{killer} made {victim} bloom instantly",
-		"Boom! Where did {victim} go?",
-		"{victim} became open-concept architecture"
+	DeathCause.DeathCause.EXPLOSION:
+	[
+		"[color=orange_red]{victim}[/color] became fireworks",
+		"[color=orange_red]{victim}[/color] experienced explosive art",
+		"[color=orange_red]{victim}[/color]'s molecular structure was rearranged",
+		"[color=orange_red]{victim}[/color] tried to hug TNT",
+		"The shockwave warmly embraced [color=orange_red]{victim}[/color]",
+		"[color=orange_red]{victim}[/color]'s fragments scattered everywhere",
+		"[color=sky_blue]{victim}[/color]'s demolition experiment succeeded",
+		"[color=orange_red]{victim}[/color]'s body parts gained free movement",
+		"Boom! Where did [color=orange_red]{victim}[/color] go?",
+		"[color=orange_red]{victim}[/color] became open-concept architecture"
 	],
-	DeathCause.DeathCause.UNKNOWN: [
-		"{victim} mysteriously disappeared",
-		"{victim} left the game",
-		"{killer} terminated {victim}",
-		"{victim} was erased by unknown forces",
-		"Reality rejected {victim}",
-		"{victim} encountered a program error",
-		"{killer} used mysterious powers",
-		"{victim} entered another dimension",
-		"404: {victim} not found",
-		"{victim} was forgotten by the server",
-		"Quantum state {victim} collapsed",
-		"{killer} triggered {victim}'s bug",
-		"{victim} encountered an indescribable event",
-		"The system recycled {victim}"
+	DeathCause.DeathCause.UNKNOWN:
+	[
+		"[color=orange_red]{victim}[/color] mysteriously disappeared",
+		"[color=orange_red]{victim}[/color] left the game",
+		"[color=orange_red]{victim}[/color] was erased by unknown forces",
+		"Reality rejected [color=orange_red]{victim}[/color]",
+		"[color=orange_red]{victim}[/color] encountered a program error",
+		"[color=sky_blue]{victim}[/color] used mysterious powers",
+		"[color=orange_red]{victim}[/color] entered another dimension",
+		"404: [color=orange_red]{victim}[/color] not found",
+		"[color=orange_red]{victim}[/color] was forgotten by the server",
+		"Quantum state [color=orange_red]{victim}[/color] collapsed",
+		"The system recycled [color=orange_red]{victim}[/color]"
 	]
 }
 
@@ -81,16 +71,4 @@ func add_kill(killer: String, victim: String, cause: DeathCause.DeathCause):
 	var chosen_msg = messages.pick_random()
 
 	item.text = chosen_msg.format({"killer": killer, "victim": victim})
-
-	match cause:
-		DeathCause.DeathCause.EXPLOSION:
-			item.add_theme_color_override("font_color", Color.ORANGE_RED)
-		DeathCause.DeathCause.FALL:
-			item.add_theme_color_override("font_color", Color.SKY_BLUE)
-		DeathCause.DeathCause.SHOT:
-			item.add_theme_color_override("font_color", Color.PERU)
-	
 	feed_container.add_child(item)
-
-	# if feed_container.get_child_count() > 5:
-	# 	feed_container.get_child(0).queue_free()

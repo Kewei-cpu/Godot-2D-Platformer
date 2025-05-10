@@ -2,6 +2,20 @@
 
 [ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="1_ikahh"]
 
+[sub_resource type="Animation" id="Animation_okppx"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
 [sub_resource type="Animation" id="Animation_dpuve"]
 resource_name = "default"
 length = 5.0
@@ -14,7 +28,7 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0, 0, 0, 0),
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.5, 4.5, 5)
+"times": PackedFloat32Array(0, 0.3, 4.5, 5)
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -31,33 +45,21 @@ tracks/1/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_okppx"]
-length = 0.001
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate:a")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sysaw"]
 _data = {
 &"RESET": SubResource("Animation_okppx"),
 &"default": SubResource("Animation_dpuve")
 }
 
-[node name="KillFeedText" type="Label"]
+[node name="KillFeedText" type="RichTextLabel"]
 modulate = Color(1, 1, 1, 0)
-offset_right = 40.0
-offset_bottom = 23.0
+custom_minimum_size = Vector2(1000, 30)
+offset_right = 1000.0
+offset_bottom = 30.0
 theme = ExtResource("1_ikahh")
-theme_override_font_sizes/font_size = 20
-horizontal_alignment = 2
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+scroll_active = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
