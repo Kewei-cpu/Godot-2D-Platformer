@@ -82,9 +82,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _ready() -> void:
-	var damage_input_ui = preload("res://scenes/player/damageinput.tscn").instantiate()
+	#var damage_input_ui = preload("res://scenes/player/damageinput.tscn").instantiate()
 	
-	add_child(damage_input_ui)
+	#add_child(damage_input_ui)
 	
 	player_team = Team.HIDER if get_multiplayer_authority() in game.hiders else Team.SEEKER
 
