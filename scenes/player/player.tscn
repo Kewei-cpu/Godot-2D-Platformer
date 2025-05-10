@@ -660,7 +660,7 @@ MAX_SPEED = 200
 unique_name_in_owner = true
 offset = Vector2(0, -20)
 enabled = false
-zoom = Vector2(3.5, 3.5)
+zoom = Vector2(5, 5)
 limit_bottom = 136
 position_smoothing_enabled = true
 

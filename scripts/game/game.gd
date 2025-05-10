@@ -35,6 +35,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("quit"):
 		MultiplayerHandler.disconnect_player()
+	
+	if Input.is_action_just_pressed("test1"):
+		remove_player_from_scene.rpc(multiplayer.get_unique_id())
 
 	if not is_server:
 		return
@@ -49,8 +52,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("restart"):
 		back_to_lobby.rpc()
 	
-	if Input.is_action_just_pressed("test1"):
-		play_flash()
+
 
 
 func start_game():
@@ -79,6 +81,7 @@ func add_player_to_scene(uid):
 	return player
 
 
+@rpc("any_peer", "call_local", "reliable")
 func remove_player_from_scene(uid):
 	var player = get_node(str(uid))
 	

@@ -104,7 +104,7 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_m6keh")
 
 [node name="JoinHiders" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme = ExtResource("2_1kcxf")
 text = "Join Hiders"
@@ -141,7 +141,7 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_m6keh")
 
 [node name="JoinSeekers" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme = ExtResource("2_1kcxf")
 text = "Join Seekers"

@@ -57,7 +57,7 @@ custom_minimum_size = Vector2(1000, 30)
 offset_right = 1000.0
 offset_bottom = 30.0
 theme = ExtResource("1_ikahh")
-theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 scroll_active = false
 

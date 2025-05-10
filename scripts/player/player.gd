@@ -95,14 +95,14 @@ func _ready() -> void:
 
 	inventory.show()
 	camera.enabled = true
-
+	camera.make_current()
 	if player_team == Team.HIDER:
 		cool_down.wait_time = 0.25
 		MAX_SPEED = 150
 		camouflage_list.append(randi_range(0, 24))
 		camouflage_list.append(randi_range(25, 47))
 	else:
-		camera.zoom = Vector2(3, 3)
+		camera.zoom = Vector2(4, 4)
 
 
 func _process(_delta: float) -> void:
@@ -368,30 +368,20 @@ func shoot(projectile: int = Projectile.Bullet):
 
 
 func die():
-	'''
-	if multiplayer.is_server():
-		#var killer_id =0
-		var killer_id = get_last_damage_source() 
-		var killer_name = game.players.get(killer_id, {}).get("name", "未知")
-		var victim_name = name_tag.text
-			#Game.kill_feed.add_kill.rpc(killer_name, victim_name)
-		print(killer_name)
-		game.kill_feed.add_kill.rpc(killer_name,name_tag.text,last_death_cause)
-			'''
-			
 	var killer_id = get_last_damage_source() 
-	var killer_name = game.players.get(killer_id, {}).get("name", "未知")
+	var killer_name = game.players.get(killer_id, {}).get("name", "unknown")
 	var victim_name = name_tag.text
-		#Game.kill_feed.add_kill.rpc(killer_name, victim_name)
-	print(killer_name)
+
 	game.kill_feed.add_kill.rpc(killer_name,victim_name,last_death_cause)
 	last_death_cause = DeathCause.DeathCause.UNKNOWN
-	
-	respawn_timer.start()
 	dead = true
 	clear_player_collision_layer()
 	effect_bar.clear_all_effects()
-
+	
+	if player_team == Team.HIDER:
+		game.remove_player_from_scene(get_multiplayer_authority())
+	
+	respawn_timer.start()
 	var spawn_point: Marker2D = spawn_points.get_children().pick_random()
 	global_position = spawn_point.global_position
 

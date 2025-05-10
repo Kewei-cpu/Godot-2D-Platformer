@@ -25,13 +25,9 @@ var death_messages_by_cause = {
 	],
 	DeathCause.DeathCause.SHOT:
 	[
-		"[color=sky_blue]{victim}[/color] precisely hit [color=orange_red]{victim}[/color]",
-		"[color=sky_blue]{victim}[/color]'s bullet found [color=orange_red]{victim}[/color]",
-		"[color=sky_blue]{victim}[/color] put a hole in [color=orange_red]{victim}[/color]",
-		"Lead supplements injected into [color=orange_red]{victim}[/color]'s body",
-		"[color=orange_red]{victim}[/color] tried to catch bullets with bare hands",
-		"A metal storm swept through [color=orange_red]{victim}[/color]",
-		"[color=orange_red]{victim}[/color]'s bulletproof vest failed quality check"
+		"[color=sky_blue]{killer}[/color] precisely hit [color=orange_red]{victim}[/color]",
+		"[color=sky_blue]{killer}[/color]'s bullet found [color=orange_red]{victim}[/color]",
+		"[color=sky_blue]{killer}[/color] put a hole in [color=orange_red]{victim}[/color]",
 	],
 	DeathCause.DeathCause.EXPLOSION:
 	[
@@ -41,7 +37,7 @@ var death_messages_by_cause = {
 		"[color=orange_red]{victim}[/color] tried to hug TNT",
 		"The shockwave warmly embraced [color=orange_red]{victim}[/color]",
 		"[color=orange_red]{victim}[/color]'s fragments scattered everywhere",
-		"[color=sky_blue]{victim}[/color]'s demolition experiment succeeded",
+		"[color=orange_red]{victim}[/color]'s demolition experiment succeeded",
 		"[color=orange_red]{victim}[/color]'s body parts gained free movement",
 		"Boom! Where did [color=orange_red]{victim}[/color] go?",
 		"[color=orange_red]{victim}[/color] became open-concept architecture"
@@ -53,7 +49,7 @@ var death_messages_by_cause = {
 		"[color=orange_red]{victim}[/color] was erased by unknown forces",
 		"Reality rejected [color=orange_red]{victim}[/color]",
 		"[color=orange_red]{victim}[/color] encountered a program error",
-		"[color=sky_blue]{victim}[/color] used mysterious powers",
+		"[color=orange_red]{victim}[/color] used mysterious powers",
 		"[color=orange_red]{victim}[/color] entered another dimension",
 		"404: [color=orange_red]{victim}[/color] not found",
 		"[color=orange_red]{victim}[/color] was forgotten by the server",
