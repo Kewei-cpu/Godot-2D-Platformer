@@ -80,6 +80,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _ready() -> void:
+	#var damage_input_ui = preload("res://scenes/player/damageinput.tscn").instantiate()
+	
+	#add_child(damage_input_ui)
+	
 	player_team = Team.HIDER if get_multiplayer_authority() in game.hiders else Team.SEEKER
 
 	set_player_collision_layer()
@@ -342,21 +346,42 @@ func set_player_collision_layer():
 		set_collision_layer_value(3, true)
 		set_collision_mask_value(2, true)
 
-
+var last_damage_source: int = 0
 @rpc("any_peer")
-func bullet_hit(damage, collision_normal, hitback):
+func bullet_hit(damage, collision_normal, hitback, source_id):
+	last_damage_source = source_id
 	change_health(-damage)
 
 	velocity += collision_normal * hitback
 	hit_color.start()
 
-
+func get_last_damage_source() -> int:
+	return last_damage_source
+	
+	
 func shoot(projectile: int = Projectile.Bullet):
 	var bullet_transform := Transform2D(muzzle.get_global_rotation(), muzzle.get_global_position())
 	spawn_projectile.rpc(multiplayer.get_unique_id(), projectile, bullet_transform)
 
 
 func die():
+	
+	if multiplayer.is_server():
+		#var killer_id =0
+		var killer_id = get_last_damage_source() 
+		if killer_id != 0:  #
+			print(killer_id)
+			print("uweqiro")
+			var killer_name = game.players.get(killer_id, {}).get("name", "未知")
+			var victim_name = name_tag.text
+			#Game.kill_feed.add_kill.rpc(killer_name, victim_name)
+			print(killer_name)
+			game.kill_feed.add_kill.rpc(killer_name,name_tag.text)
+		else:
+			game.kill_feed.add_kill.rpc("none",name_tag.text)
+
+			
+			
 	respawn_timer.start()
 	dead = true
 	clear_player_collision_layer()
@@ -369,7 +394,8 @@ func die():
 @rpc("call_local")
 func spawn_projectile(pid, _projectile: int, _transform: Transform2D):
 	var projectile: Projectile
-
+	#projectile.set_multiplayer_authority(pid)
+	
 	if _projectile == Projectile.Bullet:
 		projectile = BULLET.instantiate()
 	elif _projectile == Projectile.Grenade:
@@ -382,7 +408,8 @@ func spawn_projectile(pid, _projectile: int, _transform: Transform2D):
 	projectile.transform = _transform
 	projectile.initial_velocity = velocity * 0.5
 	projectile.set_multiplayer_authority(pid)
-
+	projectile.source_id = pid
+	
 	var bullet_team = Team.HIDER if pid in game.hiders else Team.SEEKER
 
 	if bullet_team == Team.HIDER:

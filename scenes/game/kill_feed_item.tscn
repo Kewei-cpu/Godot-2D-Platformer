@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfshvs2n88xyp"]
+
+[ext_resource type="Script" uid="uid://cb3xjdcg7vk4q" path="res://scripts/game/kill_feed_item.gd" id="1_dpuve"]
+
+[node name="KillFeedItem" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_dpuve")
+
+[node name="Text" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

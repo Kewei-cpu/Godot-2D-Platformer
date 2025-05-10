@@ -7,5 +7,5 @@ func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
 		if body.dead:
 			return
-
+		body.last_damage_source = "none"
 		body.die()

@@ -21,7 +21,7 @@ func _on_body_entered(body: Node) -> void:
 	if body is Player:
 		if body.get_multiplayer_authority() == multiplayer.get_unique_id():
 			return
-		body.bullet_hit.rpc_id(body.get_multiplayer_authority(), damage, transform.x.normalized(), hitback)
+		body.bullet_hit.rpc_id(body.get_multiplayer_authority(), damage, transform.x.normalized(), hitback  , source_id)
 
 
 @rpc("call_local", "any_peer")

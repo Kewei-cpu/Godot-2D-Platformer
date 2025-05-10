@@ -24,7 +24,15 @@ const PLAYER = preload("res://scenes/player/player.tscn")
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
+var kill_feed: KillFeed
+
+
+
 func _ready() -> void:
+	
+	var kill_feed_instance = preload("res://scenes/game/kill_feed.tscn").instantiate()
+	add_child(kill_feed_instance)
+	
 	multiplayer_spawner.spawn_function = add_player_to_scene
 	MultiplayerHandler.server_disconnected.connect(MultiplayerHandler.disconnect_player)
 	MultiplayerHandler.player_disconnected.connect(remove_player_from_scene)
@@ -49,6 +57,10 @@ func _process(_delta: float) -> void:
 	
 	if Input.is_action_just_pressed("test1"):
 		play_flash()
+
+
+func set_kill_feed(feed: CanvasLayer):
+	kill_feed = feed
 
 func start_game():
 	for uid in hiders:
