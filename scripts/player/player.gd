@@ -82,9 +82,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _ready() -> void:
-	#var damage_input_ui = preload("res://scenes/player/damageinput.tscn").instantiate()
+	var damage_input_ui = preload("res://scenes/player/damageinput.tscn").instantiate()
 	
-	#add_child(damage_input_ui)
+	add_child(damage_input_ui)
 	
 	player_team = Team.HIDER if get_multiplayer_authority() in game.hiders else Team.SEEKER
 
@@ -372,6 +372,7 @@ func die():
 	if multiplayer.is_server():
 		#var killer_id =0
 		var killer_id = get_last_damage_source() 
+		'''
 		if killer_id != 0:  #
 			print(killer_id)
 			print("uweqiro")
@@ -382,8 +383,12 @@ func die():
 			game.kill_feed.add_kill.rpc(killer_name,name_tag.text,last_death_cause)
 		else:
 			game.kill_feed.add_kill.rpc("none",name_tag.text,last_death_cause)
-		
-			
+			'''
+		var killer_name = game.players.get(killer_id, {}).get("name", "未知")
+		var victim_name = name_tag.text
+			#Game.kill_feed.add_kill.rpc(killer_name, victim_name)
+		print(killer_name)
+		game.kill_feed.add_kill.rpc(killer_name,name_tag.text,last_death_cause)
 			
 	last_death_cause = DeathCause.DeathCause.UNKNOWN
 	respawn_timer.start()
