@@ -1,6 +1,7 @@
 extends CanvasLayer
 class_name KillFeed
-@onready var feed_container = $FeedContainer/VBoxContainer
+
+@onready var feed_container: VBoxContainer = %FeedContainer
 
 const KILL_FEED_ITEM = preload("res://scenes/game/kill_feed_text.tscn")
 

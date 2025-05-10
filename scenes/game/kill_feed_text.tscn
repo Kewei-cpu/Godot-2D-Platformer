@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bfshvs2n88xyp"]
+[gd_scene load_steps=5 format=3 uid="uid://bfshvs2n88xyp"]
+
+[ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="1_ikahh"]
 
 [sub_resource type="Animation" id="Animation_dpuve"]
 resource_name = "default"
@@ -53,6 +55,9 @@ _data = {
 modulate = Color(1, 1, 1, 0)
 offset_right = 40.0
 offset_bottom = 23.0
+theme = ExtResource("1_ikahh")
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
