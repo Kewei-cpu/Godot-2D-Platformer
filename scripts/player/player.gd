@@ -83,9 +83,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	#var damage_input_ui = preload("res://scenes/player/damageinput.tscn").instantiate()
-	
 	#add_child(damage_input_ui)
-	
 	player_team = Team.HIDER if get_multiplayer_authority() in game.hiders else Team.SEEKER
 
 	set_player_collision_layer()
@@ -350,7 +348,7 @@ func set_player_collision_layer():
 
 
 @rpc("any_peer")
-func bullet_hit(damage, collision_normal, hitback, source_id , damagecause):
+func bullet_hit(damage, collision_normal, hitback, source_id, damagecause):
 	last_damage_source = source_id
 	last_death_cause = damagecause
 	change_health(-damage)
@@ -368,11 +366,11 @@ func shoot(projectile: int = Projectile.Bullet):
 
 
 func die():
-	var killer_id = get_last_damage_source() 
+	var killer_id = get_last_damage_source()
 	var killer_name = game.players.get(killer_id, {}).get("name", "unknown")
 	var victim_name = name_tag.text
 
-	game.kill_feed.add_kill.rpc(killer_name,victim_name,last_death_cause)
+	game.kill_feed.add_kill.rpc(killer_name, victim_name, last_death_cause)
 	last_death_cause = DeathCause.DeathCause.UNKNOWN
 	dead = true
 	clear_player_collision_layer()
@@ -380,6 +378,7 @@ func die():
 	
 	if player_team == Team.HIDER:
 		game.remove_player_from_scene(get_multiplayer_authority())
+		return
 	
 	respawn_timer.start()
 	var spawn_point: Marker2D = spawn_points.get_children().pick_random()
