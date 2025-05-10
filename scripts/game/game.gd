@@ -50,8 +50,6 @@ func _process(_delta: float) -> void:
 		back_to_lobby.rpc()
 	
 
-
-
 func start_game():
 	for uid in hiders:
 		multiplayer_spawner.spawn(uid)

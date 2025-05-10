@@ -377,7 +377,7 @@ func die():
 	effect_bar.clear_all_effects()
 	
 	if player_team == Team.HIDER:
-		game.remove_player_from_scene(get_multiplayer_authority())
+		game.remove_player_from_scene.rpc(get_multiplayer_authority())
 		return
 	
 	respawn_timer.start()
