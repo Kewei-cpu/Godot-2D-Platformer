@@ -368,25 +368,29 @@ func shoot(projectile: int = Projectile.Bullet):
 
 
 func die():
-	'''
+	
 	if multiplayer.is_server():
 		#var killer_id =0
 		var killer_id = get_last_damage_source() 
+		'''
+		if killer_id != 0:  #
+			print(killer_id)
+			print("uweqiro")
+			var killer_name = game.players.get(killer_id, {}).get("name", "未知")
+			var victim_name = name_tag.text
+			#Game.kill_feed.add_kill.rpc(killer_name, victim_name)
+			print(killer_name)
+			game.kill_feed.add_kill.rpc(killer_name,name_tag.text,last_death_cause)
+		else:
+			game.kill_feed.add_kill.rpc("none",name_tag.text,last_death_cause)
+			'''
 		var killer_name = game.players.get(killer_id, {}).get("name", "未知")
 		var victim_name = name_tag.text
 			#Game.kill_feed.add_kill.rpc(killer_name, victim_name)
 		print(killer_name)
 		game.kill_feed.add_kill.rpc(killer_name,name_tag.text,last_death_cause)
-			'''
 			
-	var killer_id = get_last_damage_source() 
-	var killer_name = game.players.get(killer_id, {}).get("name", "未知")
-	var victim_name = name_tag.text
-		#Game.kill_feed.add_kill.rpc(killer_name, victim_name)
-	print(killer_name)
-	game.kill_feed.add_kill.rpc(killer_name,victim_name,last_death_cause)
 	last_death_cause = DeathCause.DeathCause.UNKNOWN
-	
 	respawn_timer.start()
 	dead = true
 	clear_player_collision_layer()
