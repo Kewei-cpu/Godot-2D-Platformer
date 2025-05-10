@@ -1,4 +1,3 @@
-
 extends Node
 
 enum DeathCause {

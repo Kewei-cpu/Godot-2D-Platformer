@@ -5,6 +5,8 @@ const PLAYER = preload("res://scenes/player/player.tscn")
 
 @onready var seeker_waiting_screen: CanvasLayerRPC = %SeekerWaitingScreen
 @onready var hide_time_left: LabelRPC = %HideTimeLeft
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var kill_feed: KillFeed = %KillFeed
 
 @onready var time_display: CanvasLayerRPC = %TimeDisplay
 @onready var time_label: LabelRPC = %TimeLabel
@@ -22,17 +24,8 @@ const PLAYER = preload("res://scenes/player/player.tscn")
 @onready var hiders: Array[int] = MultiplayerHandler.hiders
 @onready var seekers: Array[int] = MultiplayerHandler.seekers
 
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
-
-var kill_feed: KillFeed
-
-
 
 func _ready() -> void:
-	
-	var kill_feed_instance = preload("res://scenes/game/kill_feed.tscn").instantiate()
-	add_child(kill_feed_instance)
-	
 	multiplayer_spawner.spawn_function = add_player_to_scene
 	MultiplayerHandler.server_disconnected.connect(MultiplayerHandler.disconnect_player)
 	MultiplayerHandler.player_disconnected.connect(remove_player_from_scene)
@@ -59,9 +52,6 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("test1"):
 		play_flash()
 
-
-func set_kill_feed(feed: CanvasLayer):
-	kill_feed = feed
 
 func start_game():
 	for uid in hiders:
@@ -103,19 +93,18 @@ func back_to_lobby():
 	Fade.fade_in(0.5, Color.BLACK, "Diamond")
 
 
-
 func _on_hide_timer_timeout() -> void:
 	if not is_server:
 		return
 
 	for uid in hiders:
-		time_label.set_text_rpc.rpc_id(uid ,"Seeking time left")
+		time_label.set_text_rpc.rpc_id(uid, "Seeking time left")
 
 	for uid in seekers:
 		seeker_waiting_screen.hide_rpc.rpc_id(uid)
 		multiplayer_spawner.spawn(uid)
 		time_display.show_rpc.rpc_id(uid)
-		time_label.set_text_rpc.rpc_id(uid ,"Seeking time left")
+		time_label.set_text_rpc.rpc_id(uid, "Seeking time left")
 		
 	seek_timer.start()
 

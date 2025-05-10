@@ -1,13 +1,64 @@
-[gd_scene load_steps=2 format=3 uid="uid://bfshvs2n88xyp"]
+[gd_scene load_steps=5 format=3 uid="uid://bfshvs2n88xyp"]
 
 [ext_resource type="Script" uid="uid://cb3xjdcg7vk4q" path="res://scripts/game/kill_feed_item.gd" id="1_dpuve"]
 
-[node name="KillFeedItem" type="Control"]
-layout_mode = 3
-anchors_preset = 0
-script = ExtResource("1_dpuve")
+[sub_resource type="Animation" id="Animation_dpuve"]
+resource_name = "default"
+length = 5.0
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5, 4.5, 5)
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
 
-[node name="Text" type="Label" parent="."]
-layout_mode = 0
+[sub_resource type="Animation" id="Animation_okppx"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sysaw"]
+_data = {
+&"RESET": SubResource("Animation_okppx"),
+&"default": SubResource("Animation_dpuve")
+}
+
+[node name="KillFeedText" type="Label"]
+modulate = Color(1, 1, 1, 0)
 offset_right = 40.0
 offset_bottom = 23.0
+script = ExtResource("1_dpuve")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_sysaw")
+}
+autoplay = "default"

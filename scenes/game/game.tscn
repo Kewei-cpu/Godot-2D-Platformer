@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cc0ytnsq165td"]
+[gd_scene load_steps=10 format=3 uid="uid://cc0ytnsq165td"]
 
 [ext_resource type="Script" uid="uid://blrflx2y4i3o6" path="res://scripts/game/game.gd" id="1_p57ef"]
 [ext_resource type="Script" uid="uid://mkmol40clssn" path="res://scripts/game/canvas_rpc.gd" id="2_iywne"]
 [ext_resource type="PackedScene" uid="uid://cin65u8s7y6gf" path="res://scenes/game/level_map.tscn" id="4_iywne"]
 [ext_resource type="Script" uid="uid://d23f6kkxm0bm2" path="res://scripts/game/label_rpc.gd" id="5_lfrn8"]
+[ext_resource type="PackedScene" uid="uid://3c5rfbrwr1y" path="res://scenes/game/kill_feed.tscn" id="6_5i0tg"]
 [ext_resource type="Theme" uid="uid://b5mq1k5kdvqx0" path="res://themes/pixel_theme.tres" id="6_p57ef"]
 
 [sub_resource type="Animation" id="Animation_5i0tg"]
@@ -169,5 +170,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="KillFeed" parent="." instance=ExtResource("6_5i0tg")]
+unique_name_in_owner = true
+layer = 2
 
 [connection signal="timeout" from="HideTimer" to="." method="_on_hide_timer_timeout"]
