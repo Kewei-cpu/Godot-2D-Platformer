@@ -24,6 +24,7 @@ config/icon="res://icon.svg"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 MultiplayerHandler="*res://scenes/game/multiplayer_handler.tscn"
 LocalStats="*res://scenes/game/local_stats.tscn"
+DeathCause="*res://scripts/game/DeathCause.gd"
 
 [display]
 

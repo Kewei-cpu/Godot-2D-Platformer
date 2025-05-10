@@ -59,12 +59,14 @@ const JUMP_BOOST_EFFECT = preload("res://scenes/effect/jump_boost_effect.tscn")
 
 @export var MAX_HEALTH = 100
 
+var last_death_cause: DeathCause.DeathCause = DeathCause.DeathCause.UNKNOWN
+
 var camouflaged = false
 var frozen = false
 var dead = false
 var camouflage_list: Array[int] = []
 var current_camouflage = 0
-
+var last_damage_source: int = 0
 var health = MAX_HEALTH
 
 enum Team {HIDER, SEEKER}
@@ -346,10 +348,11 @@ func set_player_collision_layer():
 		set_collision_layer_value(3, true)
 		set_collision_mask_value(2, true)
 
-var last_damage_source: int = 0
+
 @rpc("any_peer")
-func bullet_hit(damage, collision_normal, hitback, source_id):
+func bullet_hit(damage, collision_normal, hitback, source_id , damagecause):
 	last_damage_source = source_id
+	last_death_cause = damagecause
 	change_health(-damage)
 
 	velocity += collision_normal * hitback
@@ -376,12 +379,13 @@ func die():
 			var victim_name = name_tag.text
 			#Game.kill_feed.add_kill.rpc(killer_name, victim_name)
 			print(killer_name)
-			game.kill_feed.add_kill.rpc(killer_name,name_tag.text)
+			game.kill_feed.add_kill.rpc(killer_name,name_tag.text,last_death_cause)
 		else:
-			game.kill_feed.add_kill.rpc("none",name_tag.text)
-
+			game.kill_feed.add_kill.rpc("none",name_tag.text,last_death_cause)
+		
 			
 			
+	last_death_cause = DeathCause.DeathCause.UNKNOWN
 	respawn_timer.start()
 	dead = true
 	clear_player_collision_layer()

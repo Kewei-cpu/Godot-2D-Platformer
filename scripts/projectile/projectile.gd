@@ -10,8 +10,8 @@ extends RigidBody2D
 @onready var trail: Line2D = $Trail
 @onready var point_light_2d: PointLight2D = $PointLight2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var source_id 
 
-@onready var source_id
 func _ready() -> void:
 	linear_velocity = transform.x.normalized() * speed + initial_velocity
 	angular_velocity = 0.0
