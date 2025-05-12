@@ -49,15 +49,15 @@ const SLOWNESS_EFFECT = preload("res://scenes/effect/slowness_effect.tscn")
 const REGENERATION_EFFECT = preload("res://scenes/effect/regeneration_effect.tscn")
 const JUMP_BOOST_EFFECT = preload("res://scenes/effect/jump_boost_effect.tscn")
 
-@export var MAX_SPEED = 175
-@export var JUMP_VELOCITY = -300
+@export var max_speed: int = 175
+@export var jump_speed: int = -300
 
-@export var GROUND_ACCELERATION = 1200
-@export var AIR_ACCELERATION = 800
-@export var GROUND_FRICTION = 1000
-@export var AIR_FRICTION = 600
+@export var ground_acceleration: int = 1200
+@export var air_acceleration: int = 800
+@export var ground_friction: int = 1000
+@export var air_friction: int = 600
 
-@export var MAX_HEALTH = 100
+@export var max_health: int = 100
 
 var last_death_cause: DeathCause.DeathCause = DeathCause.DeathCause.UNKNOWN
 
@@ -67,7 +67,8 @@ var dead = false
 var camouflage_list: Array[int] = []
 var current_camouflage = 0
 var last_damage_source: int = 0
-var health = MAX_HEALTH
+
+var health = IntStream.new()
 
 enum Team {HIDER, SEEKER}
 
@@ -94,9 +95,12 @@ func _ready() -> void:
 	inventory.show()
 	camera.enabled = true
 	camera.make_current()
+
+	set_health(max_health)
+
 	if player_team == Team.HIDER:
 		cool_down.wait_time = 0.25
-		MAX_SPEED = 150
+		max_speed = 150
 		camouflage_list.append(randi_range(0, 24))
 		camouflage_list.append(randi_range(25, 47))
 	else:
@@ -210,14 +214,14 @@ func handle_jump(delta):
 		velocity += get_gravity() * delta
 
 	if Input.is_action_just_released("jump"):
-		if velocity.y < JUMP_VELOCITY * 0.5 and not is_on_floor():
-			velocity.y = JUMP_VELOCITY * 0.5
+		if velocity.y < jump_speed * 0.5 and not is_on_floor():
+			velocity.y = jump_speed * 0.5
 
 	# Handle jump.
 	var can_jump := is_on_floor() or coyote_timer.time_left > 0.0
 	var should_jump := can_jump and jump_request_timer.time_left > 0.0
 	if should_jump:
-		velocity.y = JUMP_VELOCITY
+		velocity.y = jump_speed
 		coyote_timer.stop()
 		jump_request_timer.stop()
 
@@ -230,15 +234,15 @@ func handle_move(delta):
 
 	if is_on_floor():
 		if direction:
-			velocity.x = clampf(velocity.x + direction * GROUND_ACCELERATION * delta, -MAX_SPEED, MAX_SPEED)
+			velocity.x = clampf(velocity.x + direction * ground_acceleration * delta, -max_speed, max_speed)
 		else:
-			velocity.x -= speed_direction * clampf(GROUND_FRICTION * delta, 0, abs(velocity.x))
+			velocity.x -= speed_direction * clampf(ground_friction * delta, 0, abs(velocity.x))
 
 	else:
 		if direction:
-			velocity.x = clampf(velocity.x + direction * AIR_ACCELERATION * delta, -MAX_SPEED, MAX_SPEED)
+			velocity.x = clampf(velocity.x + direction * air_acceleration * delta, -max_speed, max_speed)
 		else:
-			velocity.x -= speed_direction * clampf(AIR_FRICTION * delta, 0, abs(velocity.x))
+			velocity.x -= speed_direction * clampf(air_friction * delta, 0, abs(velocity.x))
 
 	if is_on_floor():
 		if velocity.x == 0:
@@ -264,7 +268,7 @@ func respawn():
 	velocity = Vector2(0, 0)
 	dead = false
 
-	set_health(MAX_HEALTH)
+	set_health(max_health)
 	update_health_bar()
 	call_deferred("set_camouflage", false)
 	call_deferred("set_frozen", false)
@@ -415,10 +419,10 @@ func update_health_bar():
 	if not is_inside_tree():
 		return
 
-	var health_ratio = float(health) / MAX_HEALTH
+	var health_ratio = float(health.value) / max_health
 	health_fill.scale.x = health_ratio
 
-	health_label.text = str(health)
+	health_label.text = str(health.value)
 
 	if health_ratio < 0.3:
 		health_fill.color = Color(0.928, 0.329, 0.199, 0.784)
@@ -429,14 +433,14 @@ func update_health_bar():
 
 
 func change_health(amount: int) -> void:
-	health = clamp(health + amount, 0, MAX_HEALTH)
+	health.value = clamp(health.value + amount, 0, max_health)
 	update_health_bar()
-	if health <= 0:
+	if health.value <= 0:
 		die()
 
 
 func set_health(value: int) -> void:
-	health = clamp(value, 0, MAX_HEALTH)
+	health.value = clamp(value, 0, max_health)
 	update_health_bar()
 
 

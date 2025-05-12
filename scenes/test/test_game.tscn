@@ -3144,7 +3144,6 @@ position = Vector2(-144, 64)
 collision_layer = 0
 collision_mask = 281
 script = ExtResource("14_oaxcw")
-MAX_SPEED = 200
 
 [node name="Camera" type="Camera2D" parent="Player"]
 unique_name_in_owner = true
@@ -3441,7 +3440,6 @@ position = Vector2(-232, 64)
 collision_layer = 0
 collision_mask = 281
 script = ExtResource("14_oaxcw")
-MAX_SPEED = 200
 
 [node name="Camera" type="Camera2D" parent="Player2"]
 offset = Vector2(0, -20)

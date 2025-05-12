@@ -9,7 +9,7 @@ signal server_disconnected
 
 const PORT = 7000
 const MAX_CONNECTIONS = 20
-const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
+const DEFAULT_SERVER_IP = "127.0.0.1"  # IPv4 localhost
 
 # This will contain player info for every player,
 # with the keys being each player's unique IDs.
@@ -34,9 +34,6 @@ func _ready():
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
-
-func is_server():
-	return multiplayer.get_unique_id() == 1
 
 func join_game(address = ""):
 	if address.is_empty():
